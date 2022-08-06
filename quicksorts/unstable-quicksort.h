@@ -22,17 +22,24 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define QUICKSORTS__UNSTABLE_QUICKSORT__SWAP(PFX)                   \
-  do                                                                \
-    {                                                               \
-      size_t PFX##i = PFX##elemsz;                                  \
-      for (size_t PFX##i = 0; PFX##i < PFX##elemsz; PFX##i += 1)    \
-        {                                                           \
-          char PFX##tmp = PFX##p1[PFX##i];                          \
-          PFX##p1[PFX##i] = PFX##p2[PFX##i];                        \
-          PFX##p2[PFX##i] = PFX##tmp;                               \
-        }                                                           \
-    }                                                               \
+#if defined __GNUC__
+#define QUICKSORTS__UNSTABLE_QUICKSORT__MEMCPY __builtin_memcpy
+#define QUICKSORTS__UNSTABLE_QUICKSORT__MEMMOVE __builtin_memmove
+#else
+#define QUICKSORTS__UNSTABLE_QUICKSORT__MEMCPY memcpy
+#define QUICKSORTS__UNSTABLE_QUICKSORT__MEMMOVE memmove
+#endif
+
+#define QUICKSORTS__UNSTABLE_QUICKSORT__SWAP(PFX)   \
+  do                                                \
+    {                                               \
+      QUICKSORTS__UNSTABLE_QUICKSORT__MEMCPY        \
+        (PFX##elembuf, PFX##p1, PFX##elemsz);       \
+      QUICKSORTS__UNSTABLE_QUICKSORT__MEMCPY        \
+        (PFX##p1, PFX##p2, PFX##elemsz);            \
+      QUICKSORTS__UNSTABLE_QUICKSORT__MEMCPY        \
+        (PFX##p2, PFX##elembuf, PFX##elemsz);       \
+    }                                               \
   while (0)
 
 #define QUICKSORTS__UNSTABLE_QUICKSORT__REVERSE_PREFIX(PFX)     \
@@ -136,22 +143,16 @@
         {                                                               \
           char *PFX##p_left = PFX##arr + (PFX##elemsz * PFX##left);     \
           char *PFX##p_right = PFX##arr + (PFX##elemsz * PFX##right);   \
-          for (size_t PFX##bytenum = 0;                                 \
-               PFX##bytenum < PFX##elemsz;                              \
-               PFX##bytenum += 1)                                       \
-            {                                                           \
-              char *PFX##pl = PFX##p_left + PFX##bytenum;               \
-              char *PFX##pr = PFX##p_right + PFX##bytenum;              \
                                                                         \
-              char PFX##tmp = *PFX##pr;                                 \
+          QUICKSORTS__UNSTABLE_QUICKSORT__MEMCPY                        \
+            (PFX##elembuf, PFX##p_right, PFX##elemsz);                  \
                                                                         \
-              for (char *PFX##p = PFX##pr;                              \
-                   PFX##p != PFX##pl;                                   \
-                   PFX##p -= PFX##elemsz)                               \
-                *PFX##p = *(PFX##p - PFX##elemsz);                      \
+          QUICKSORTS__UNSTABLE_QUICKSORT__MEMMOVE                       \
+            (PFX##p_left + PFX##elemsz, PFX##p_left,                    \
+             PFX##elemsz * (PFX##right - PFX##left));                   \
                                                                         \
-              *PFX##pl = PFX##tmp;                                      \
-            }                                                           \
+          QUICKSORTS__UNSTABLE_QUICKSORT__MEMCPY                        \
+            (PFX##p_left, PFX##elembuf, PFX##elemsz);                   \
         }                                                               \
     }                                                                   \
   while (0)
@@ -160,6 +161,9 @@
                                                        ELEMSZ)          \
   do                                                                    \
     {                                                                   \
+      /* FIXME : Put elembuf in the heap if ELEMSZ is very large. */    \
+      char PFX##elembuf[ELEMSZ];                                        \
+                                                                        \
       size_t PFX##nmemb = (NMEMB);                                      \
       if (PFX##nmemb > 1)                                               \
         {                                                               \
