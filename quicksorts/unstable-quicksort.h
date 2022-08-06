@@ -19,28 +19,40 @@
 #ifndef QUICKSORTS__UNSTABLE_QUICKSORT_H__HEADER_GUARD__
 #define QUICKSORTS__UNSTABLE_QUICKSORT_H__HEADER_GUARD__
 
-#if defined __GNUC__
-#define QUICKSORTS__UNSTABLE_QUICKSORT__MEMSET __builtin_memset
-#define QUICKSORTS__UNSTABLE_QUICKSORT__MEMCPY __builtin_memcpy
-#else
-#define QUICKSORTS__UNSTABLE_QUICKSORT__MEMSET memset
-#define QUICKSORTS__UNSTABLE_QUICKSORT__MEMCPY memcpy
-#endif
+/* #if defined __GNUC__ */
+/* #define QUICKSORTS__UNSTABLE_QUICKSORT__MEMSET __builtin_memset */
+/* #define QUICKSORTS__UNSTABLE_QUICKSORT__MEMCPY __builtin_memcpy */
+/* #else */
+/* #define QUICKSORTS__UNSTABLE_QUICKSORT__MEMSET memset */
+/* #define QUICKSORTS__UNSTABLE_QUICKSORT__MEMCPY memcpy */
+/* #endif */
+
+#define QUICKSORTS__UNSTABLE_QUICKSORT__SWAP(PFX, P1, P2, ELEMSZ)   \
+  do                                                                \
+    {                                                               \
+      char *PFX##p1 = (P1);                                         \
+      char *PFX##p2 = (P2);                                         \
+      size_t PFX##n = (ELEMSZ);                                     \
+      do                                                            \
+        {                                                           \
+          char PFX##tmp = *PFX##p1;                                 \
+          *PFX##p1 = *PFX##p2;                                      \
+          *PFX##p2 = PFX##tmp;                                      \
+          PFX##n -= 1;                                              \
+        }                                                           \
+      while (PFX##n != 0);                                          \
+    }                                                               \
+  while (0)
 
 #define QUICKSORTS__UNSTABLE_QUICKSORT__REVERSE_ARRAY(PFX, ARR, N, ELEMSZ) \
   do                                                                    \
     {                                                                   \
-      char PFX##temp[(ELEMSZ)];                                         \
       PFX##p_left = (ARR);                                              \
       PFX##p_right = (ARR) + (((N) - 1) * (ELEMSZ));                    \
       while (PFX##p_left < PFX##p_right)                                \
         {                                                               \
-          QUICKSORTS__UNSTABLE_QUICKSORT__MEMCPY                        \
-            (temp, PFX##p_left, (ELEMSZ));                              \
-          QUICKSORTS__UNSTABLE_QUICKSORT__MEMCPY                        \
-            (PFX##p_left, PFX##p_right, (ELEMSZ));                      \
-          QUICKSORTS__UNSTABLE_QUICKSORT__MEMCPY                        \
-            (PFX##p_right, temp, (ELEMSZ));                             \
+          QUICKSORTS__UNSTABLE_QUICKSORT__SWAP                          \
+            (PFX, PFX##p_left, PFX##p_right, (ELEMSZ));                 \
           PFX##p_left += (ELEMSZ);                                      \
           PFX##p_right -= (ELEMSZ);                                     \
         }                                                               \
@@ -74,6 +86,8 @@
       QUQ__PREFIX_LENGTH__ = PFX##pfx_len;                              \
     }                                                                   \
   while (0)
+
+
 
 /* fn {a  : vt@ype} */
 /* insertion_position */
