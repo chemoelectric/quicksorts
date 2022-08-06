@@ -19,126 +19,166 @@
 #ifndef QUICKSORTS__UNSTABLE_QUICKSORT_H__HEADER_GUARD__
 #define QUICKSORTS__UNSTABLE_QUICKSORT_H__HEADER_GUARD__
 
-/* #if defined __GNUC__ */
-/* #define QUICKSORTS__UNSTABLE_QUICKSORT__MEMSET __builtin_memset */
-/* #define QUICKSORTS__UNSTABLE_QUICKSORT__MEMCPY __builtin_memcpy */
-/* #else */
-/* #define QUICKSORTS__UNSTABLE_QUICKSORT__MEMSET memset */
-/* #define QUICKSORTS__UNSTABLE_QUICKSORT__MEMCPY memcpy */
-/* #endif */
+#include <stdlib.h>
+#include <string.h>
 
-#define QUICKSORTS__UNSTABLE_QUICKSORT__SWAP(PFX, P1, P2, ELEMSZ)   \
+#define QUICKSORTS__UNSTABLE_QUICKSORT__SWAP(PFX)                   \
   do                                                                \
     {                                                               \
-      char *PFX##p1 = (P1);                                         \
-      char *PFX##p2 = (P2);                                         \
-      size_t PFX##n = (ELEMSZ);                                     \
-      do                                                            \
+      size_t PFX##i = PFX##elemsz;                                  \
+      for (size_t PFX##i = 0; PFX##i < PFX##elemsz; PFX##i += 1)    \
         {                                                           \
-          char PFX##tmp = *PFX##p1;                                 \
-          *PFX##p1 = *PFX##p2;                                      \
-          *PFX##p2 = PFX##tmp;                                      \
-          PFX##n -= 1;                                              \
+          char PFX##tmp = PFX##p1[PFX##i];                          \
+          PFX##p1[PFX##i] = PFX##p2[PFX##i];                        \
+          PFX##p2[PFX##i] = PFX##tmp;                               \
         }                                                           \
-      while (PFX##n != 0);                                          \
     }                                                               \
   while (0)
 
-#define QUICKSORTS__UNSTABLE_QUICKSORT__REVERSE_ARRAY(PFX, ARR, N, ELEMSZ) \
-  do                                                                    \
-    {                                                                   \
-      PFX##p_left = (ARR);                                              \
-      PFX##p_right = (ARR) + (((N) - 1) * (ELEMSZ));                    \
-      while (PFX##p_left < PFX##p_right)                                \
-        {                                                               \
-          QUICKSORTS__UNSTABLE_QUICKSORT__SWAP                          \
-            (PFX, PFX##p_left, PFX##p_right, (ELEMSZ));                 \
-          PFX##p_left += (ELEMSZ);                                      \
-          PFX##p_right -= (ELEMSZ);                                     \
-        }                                                               \
-    }                                                                   \
+#define QUICKSORTS__UNSTABLE_QUICKSORT__REVERSE_PREFIX(PFX)     \
+  do                                                            \
+    {                                                           \
+      char *PFX##p_left = PFX##arr;                             \
+      char *PFX##p_right =                                      \
+        PFX##p_left + ((PFX##pfx_len - 1) * PFX##elemsz);       \
+      while (PFX##p_left < PFX##p_right)                        \
+        {                                                       \
+          char *PFX##p1 = PFX##p_left;                          \
+          char *PFX##p2 = PFX##p_right;                         \
+          QUICKSORTS__UNSTABLE_QUICKSORT__SWAP (PFX);           \
+          PFX##p_left += PFX##elemsz;                           \
+          PFX##p_right -= PFX##elemsz;                          \
+        }                                                       \
+    }                                                           \
   while (0)
 
-#define QUICKSORTS__UNSTABLE_QUICKSORT__MAKE_AN_ORDERED_PREFIX(PFX, ARR, N, ELEMSZ, \
-                                                               QUQ__LT__, \
-                                                               QUQ__PREFIX_LENGTH__) \
+#define QUICKSORTS__UNSTABLE_QUICKSORT__MAKE_AN_ORDERED_PREFIX(PFX)     \
   do                                                                    \
     {                                                                   \
-      size_t PFX##pfx_len = 2;                                          \
-      if (!QUQ__LT__ ((ARR) + (ELEMSZ), (ARR)))                         \
+      PFX##pfx_len = 2;                                                 \
+      char *PFX##p = PFX##arr + (PFX##elemsz * 2);                      \
+                                                                        \
+      if (!(QUICKSORTS__UNSTABLE_QUICKSORT__LT                          \
+            ((const void *) (PFX##arr + PFX##elemsz),                   \
+             (const void *) PFX##arr)))                                 \
         {                                                               \
           /* Non-decreasing order. */                                   \
-          while (PFX##pfx_len < N &&                                    \
-                 !QUQ__LT__ ((ARR) + ((ELEMSZ) * PFX##pfx_len),         \
-                             (ARR) + (((ELEMSZ) - 1) * PFX##pfx_len)))  \
-            PFX##pfx_len += 1;                                          \
+          while (PFX##pfx_len < PFX##nmemb &&                           \
+                 !(QUICKSORTS__UNSTABLE_QUICKSORT__LT                   \
+                   ((void *) PFX##p, (void *) (PFX##p - PFX##elemsz)))) \
+            {                                                           \
+              PFX##pfx_len += 1;                                        \
+              PFX##p += PFX##elemsz;                                    \
+            }                                                           \
         }                                                               \
       else                                                              \
         {                                                               \
           /* Decreasing order. This branch sorts unstably. */           \
-          while (PFX##pfx_len < N &&                                    \
-                 !QUQ__LT__ ((ARR) + (((ELEMSZ) - 1) * PFX##pfx_len),   \
-                             (ARR) + ((ELEMSZ) * PFX##pfx_len)))        \
-            PFX##pfx_len += 1;                                          \
-          QUICKSORTS__UNSTABLE_QUICKSORT__REVERSE_ARRAY                 \
-            (PFX, (ARR), PFX##pfx_len, (ELEMSZ));                       \
+          while (PFX##pfx_len < PFX##nmemb &&                           \
+                 !(QUICKSORTS__UNSTABLE_QUICKSORT__LT                   \
+                   ((void *) (PFX##p - PFX##elemsz), (void *) PFX##p))) \
+            {                                                           \
+              PFX##pfx_len += 1;                                        \
+              PFX##p += PFX##elemsz;                                    \
+            }                                                           \
+          QUICKSORTS__UNSTABLE_QUICKSORT__REVERSE_PREFIX (PFX);         \
         }                                                               \
-      QUQ__PREFIX_LENGTH__ = PFX##pfx_len;                              \
     }                                                                   \
   while (0)
 
+/*
+  The insertion position is found by a binary search.
 
+  References:
 
-/* fn {a  : vt@ype} */
-/* insertion_position */
-/*           {n      : int} */
-/*           {i      : pos | i < n} */
-/*           {p_arr  : addr} */
-/*           (pf_arr : !array_v (a, p_arr, n) >> _ | */
-/*            p_arr  : ptr p_arr, */
-/*            i      : size_t i) */
-/*     :<> [j : nat | j <= i] */
-/*         size_t j = */
-/*   (* */
-/*     A binary search. */
+  * H. Bottenbruch, "Structure and use of ALGOL 60", Journal of the
+    ACM, Volume 9, Issue 2, April 1962, pp.161-221.
+    https://doi.org/10.1145/321119.321120
 
-/*     References: */
+    The general algorithm is described on pages 214 and 215.
 
-/*       * H. Bottenbruch, "Structure and use of ALGOL 60", Journal of */
-/*         the ACM, Volume 9, Issue 2, April 1962, pp.161-221. */
-/*         https://doi.org/10.1145/321119.321120 */
+  * https://en.wikipedia.org/w/index.php?title=Binary_search_algorithm&oldid=1062988272#Alternative_procedure
+*/
+#define QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_POSITION(PFX)         \
+  do                                                                    \
+    {                                                                   \
+      size_t PFX##j = 0;                                                \
+      size_t PFX##k = PFX##i - 1;                                       \
+                                                                        \
+      while (PFX##j != PFX##k)                                          \
+        {                                                               \
+          /* Ceiling of the midway point: */                            \
+          size_t PFX##h = PFX##k - ((PFX##k - PFX##j) >> 1);            \
+                                                                        \
+          if (QUICKSORTS__UNSTABLE_QUICKSORT__LT                        \
+              ((void *) (PFX##arr + (PFX##elemsz * PFX##i)),            \
+               (void *) (PFX##arr + (PFX##elemsz * PFX##h))))           \
+            PFX##k = PFX##h - 1;                                        \
+          else                                                          \
+            PFX##j = PFX##h;                                            \
+        }                                                               \
+                                                                        \
+      if (PFX##j != 0)                                                  \
+        PFX##pos = PFX##j + 1;                                          \
+      else if (QUICKSORTS__UNSTABLE_QUICKSORT__LT                       \
+               ((void *) (PFX##arr + (PFX##elemsz * PFX##i)),           \
+                (void *) PFX##arr))                                     \
+        PFX##pos = 0;                                                   \
+      else                                                              \
+        PFX##pos = 1;                                                   \
+    }                                                                   \
+  while (0)
 
-/*         The general algorithm is described on pages 214 and 215. */
+#define QUICKSORTS__UNSTABLE_QUICKSORT__SUBCIRCULATE_RIGHT(PFX)         \
+  do                                                                    \
+    {                                                                   \
+      if (PFX##left != PFX##right)                                      \
+        {                                                               \
+          char *PFX##p_left = PFX##arr + (PFX##elemsz * PFX##left);     \
+          char *PFX##p_right = PFX##arr + (PFX##elemsz * PFX##right);   \
+          for (size_t PFX##bytenum = 0;                                 \
+               PFX##bytenum < PFX##elemsz;                              \
+               PFX##bytenum += 1)                                       \
+            {                                                           \
+              char *PFX##pl = PFX##p_left + PFX##bytenum;               \
+              char *PFX##pr = PFX##p_right + PFX##bytenum;              \
+                                                                        \
+              char PFX##tmp = *PFX##pr;                                 \
+                                                                        \
+              for (char *PFX##p = PFX##pr;                              \
+                   PFX##p != PFX##pl;                                   \
+                   PFX##p -= PFX##elemsz)                               \
+                *PFX##p = *(PFX##p - PFX##elemsz);                      \
+                                                                        \
+              *PFX##pl = PFX##tmp;                                      \
+            }                                                           \
+        }                                                               \
+    }                                                                   \
+  while (0)
 
-/*       * https://en.wikipedia.org/w/index.php?title=Binary_search_algorithm&oldid=1062988272#Alternative_procedure */
-/*   *) */
-/*   let */
-/*     fun */
-/*     loop {j, k : int | 0 <= j; j <= k; k < i} */
-/*          .<k - j>. */
-/*          (arr : &array (a, n), */
-/*           j   : size_t j, */
-/*           k   : size_t k) */
-/*         :<> [j1 : nat | j1 <= i] */
-/*             size_t j1 = */
-/*       if j <> k then */
-/*         let */
-/*           val h = k - half (k - j) (* (j + k) ceildiv 2 *) */
-/*          in */
-/*           if array_element_lt<a> {n} (arr, i, h) then */
-/*             loop (arr, j, pred h) */
-/*           else */
-/*             loop (arr, h, k) */
-/*         end */
-/*       else if j <> i2sz 0 then */
-/*         succ j */
-/*       else if array_element_lt<a> {n} (arr, i, i2sz 0) then */
-/*         i2sz 0 */
-/*       else */
-/*         i2sz 1 */
-/*   in */
-/*     loop (!p_arr, i2sz 0, pred i) */
-/*   end */
-
+#define QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT(PFX, ARR, NMEMB, \
+                                                       ELEMSZ)          \
+  do                                                                    \
+    {                                                                   \
+      size_t PFX##nmemb = (NMEMB);                                      \
+      if (PFX##nmemb > 1)                                               \
+        {                                                               \
+          size_t PFX##elemsz = (ELEMSZ);                                \
+          char *PFX##arr = (void *) (ARR);                              \
+          size_t PFX##pfx_len;                                          \
+          QUICKSORTS__UNSTABLE_QUICKSORT__MAKE_AN_ORDERED_PREFIX (PFX); \
+          size_t PFX##i = PFX##pfx_len;                                 \
+          while (PFX##i != PFX##nmemb)                                  \
+            {                                                           \
+              size_t PFX##pos;                                          \
+              QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_POSITION (PFX); \
+              size_t PFX##left = PFX##pos;                              \
+              size_t PFX##right = PFX##i;                               \
+              QUICKSORTS__UNSTABLE_QUICKSORT__SUBCIRCULATE_RIGHT (PFX); \
+              PFX##i += 1;                                              \
+            }                                                           \
+        }                                                               \
+    }                                                                   \
+  while (0)
 
 #endif /* QUICKSORTS__UNSTABLE_QUICKSORT_H__HEADER_GUARD__ */

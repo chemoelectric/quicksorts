@@ -623,7 +623,7 @@ PACKAGE_STRING='quicksorts 1.0.0'
 PACKAGE_BUGREPORT=''
 PACKAGE_URL=''
 
-ac_unique_file="unstable-quicksort.h"
+ac_unique_file="quicksorts/unstable-quicksort.h"
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stddef.h>
