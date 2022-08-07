@@ -80,6 +80,7 @@ escape = $(subst $$,\$$,$(subst ^,\^,$(subst ],\],$(subst [,\[,$(subst .,\.,$(su
 lib_LTLIBRARIES += libquicksorts.la
 libquicksorts_la_SOURCES =
 libquicksorts_la_SOURCES += unstable-qsort.c
+libquicksorts_la_SOURCES += lcg-seed.c
 libquicksorts_la_SOURCES += $(nobase_dist_include_HEADERS)
 
 nobase_dist_include_HEADERS =

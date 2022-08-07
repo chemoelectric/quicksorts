@@ -19,20 +19,6 @@
 #include "quicksorts/unstable-qsort.h"
 #include "quicksorts/unstable-quicksort.h"
 
-// FIXME: MAKE THESE BE ACTUAL QUICKSORT INSTEAD OF INSERTION SORT.
-// FIXME: MAKE THESE BE ACTUAL QUICKSORT INSTEAD OF INSERTION SORT.
-// FIXME: MAKE THESE BE ACTUAL QUICKSORT INSTEAD OF INSERTION SORT.
-// FIXME: MAKE THESE BE ACTUAL QUICKSORT INSTEAD OF INSERTION SORT.
-// FIXME: MAKE THESE BE ACTUAL QUICKSORT INSTEAD OF INSERTION SORT.
-// FIXME: MAKE THESE BE ACTUAL QUICKSORT INSTEAD OF INSERTION SORT.
-// FIXME: MAKE THESE BE ACTUAL QUICKSORT INSTEAD OF INSERTION SORT.
-// FIXME: MAKE THESE BE ACTUAL QUICKSORT INSTEAD OF INSERTION SORT.
-// FIXME: MAKE THESE BE ACTUAL QUICKSORT INSTEAD OF INSERTION SORT.
-// FIXME: MAKE THESE BE ACTUAL QUICKSORT INSTEAD OF INSERTION SORT.
-// FIXME: MAKE THESE BE ACTUAL QUICKSORT INSTEAD OF INSERTION SORT.
-// FIXME: MAKE THESE BE ACTUAL QUICKSORT INSTEAD OF INSERTION SORT.
-// FIXME: MAKE THESE BE ACTUAL QUICKSORT INSTEAD OF INSERTION SORT.
-
 #undef QUICKSORTS__UNSTABLE_QUICKSORT__LT
 #define QUICKSORTS__UNSTABLE_QUICKSORT__LT(x, y) \
   (quicksorts__unstable_quicksort__compar ((x), (y)) < 0)
@@ -45,6 +31,10 @@ unstable_qsort (void *base, size_t nmemb, size_t size,
   /* FIXME : Put elembuf in the heap if ‘size’ is very large. */
   char quicksorts__unstable_qsort__elembuf[size];
 
-  QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT
-    (quicksorts__unstable_qsort__, base, nmemb, size);
+  char *quicksorts__unstable_qsort__arr = base;
+  size_t quicksorts__unstable_qsort__nmemb = nmemb;
+  size_t quicksorts__unstable_qsort__elemsz = size;
+
+  QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT
+    (quicksorts__unstable_qsort__);
 }

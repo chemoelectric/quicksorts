@@ -107,14 +107,20 @@ test_arrays_with_int_keys (void (*init) (size_t i, int *x))
       unstable_qsort (p3, sz, sizeof (int), intcmp);
       const long double t32 = get_clock ();
       const long double t3 = t32 - t31;
-#if 0
+#if 1
       printf ("unstable_qsort ---------------------\n");
       for (size_t i = 0; i != sz; i += 1)
         printf ("%d\n", p3[i]);
 #endif
 
       for (size_t i = 0; i != sz; i += 1)
-        CHECK (p2[i] == p3[i]);
+        {
+#if 1
+          printf ("i = %zu  p2[i] = %d,  p3[i] = %d\n",
+                  i, p2[i], p3[i]);
+#endif
+          CHECK (p2[i] == p3[i]);
+        }
 
       printf ("  qsort:%Lf  unstable_qsort:%Lf  %zu\n", t2, t3, sz);
     }

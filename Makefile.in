@@ -174,7 +174,8 @@ am__uninstall_files_from_dir = { \
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libquicksorts_la_LIBADD =
 am__objects_1 =
-am_libquicksorts_la_OBJECTS = unstable-qsort.lo $(am__objects_1)
+am_libquicksorts_la_OBJECTS = unstable-qsort.lo lcg-seed.lo \
+	$(am__objects_1)
 libquicksorts_la_OBJECTS = $(am_libquicksorts_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -200,7 +201,8 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/unstable-qsort.Plo \
+am__depfiles_remade = ./$(DEPDIR)/lcg-seed.Plo \
+	./$(DEPDIR)/unstable-qsort.Plo \
 	tests/$(DEPDIR)/test-unstable_qsort.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -646,7 +648,7 @@ space := $(empty) $(empty)
 
 # Escape things for sed expressions, etc.
 escape = $(subst $$,\$$,$(subst ^,\^,$(subst ],\],$(subst [,\[,$(subst .,\.,$(subst \,\\,$(1)))))))
-libquicksorts_la_SOURCES = unstable-qsort.c \
+libquicksorts_la_SOURCES = unstable-qsort.c lcg-seed.c \
 	$(nobase_dist_include_HEADERS)
 nobase_dist_include_HEADERS = quicksorts/unstable-qsort.h \
 	quicksorts/unstable-quicksort.h \
@@ -800,6 +802,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lcg-seed.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unstable-qsort.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test-unstable_qsort.Po@am__quote@ # am--include-marker
 
@@ -1366,7 +1369,8 @@ clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-		-rm -f ./$(DEPDIR)/unstable-qsort.Plo
+		-rm -f ./$(DEPDIR)/lcg-seed.Plo
+	-rm -f ./$(DEPDIR)/unstable-qsort.Plo
 	-rm -f tests/$(DEPDIR)/test-unstable_qsort.Po
 	-rm -f GNUmakefile
 distclean-am: clean-am distclean-compile distclean-generic \
@@ -1417,7 +1421,8 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-		-rm -f ./$(DEPDIR)/unstable-qsort.Plo
+		-rm -f ./$(DEPDIR)/lcg-seed.Plo
+	-rm -f ./$(DEPDIR)/unstable-qsort.Plo
 	-rm -f tests/$(DEPDIR)/test-unstable_qsort.Po
 	-rm -f GNUmakefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
