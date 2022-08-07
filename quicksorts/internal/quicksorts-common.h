@@ -133,23 +133,22 @@ quicksorts_common__random_size_t_below (size_t n)
 
 /*------------------------------------------------------------------*/
 
-/* FIXME: TRY A SWAP THAT DOES NOT REQUIRE AN elembuf */
-/* FIXME: TRY A SWAP THAT DOES NOT REQUIRE AN elembuf */
-/* FIXME: TRY A SWAP THAT DOES NOT REQUIRE AN elembuf */
-/* FIXME: TRY A SWAP THAT DOES NOT REQUIRE AN elembuf */
-/* FIXME: TRY A SWAP THAT DOES NOT REQUIRE AN elembuf */
-/* FIXME: TRY A SWAP THAT DOES NOT REQUIRE AN elembuf */
-/* FIXME: TRY A SWAP THAT DOES NOT REQUIRE AN elembuf */
-/* FIXME: TRY A SWAP THAT DOES NOT REQUIRE AN elembuf */
 #define QUICKSORTS_COMMON__SWAP(PFX)            \
   do                                            \
     {                                           \
-      QUICKSORTS_COMMON__MEMCPY                 \
-        (PFX##elembuf, PFX##p1, PFX##elemsz);   \
-      QUICKSORTS_COMMON__MEMCPY                 \
-        (PFX##p1, PFX##p2, PFX##elemsz);        \
-      QUICKSORTS_COMMON__MEMCPY                 \
-        (PFX##p2, PFX##elembuf, PFX##elemsz);   \
+      char *PFX##q1 = PFX##p1;                  \
+      char *PFX##q2 = PFX##p2;                  \
+      size_t PFX##k = PFX##elemsz;              \
+      do                                        \
+        {                                       \
+          const char PFX##tmp = *PFX##q1;       \
+          *PFX##q1 = *PFX##q2;                  \
+          *PFX##q2 = PFX##tmp;                  \
+          PFX##q1 += 1;                         \
+          PFX##q2 += 1;                         \
+          PFX##k -= 1;                          \
+        }                                       \
+      while (PFX##k != 0);                      \
     }                                           \
   while (0)
 
