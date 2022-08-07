@@ -23,6 +23,10 @@
 #define QUICKSORTS__UNSTABLE_QUICKSORT__LT(x, y) \
   (quicksorts__unstable_quicksort__compar ((x), (y)) < 0)
 
+/* #undef QUICKSORTS__UNSTABLE_QUICKSORT__LT */
+/* #define QUICKSORTS__UNSTABLE_QUICKSORT__LT(x, y)    \ */
+/*   (*(const int *) (x) < *(const int *) (y)) */
+
 void
 unstable_qsort (void *base, size_t nmemb, size_t size,
                 int (*quicksorts__unstable_quicksort__compar)
