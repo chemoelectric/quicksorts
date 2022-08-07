@@ -107,6 +107,9 @@
                       (uintptr_t) PFX##p_left) / (PFX##elemsz << 1));   \
                   PFX##p_pivot =                                        \
                     PFX##p_right - (PFX##elemsz * PFX##half_diff);      \
+                  PFX##i_pivot =                                        \
+                    ((uintptr_t) PFX##p_pivot - (uintptr_t) PFX##arr)   \
+                    / PFX##elemsz;                                      \
                   char *const PFX##p1 = PFX##p_pivot;                   \
                   char *const PFX##p2 = PFX##p_right;                   \
                   QUICKSORTS_COMMON__SWAP (PFX);                        \
@@ -120,6 +123,9 @@
                       (uintptr_t) PFX##p_left) / (PFX##elemsz << 1));   \
                   PFX##p_pivot =                                        \
                     PFX##p_left + (PFX##elemsz * PFX##half_diff);       \
+                  PFX##i_pivot =                                        \
+                    ((uintptr_t) PFX##p_pivot - (uintptr_t) PFX##arr)   \
+                    / PFX##elemsz;                                      \
                   char *const PFX##p1 = PFX##p_left;                    \
                   char *const PFX##p2 = PFX##p_pivot;                   \
                   QUICKSORTS_COMMON__SWAP (PFX);                        \

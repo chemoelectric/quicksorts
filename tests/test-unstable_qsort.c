@@ -24,8 +24,7 @@
 
 #define MAX(x, y) ((x) < (y) ? (y) : (x))
 
-// FIXME #define MAX_SZ 10000000ULL
-#define MAX_SZ 10000ULL
+#define MAX_SZ 10000000ULL
 
 #define CHECK(expr)                             \
   if (expr)                                     \
@@ -107,7 +106,7 @@ test_arrays_with_int_keys (void (*init) (size_t i, int *x))
       unstable_qsort (p3, sz, sizeof (int), intcmp);
       const long double t32 = get_clock ();
       const long double t3 = t32 - t31;
-#if 1
+#if 0
       printf ("unstable_qsort ---------------------\n");
       for (size_t i = 0; i != sz; i += 1)
         printf ("%d\n", p3[i]);
@@ -115,7 +114,7 @@ test_arrays_with_int_keys (void (*init) (size_t i, int *x))
 
       for (size_t i = 0; i != sz; i += 1)
         {
-#if 1
+#if 0
           printf ("i = %zu  p2[i] = %d,  p3[i] = %d\n",
                   i, p2[i], p3[i]);
 #endif
