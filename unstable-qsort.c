@@ -42,6 +42,9 @@ unstable_qsort (void *base, size_t nmemb, size_t size,
                 int (*quicksorts__unstable_quicksort__compar)
                 (const void *, const void *))
 {
+  /* FIXME : Put elembuf in the heap if ‘size’ is very large. */
+  char quicksorts__unstable_qsort__elembuf[size];
+
   QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT
     (quicksorts__unstable_qsort__, base, nmemb, size);
 }

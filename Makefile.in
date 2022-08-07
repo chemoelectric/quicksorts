@@ -173,7 +173,8 @@ am__uninstall_files_from_dir = { \
   }
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libquicksorts_la_LIBADD =
-am_libquicksorts_la_OBJECTS = unstable-qsort.lo
+am__objects_1 =
+am_libquicksorts_la_OBJECTS = unstable-qsort.lo $(am__objects_1)
 libquicksorts_la_OBJECTS = $(am_libquicksorts_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -646,9 +647,10 @@ space := $(empty) $(empty)
 # Escape things for sed expressions, etc.
 escape = $(subst $$,\$$,$(subst ^,\^,$(subst ],\],$(subst [,\[,$(subst .,\.,$(subst \,\\,$(1)))))))
 libquicksorts_la_SOURCES = unstable-qsort.c \
-	quicksorts/unstable-qsort.h quicksorts/unstable-quicksort.h
+	$(nobase_dist_include_HEADERS)
 nobase_dist_include_HEADERS = quicksorts/unstable-qsort.h \
-	quicksorts/unstable-quicksort.h
+	quicksorts/unstable-quicksort.h \
+	quicksorts/internal/quicksorts-common.h
 tests_test_unstable_qsort_SOURCES = tests/test-unstable_qsort.c
 tests_test_unstable_qsort_DEPENDENCIES = libquicksorts.la
 tests_test_unstable_qsort_LDADD = libquicksorts.la
@@ -1576,7 +1578,7 @@ code-coverage-capture-hook:
 @GNU@ include $(top_srcdir)/silent-rules.mk
 
 clean-local: code-coverage-clean tests-clean
-distclean-local: code-coverage-dist-clean ats-includes-distclean
+distclean-local: code-coverage-dist-clean
 
 tests-clean:
 	-rm -f tests/*.$(OBJEXT)

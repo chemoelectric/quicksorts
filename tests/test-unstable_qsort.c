@@ -24,7 +24,8 @@
 
 #define MAX(x, y) ((x) < (y) ? (y) : (x))
 
-#define MAX_SZ 10000000ULL
+// FIXME #define MAX_SZ 10000000ULL
+#define MAX_SZ 10000ULL
 
 #define CHECK(expr)                             \
   if (expr)                                     \

@@ -61,7 +61,7 @@ CODE_COVERAGE_IGNORE_PATTERN += /usr/include/*
 CODE_COVERAGE_IGNORE_PATTERN += /usr/include/*/*
 
 clean-local: code-coverage-clean tests-clean
-distclean-local: code-coverage-dist-clean ats-includes-distclean
+distclean-local: code-coverage-dist-clean
 
 #---------------------------------------------------------------------
 #
@@ -80,12 +80,12 @@ escape = $(subst $$,\$$,$(subst ^,\^,$(subst ],\],$(subst [,\[,$(subst .,\.,$(su
 lib_LTLIBRARIES += libquicksorts.la
 libquicksorts_la_SOURCES =
 libquicksorts_la_SOURCES += unstable-qsort.c
-libquicksorts_la_SOURCES += quicksorts/unstable-qsort.h
-libquicksorts_la_SOURCES += quicksorts/unstable-quicksort.h
+libquicksorts_la_SOURCES += $(nobase_dist_include_HEADERS)
 
 nobase_dist_include_HEADERS =
 nobase_dist_include_HEADERS += quicksorts/unstable-qsort.h
 nobase_dist_include_HEADERS += quicksorts/unstable-quicksort.h
+nobase_dist_include_HEADERS += quicksorts/internal/quicksorts-common.h
 
 #--------------------------------------------------------------------------
 
