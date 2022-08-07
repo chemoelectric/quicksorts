@@ -30,9 +30,8 @@
       PFX##pfx_len = 2;                                             \
       char *PFX##p = PFX##arr + (PFX##elemsz * 2);                  \
                                                                     \
-      if (!(QUICKSORTS__UNSTABLE_QUICKSORT__LT                      \
-            ((const void *) (PFX##arr + PFX##elemsz),               \
-             (const void *) PFX##arr)))                             \
+      if (!(LT ((const void *) (PFX##arr + PFX##elemsz),            \
+                (const void *) PFX##arr)))                          \
         {                                                           \
           /* Non-decreasing order. */                               \
           while (PFX##pfx_len < PFX##nmemb &&                       \

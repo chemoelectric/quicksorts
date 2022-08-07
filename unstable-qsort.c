@@ -19,12 +19,11 @@
 #include "quicksorts/unstable-qsort.h"
 #include "quicksorts/unstable-quicksort.h"
 
-#undef QUICKSORTS__UNSTABLE_QUICKSORT__LT
-#define QUICKSORTS__UNSTABLE_QUICKSORT__LT(x, y) \
+#define ORDER_PREDICATE(x, y) \
   (quicksorts__unstable_quicksort__compar ((x), (y)) < 0)
 
-/* #undef QUICKSORTS__UNSTABLE_QUICKSORT__LT */
-/* #define QUICKSORTS__UNSTABLE_QUICKSORT__LT(x, y)    \ */
+/* #undef ORDER_PREDICATE */
+/* #define ORDER_PREDICATE(x, y)    \ */
 /*   (*(const int *) (x) < *(const int *) (y)) */
 
 void
@@ -40,6 +39,5 @@ unstable_qsort (void *base, size_t nmemb, size_t size,
   size_t quicksorts__unstable_qsort__elemsz = size;
 
   QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT
-    (quicksorts__unstable_qsort__,
-     QUICKSORTS__UNSTABLE_QUICKSORT__LT);
+    (quicksorts__unstable_qsort__, ORDER_PREDICATE);
 }
