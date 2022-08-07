@@ -23,65 +23,64 @@
 #include <string.h>
 #include <quicksorts/internal/quicksorts-common.h>
 
-#define QUICKSORTS__UNSTABLE_QUICKSORT__MAKE_AN_ORDERED_PREFIX(PFX)     \
-  do                                                                    \
-    {                                                                   \
-      PFX##pfx_len = 2;                                                 \
-      char *PFX##p = PFX##arr + (PFX##elemsz * 2);                      \
-                                                                        \
-      if (!(QUICKSORTS__UNSTABLE_QUICKSORT__LT                          \
-            ((const void *) (PFX##arr + PFX##elemsz),                   \
-             (const void *) PFX##arr)))                                 \
-        {                                                               \
-          /* Non-decreasing order. */                                   \
-          while (PFX##pfx_len < PFX##nmemb &&                           \
-                 !(QUICKSORTS__UNSTABLE_QUICKSORT__LT                   \
-                   ((void *) PFX##p, (void *) (PFX##p - PFX##elemsz)))) \
-            {                                                           \
-              PFX##pfx_len += 1;                                        \
-              PFX##p += PFX##elemsz;                                    \
-            }                                                           \
-        }                                                               \
-      else                                                              \
-        {                                                               \
-          /* Decreasing order. This branch sorts unstably. */           \
-          while (PFX##pfx_len < PFX##nmemb &&                           \
-                 !(QUICKSORTS__UNSTABLE_QUICKSORT__LT                   \
-                   ((void *) (PFX##p - PFX##elemsz), (void *) PFX##p))) \
-            {                                                           \
-              PFX##pfx_len += 1;                                        \
-              PFX##p += PFX##elemsz;                                    \
-            }                                                           \
-          QUICKSORTS_COMMON__REVERSE_PREFIX (PFX);                      \
-        }                                                               \
-    }                                                                   \
+#define QUICKSORTS__UNSTABLE_QUICKSORT__MAKE_AN_ORDERED_PREFIX(PFX, \
+                                                               LT)  \
+  do                                                                \
+    {                                                               \
+      PFX##pfx_len = 2;                                             \
+      char *PFX##p = PFX##arr + (PFX##elemsz * 2);                  \
+                                                                    \
+      if (!(QUICKSORTS__UNSTABLE_QUICKSORT__LT                      \
+            ((const void *) (PFX##arr + PFX##elemsz),               \
+             (const void *) PFX##arr)))                             \
+        {                                                           \
+          /* Non-decreasing order. */                               \
+          while (PFX##pfx_len < PFX##nmemb &&                       \
+                 !(LT ((void *) PFX##p,                             \
+                       (void *) (PFX##p - PFX##elemsz))))           \
+            {                                                       \
+              PFX##pfx_len += 1;                                    \
+              PFX##p += PFX##elemsz;                                \
+            }                                                       \
+        }                                                           \
+      else                                                          \
+        {                                                           \
+          /* Decreasing order. This branch sorts unstably. */       \
+          while (PFX##pfx_len < PFX##nmemb &&                       \
+                 !(LT ((void *) (PFX##p - PFX##elemsz),             \
+                       (void *) PFX##p)))                           \
+            {                                                       \
+              PFX##pfx_len += 1;                                    \
+              PFX##p += PFX##elemsz;                                \
+            }                                                       \
+          QUICKSORTS_COMMON__REVERSE_PREFIX (PFX);                  \
+        }                                                           \
+    }                                                               \
   while (0)
 
-#define QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT(PFX)     \
-  QUICKSORTS_COMMON__INSERTION_SORT                             \
-  (PFX, QUICKSORTS__UNSTABLE_QUICKSORT__MAKE_AN_ORDERED_PREFIX)
+#define QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT(PFX, LT)     \
+  QUICKSORTS_COMMON__INSERTION_SORT                                 \
+  (PFX, LT, QUICKSORTS__UNSTABLE_QUICKSORT__MAKE_AN_ORDERED_PREFIX)
 
-#define QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_RIGHTWARDS(PFX)    \
-  do                                                            \
-    {                                                           \
-      while (PFX##p_left != PFX##p_pivot &&                     \
-             QUICKSORTS__UNSTABLE_QUICKSORT__LT                 \
-             ((void *) PFX##p_left, (void *) PFX##p_pivot))     \
-        PFX##p_left += PFX##elemsz;                             \
-    }                                                           \
+#define QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_RIGHTWARDS(PFX, LT)    \
+  do                                                                \
+    {                                                               \
+      while (PFX##p_left != PFX##p_pivot &&                         \
+             (LT ((void *) PFX##p_left, (void *) PFX##p_pivot)))    \
+        PFX##p_left += PFX##elemsz;                                 \
+    }                                                               \
   while (0)
 
-#define QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_LEFTWARDS(PFX)     \
-  do                                                            \
-    {                                                           \
-      while (PFX##p_right != PFX##p_pivot &&                    \
-             QUICKSORTS__UNSTABLE_QUICKSORT__LT                 \
-             ((void *) PFX##p_pivot, (void *) PFX##p_right))    \
-        PFX##p_right -= PFX##elemsz;                            \
-    }                                                           \
+#define QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_LEFTWARDS(PFX, LT)     \
+  do                                                                \
+    {                                                               \
+      while (PFX##p_right != PFX##p_pivot &&                        \
+             (LT ((void *) PFX##p_pivot, (void *) PFX##p_right)))   \
+        PFX##p_right -= PFX##elemsz;                                \
+    }                                                               \
   while (0)
 
-#define QUICKSORTS__UNSTABLE_QUICKSORT__PARTITION(PFX)                  \
+#define QUICKSORTS__UNSTABLE_QUICKSORT__PARTITION(PFX, LT)              \
   do                                                                    \
     {                                                                   \
       PFX##i_pivot =                                                    \
@@ -92,8 +91,8 @@
         PFX##arr + (PFX##elemsz * (PFX##nmemb - 1));                    \
       do                                                                \
         {                                                               \
-          QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_RIGHTWARDS (PFX);        \
-          QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_LEFTWARDS (PFX);         \
+          QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_RIGHTWARDS (PFX, LT);    \
+          QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_LEFTWARDS (PFX, LT);     \
           if (PFX##p_left != PFX##p_right)                              \
             {                                                           \
               char *const PFX##p1 = PFX##p_left;                        \
@@ -143,11 +142,10 @@
   while (0)
 
 #ifndef QUICKSORTS__UNSTABLE_QUICKSORT__SMALL
-// /* FIXME: TUNE THIS */ /* FIXME: TUNE THIS */ /* FIXME: TUNE THIS */ /* FIXME: TUNE THIS */ /* FIXME: TUNE THIS */
 #define QUICKSORTS__UNSTABLE_QUICKSORT__SMALL 80
 #endif
 
-#define QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT(PFX)                  \
+#define QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT(PFX, LT)              \
   do                                                                    \
     {                                                                   \
       if (2 <= PFX##nmemb)                                              \
@@ -161,10 +159,13 @@
             {                                                           \
               QUICKSORTS_COMMON__STK_POP (PFX);                         \
               if (PFX##nmemb <= QUICKSORTS__UNSTABLE_QUICKSORT__SMALL)  \
-                QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT (PFX);   \
+                {                                                       \
+                  QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT        \
+                    (PFX, LT);                                          \
+                }                                                       \
               else                                                      \
                 {                                                       \
-                  QUICKSORTS__UNSTABLE_QUICKSORT__PARTITION (PFX);      \
+                  QUICKSORTS__UNSTABLE_QUICKSORT__PARTITION (PFX, LT);  \
                                                                         \
                   /* Push the larger part of the partition first. */    \
                   /* Otherwise the stack may overflow.            */    \
@@ -172,8 +173,10 @@
                   size_t PFX##n_le = PFX##i_pivot;                      \
                   size_t PFX##n_ge = PFX##nmemb - 1 - PFX##i_pivot;     \
                   if (PFX##n_le == 0)                                   \
-                    QUICKSORTS_COMMON__STK_PUSH                         \
-                      (PFX, PFX##p_pivot + PFX##elemsz, PFX##n_ge);     \
+                    {                                                   \
+                      QUICKSORTS_COMMON__STK_PUSH                       \
+                        (PFX, PFX##p_pivot + PFX##elemsz, PFX##n_ge);   \
+                    }                                                   \
                   else if (PFX##n_le < PFX##n_ge)                       \
                     {                                                   \
                       QUICKSORTS_COMMON__STK_PUSH                       \
@@ -182,8 +185,10 @@
                         (PFX, PFX##arr, PFX##n_le);                     \
                     }                                                   \
                   else if (PFX##n_ge == 0)                              \
-                    QUICKSORTS_COMMON__STK_PUSH                         \
-                      (PFX, PFX##arr, PFX##n_le);                       \
+                    {                                                   \
+                      QUICKSORTS_COMMON__STK_PUSH                       \
+                        (PFX, PFX##arr, PFX##n_le);                     \
+                    }                                                   \
                   else                                                  \
                     {                                                   \
                       QUICKSORTS_COMMON__STK_PUSH                       \
@@ -192,7 +197,7 @@
                         (PFX, PFX##p_pivot + PFX##elemsz, PFX##n_ge);   \
                     }                                                   \
                 }                                                       \
-            }                                                           \
+              }                                                         \
           while (PFX##stk_depth != 0);                                  \
         }                                                               \
     }                                                                   \

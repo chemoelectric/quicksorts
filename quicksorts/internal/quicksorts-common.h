@@ -182,34 +182,32 @@ quicksorts_common__random_size_t_below (size_t n)
 
   * https://en.wikipedia.org/w/index.php?title=Binary_search_algorithm&oldid=1062988272#Alternative_procedure
 */
-#define QUICKSORTS_COMMON__INSERTION_POSITION(PFX)              \
-  do                                                            \
-    {                                                           \
-      size_t PFX##j = 0;                                        \
-      size_t PFX##k = PFX##i - 1;                               \
-                                                                \
-      while (PFX##j != PFX##k)                                  \
-        {                                                       \
-          /* Ceiling of the midway point: */                    \
-          size_t PFX##h = PFX##k - ((PFX##k - PFX##j) >> 1);    \
-                                                                \
-          if (QUICKSORTS__UNSTABLE_QUICKSORT__LT                \
-              ((void *) (PFX##arr + (PFX##elemsz * PFX##i)),    \
-               (void *) (PFX##arr + (PFX##elemsz * PFX##h))))   \
-            PFX##k = PFX##h - 1;                                \
-          else                                                  \
-            PFX##j = PFX##h;                                    \
-        }                                                       \
-                                                                \
-      if (PFX##j != 0)                                          \
-        PFX##pos = PFX##j + 1;                                  \
-      else if (QUICKSORTS__UNSTABLE_QUICKSORT__LT               \
-               ((void *) (PFX##arr + (PFX##elemsz * PFX##i)),   \
-                (void *) PFX##arr))                             \
-        PFX##pos = 0;                                           \
-      else                                                      \
-        PFX##pos = 1;                                           \
-    }                                                           \
+#define QUICKSORTS_COMMON__INSERTION_POSITION(PFX, LT)              \
+  do                                                                \
+    {                                                               \
+      size_t PFX##j = 0;                                            \
+      size_t PFX##k = PFX##i - 1;                                   \
+                                                                    \
+      while (PFX##j != PFX##k)                                      \
+        {                                                           \
+          /* Ceiling of the midway point: */                        \
+          size_t PFX##h = PFX##k - ((PFX##k - PFX##j) >> 1);        \
+                                                                    \
+          if (LT ((void *) (PFX##arr + (PFX##elemsz * PFX##i)),     \
+                  (void *) (PFX##arr + (PFX##elemsz * PFX##h))))    \
+            PFX##k = PFX##h - 1;                                    \
+          else                                                      \
+            PFX##j = PFX##h;                                        \
+        }                                                           \
+                                                                    \
+      if (PFX##j != 0)                                              \
+        PFX##pos = PFX##j + 1;                                      \
+      else if (LT ((void *) (PFX##arr + (PFX##elemsz * PFX##i)),    \
+                   (void *) PFX##arr))                              \
+        PFX##pos = 0;                                               \
+      else                                                          \
+        PFX##pos = 1;                                               \
+    }                                                               \
   while (0)
 
 #define QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT(PFX)                      \
@@ -233,18 +231,19 @@ quicksorts_common__random_size_t_below (size_t n)
     }                                                                   \
   while (0)
 
-#define QUICKSORTS_COMMON__INSERTION_SORT(PFX, MAKE_AN_ORDERED_PREFIX)  \
+#define QUICKSORTS_COMMON__INSERTION_SORT(PFX, LT,                      \
+                                          MAKE_AN_ORDERED_PREFIX)       \
   do                                                                    \
     {                                                                   \
       if (PFX##nmemb > 1)                                               \
         {                                                               \
           size_t PFX##pfx_len;                                          \
-          MAKE_AN_ORDERED_PREFIX (PFX);                                 \
+          MAKE_AN_ORDERED_PREFIX (PFX, LT);                             \
           size_t PFX##i = PFX##pfx_len;                                 \
           while (PFX##i != PFX##nmemb)                                  \
             {                                                           \
               size_t PFX##pos;                                          \
-              QUICKSORTS_COMMON__INSERTION_POSITION (PFX);              \
+              QUICKSORTS_COMMON__INSERTION_POSITION (PFX, LT);          \
               size_t PFX##left = PFX##pos;                              \
               size_t PFX##right = PFX##i;                               \
               QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT (PFX);              \

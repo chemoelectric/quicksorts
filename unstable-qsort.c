@@ -40,5 +40,6 @@ unstable_qsort (void *base, size_t nmemb, size_t size,
   size_t quicksorts__unstable_qsort__elemsz = size;
 
   QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT
-    (quicksorts__unstable_qsort__);
+    (quicksorts__unstable_qsort__,
+     QUICKSORTS__UNSTABLE_QUICKSORT__LT);
 }
