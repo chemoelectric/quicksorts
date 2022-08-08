@@ -84,8 +84,8 @@
                                                   PIVOT_SELECTION)      \
   do                                                                    \
     {                                                                   \
-      PFX##i_pivot =                                                    \
-        PIVOT_SELECTION (PFX##arr, PFX##nmemb, PFX##elemsz);            \
+      PIVOT_SELECTION (PFX##arr, PFX##nmemb, PFX##elemsz, LT,           \
+                       PFX##i_pivot);                                   \
       PFX##p_pivot = PFX##arr + (PFX##elemsz * PFX##i_pivot);           \
       char *PFX##p_left = PFX##arr;                                     \
       char *PFX##p_right =                                              \

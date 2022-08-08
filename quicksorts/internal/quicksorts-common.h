@@ -134,12 +134,68 @@ quicksorts_common__random_size_t_below (size_t n)
 /*------------------------------------------------------------------*/
 /* Pivot selection mechanisms.                                      */
 
-quicksorts_common__inline size_t
-quicksorts_common__random_pivot (const void *base, size_t nmemb,
-                                 size_t size)
-{
-  return quicksorts_common__random_size_t_below (nmemb);
-}
+#define QUICKSORTS_COMMON__PIVOT_RANDOM(BASE, NMEMB, SIZE, LT,  \
+                                        RESULT)                 \
+  do                                                            \
+    {                                                           \
+      RESULT = quicksorts_common__random_size_t_below (NMEMB);  \
+    }                                                           \
+  while (0)
+
+#define QUICKSORTS_COMMON__PIVOT_MIDDLE(BASE, NMEMB, SIZE, LT,  \
+                                        RESULT)                 \
+  do                                                            \
+    {                                                           \
+      RESULT = ((NMEMB) >> 1);                                  \
+    }                                                           \
+  while (0)
+
+#define QUICKSORTS_COMMON__PIVOT_MEDIAN_OF_THREE(BASE, NMEMB, SIZE, \
+                                                 LT, RESULT)        \
+  do                                                                \
+    {                                                               \
+      size_t nmemb = (size_t) (NMEMB);                              \
+      if (nmemb <= 2)                                               \
+        {                                                           \
+          RESULT = (size_t) 0;                                      \
+        }                                                           \
+      else                                                          \
+        {                                                           \
+          char *const arr = (void *) (BASE);                        \
+          const size_t elemsz = (size_t) (SIZE);                    \
+                                                                    \
+          const size_t i_first = 0;                                 \
+          const size_t i_middle = nmemb >> 1;                       \
+          const size_t i_last = nmemb - 1;                          \
+                                                                    \
+          const char *p_first = arr;                                \
+          const char *p_middle = arr + (elemsz * i_middle);         \
+          const char *p_last = arr + (elemsz * i_last);             \
+                                                                    \
+          const bool middle_lt_first =                              \
+            (bool) LT (p_middle, p_first);                          \
+          const bool last_lt_first =                                \
+            (bool) LT (p_last, p_first);                            \
+          if (middle_lt_first != last_lt_first)                     \
+            {                                                       \
+              RESULT = i_first;                                     \
+            }                                                       \
+          else                                                      \
+            {                                                       \
+              const bool middle_lt_last =                           \
+                (bool) LT (p_middle, p_last);                       \
+              if (middle_lt_first != middle_lt_last)                \
+                {                                                   \
+                  RESULT = i_middle;                                \
+                }                                                   \
+              else                                                  \
+                {                                                   \
+                  RESULT = i_last;                                  \
+                }                                                   \
+            }                                                       \
+        }                                                           \
+    }                                                               \
+  while (0)
 
 /*------------------------------------------------------------------*/
 
