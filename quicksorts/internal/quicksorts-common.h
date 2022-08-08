@@ -143,41 +143,37 @@ quicksorts_common__random_pivot (const void *base, size_t nmemb,
 
 /*------------------------------------------------------------------*/
 
-#define QUICKSORTS_COMMON__SWAP(PFX)            \
-  do                                            \
-    {                                           \
-      char *PFX##q1 = PFX##p1;                  \
-      char *PFX##q2 = PFX##p2;                  \
-      size_t PFX##k = PFX##elemsz;              \
-      do                                        \
-        {                                       \
-          const char PFX##tmp = *PFX##q1;       \
-          *PFX##q1 = *PFX##q2;                  \
-          *PFX##q2 = PFX##tmp;                  \
-          PFX##q1 += 1;                         \
-          PFX##q2 += 1;                         \
-          PFX##k -= 1;                          \
-        }                                       \
-      while (PFX##k != 0);                      \
-    }                                           \
-  while (0)
+/* Swap two elements. */
+quicksorts_common__inline void
+quicksorts_common__elem_swap (char *p1, char *p2, size_t elemsz)
+{
+  do
+    {
+      const char tmp = *p1;
+      *p1 = *p2;
+      *p2 = tmp;
+      p1 += 1;
+      p2 += 1;
+      elemsz -= 1;
+    }
+  while (elemsz != 0);
+}
 
-#define QUICKSORTS_COMMON__REVERSE_PREFIX(PFX)              \
-  do                                                        \
-    {                                                       \
-      char *PFX##p_left = PFX##arr;                         \
-      char *PFX##p_right =                                  \
-        PFX##p_left + ((PFX##pfx_len - 1) * PFX##elemsz);   \
-      while (PFX##p_left < PFX##p_right)                    \
-        {                                                   \
-          char *PFX##p1 = PFX##p_left;                      \
-          char *PFX##p2 = PFX##p_right;                     \
-          QUICKSORTS_COMMON__SWAP (PFX);                    \
-          PFX##p_left += PFX##elemsz;                       \
-          PFX##p_right -= PFX##elemsz;                      \
-        }                                                   \
-    }                                                       \
-  while (0)
+/* Reverse a prefix of pfx_len >= 2. */
+quicksorts_common__inline void
+quicksorts_common__reverse_prefix (char *arr, size_t pfx_len,
+                                   size_t elemsz)
+{
+  char *p_left = arr;
+  char *p_right = p_left + ((pfx_len - 1) * elemsz);
+  do
+    {
+      quicksorts_common__elem_swap (p_left, p_right, elemsz);
+      p_left += elemsz;
+      p_right -= elemsz;
+    }
+  while (p_left < p_right);
+}
 
 /*
   The insertion position is found by a binary search.
@@ -220,47 +216,72 @@ quicksorts_common__random_pivot (const void *base, size_t nmemb,
     }                                                               \
   while (0)
 
-#define QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT(PFX)                      \
-  do                                                                    \
-    {                                                                   \
-      if (PFX##left != PFX##right)                                      \
-        {                                                               \
-          char *PFX##p_left = PFX##arr + (PFX##elemsz * PFX##left);     \
-          char *PFX##p_right = PFX##arr + (PFX##elemsz * PFX##right);   \
-                                                                        \
-          QUICKSORTS_COMMON__MEMCPY                                     \
-            (PFX##elembuf, PFX##p_right, PFX##elemsz);                  \
-                                                                        \
-          QUICKSORTS_COMMON__MEMMOVE                                    \
-            (PFX##p_left + PFX##elemsz, PFX##p_left,                    \
-             PFX##elemsz * (PFX##right - PFX##left));                   \
-                                                                        \
-          QUICKSORTS_COMMON__MEMCPY                                     \
-            (PFX##p_left, PFX##elembuf, PFX##elemsz);                   \
-        }                                                               \
-    }                                                                   \
-  while (0)
+#define QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE 128
 
-#define QUICKSORTS_COMMON__INSERTION_SORT(PFX, LT,                      \
-                                          MAKE_AN_ORDERED_PREFIX)       \
-  do                                                                    \
-    {                                                                   \
-      if (PFX##nmemb > 1)                                               \
-        {                                                               \
-          size_t PFX##pfx_len;                                          \
-          MAKE_AN_ORDERED_PREFIX (PFX, LT);                             \
-          size_t PFX##i = PFX##pfx_len;                                 \
-          while (PFX##i != PFX##nmemb)                                  \
-            {                                                           \
-              size_t PFX##pos;                                          \
-              QUICKSORTS_COMMON__INSERTION_POSITION (PFX, LT);          \
-              size_t PFX##left = PFX##pos;                              \
-              size_t PFX##right = PFX##i;                               \
-              QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT (PFX);              \
-              PFX##i += 1;                                              \
-            }                                                           \
-        }                                                               \
-    }                                                                   \
+quicksorts_common__inline void
+quicksorts_common__subcirculate_right (char *p_left, char *p_right,
+                                       size_t elemsz)
+{
+  char elembuf
+    [QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE];
+
+  if (p_left != p_right)
+    {
+      if (elemsz <=
+          QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE)
+        {
+          QUICKSORTS_COMMON__MEMCPY (elembuf, p_right, elemsz);
+          QUICKSORTS_COMMON__MEMMOVE (p_left + elemsz, p_left,
+                                      p_right - p_left);
+          QUICKSORTS_COMMON__MEMCPY (p_left, elembuf, elemsz);
+        }
+      else
+        {
+          const size_t elembuf_sz =
+            QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE;
+          for (size_t i = 0;
+               i != elemsz;
+               i += (((elemsz - i) < elembuf_sz) ?
+                     (elemsz - i) : elembuf_sz))
+            {
+              const size_t blocksz =
+                ((elemsz - i) < elembuf_sz) ?
+                (elemsz - i) : elembuf_sz;
+              QUICKSORTS_COMMON__MEMCPY (elembuf, p_right, blocksz);
+              for (char *p = p_right; p != p_left; p -= elemsz)
+                QUICKSORTS_COMMON__MEMCPY (p, p - elemsz, blocksz);
+              QUICKSORTS_COMMON__MEMCPY (p_left, elembuf, blocksz);
+              p_right += blocksz;
+              p_left += blocksz;
+            }
+        }
+    }
+}
+
+#define QUICKSORTS_COMMON__INSERTION_SORT(PFX, LT,                  \
+                                          MAKE_AN_ORDERED_PREFIX)   \
+  do                                                                \
+    {                                                               \
+      if (PFX##nmemb > 1)                                           \
+        {                                                           \
+          size_t PFX##pfx_len;                                      \
+          MAKE_AN_ORDERED_PREFIX (PFX, LT);                         \
+          size_t PFX##i = PFX##pfx_len;                             \
+          while (PFX##i != PFX##nmemb)                              \
+            {                                                       \
+              size_t PFX##pos;                                      \
+              QUICKSORTS_COMMON__INSERTION_POSITION (PFX, LT);      \
+              size_t PFX##left = PFX##pos;                          \
+              size_t PFX##right = PFX##i;                           \
+              if (PFX##left != PFX##right)                          \
+                quicksorts_common__subcirculate_right               \
+                  (PFX##arr + (PFX##elemsz * PFX##left),            \
+                   PFX##arr + (PFX##elemsz * PFX##right),           \
+                   PFX##elemsz);                                    \
+              PFX##i += 1;                                          \
+            }                                                       \
+        }                                                           \
+    }                                                               \
   while (0)
 
 #define QUICKSORTS_COMMON__STK_MAKE(PFX)                    \

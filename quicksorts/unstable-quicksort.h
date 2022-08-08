@@ -52,7 +52,8 @@
               PFX##pfx_len += 1;                                    \
               PFX##p += PFX##elemsz;                                \
             }                                                       \
-          QUICKSORTS_COMMON__REVERSE_PREFIX (PFX);                  \
+          quicksorts_common__reverse_prefix                         \
+            (PFX##arr, PFX##pfx_len, PFX##elemsz);                  \
         }                                                           \
     }                                                               \
   while (0)
@@ -95,39 +96,32 @@
           QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_LEFTWARDS (PFX, LT);     \
           if (PFX##p_left != PFX##p_right)                              \
             {                                                           \
-              char *const PFX##p1 = PFX##p_left;                        \
-              char *const PFX##p2 = PFX##p_right;                       \
-              QUICKSORTS_COMMON__SWAP (PFX);                            \
+              quicksorts_common__elem_swap                              \
+                (PFX##p_left, PFX##p_right, PFX##elemsz);               \
               if (PFX##p_left == PFX##p_pivot)                          \
                 {                                                       \
                   /* Keep the pivot between p_left and p_right. */      \
                   size_t PFX##half_diff =                               \
-                    (((uintptr_t) PFX##p_right -                        \
-                      (uintptr_t) PFX##p_left) / (PFX##elemsz << 1));   \
+                    (PFX##p_right - PFX##p_left) / (PFX##elemsz << 1);  \
                   PFX##p_pivot =                                        \
                     PFX##p_right - (PFX##elemsz * PFX##half_diff);      \
                   PFX##i_pivot =                                        \
-                    ((uintptr_t) PFX##p_pivot - (uintptr_t) PFX##arr)   \
-                    / PFX##elemsz;                                      \
-                  char *const PFX##p1 = PFX##p_pivot;                   \
-                  char *const PFX##p2 = PFX##p_right;                   \
-                  QUICKSORTS_COMMON__SWAP (PFX);                        \
+                    (PFX##p_pivot - PFX##arr) / PFX##elemsz;            \
+                  quicksorts_common__elem_swap                          \
+                    (PFX##p_pivot, PFX##p_right, PFX##elemsz);          \
                   PFX##p_left += PFX##elemsz;                           \
                 }                                                       \
               else if (PFX##p_right == PFX##p_pivot)                    \
                 {                                                       \
                   /* Keep the pivot between p_left and p_right. */      \
                   size_t PFX##half_diff =                               \
-                    (((uintptr_t) PFX##p_right -                        \
-                      (uintptr_t) PFX##p_left) / (PFX##elemsz << 1));   \
+                    (PFX##p_right - PFX##p_left) / (PFX##elemsz << 1);  \
                   PFX##p_pivot =                                        \
                     PFX##p_left + (PFX##elemsz * PFX##half_diff);       \
                   PFX##i_pivot =                                        \
-                    ((uintptr_t) PFX##p_pivot - (uintptr_t) PFX##arr)   \
-                    / PFX##elemsz;                                      \
-                  char *const PFX##p1 = PFX##p_left;                    \
-                  char *const PFX##p2 = PFX##p_pivot;                   \
-                  QUICKSORTS_COMMON__SWAP (PFX);                        \
+                    (PFX##p_pivot - PFX##arr) / PFX##elemsz;            \
+                  quicksorts_common__elem_swap                          \
+                    (PFX##p_left, PFX##p_pivot, PFX##elemsz);           \
                   PFX##p_right -= PFX##elemsz;                          \
                 }                                                       \
               else                                                      \
@@ -213,28 +207,9 @@
       size_t quicksorts__unstable_quicksort__elemsz =               \
         (size_t) (ELEMSZ);                                          \
                                                                     \
-      if (quicksorts__unstable_quicksort__elemsz <= 256)            \
-        {                                                           \
-          char quicksorts__unstable_quicksort__elembuf              \
-            [quicksorts__unstable_quicksort__elemsz];               \
-                                                                    \
-          QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT                 \
-            (quicksorts__unstable_quicksort__,                      \
-             LT, SMALL_SIZE, SMALL_SORT, PIVOT_SELECTION);          \
-        }                                                           \
-      else                                                          \
-        {                                                           \
-          /* FIXME: DO WE NEED elembuf? */                          \
-          char *quicksorts__unstable_quicksort__elembuf =           \
-            malloc (quicksorts__unstable_quicksort__elemsz);        \
-          /* FIXME: WHAT TO DO IF THERE IS AN ALLOCATION ERROR? */  \
-                                                                    \
-          QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT                 \
-            (quicksorts__unstable_quicksort__,                      \
-             LT, SMALL_SIZE, SMALL_SORT, PIVOT_SELECTION);          \
-                                                                    \
-          free (quicksorts__unstable_quicksort__elembuf);           \
-        }                                                           \
+      QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT                     \
+        (quicksorts__unstable_quicksort__,                          \
+         LT, SMALL_SIZE, SMALL_SORT, PIVOT_SELECTION);              \
     }                                                               \
   while (0)
 
