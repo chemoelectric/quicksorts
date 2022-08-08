@@ -93,14 +93,16 @@ nobase_dist_include_HEADERS += quicksorts/internal/quicksorts-common.h
 TESTS =
 TESTS += tests/test-unstable_qsort
 
-EXTRA_PROGRAMS += tests/test-unstable_qsort
-CLEANFILES += tests/test-unstable_qsort
-tests_test_unstable_qsort_SOURCES =
-tests_test_unstable_qsort_SOURCES += tests/test-unstable_qsort.c
-tests_test_unstable_qsort_DEPENDENCIES =
-tests_test_unstable_qsort_DEPENDENCIES += libquicksorts.la
-tests_test_unstable_qsort_LDADD =
-tests_test_unstable_qsort_LDADD += libquicksorts.la
+check: tests/test-int-patterns
+
+EXTRA_PROGRAMS += tests/test-int-patterns
+CLEANFILES += tests/test-int-patterns
+tests_test_int_patterns_SOURCES =
+tests_test_int_patterns_SOURCES += tests/test-int-patterns.c
+tests_test_int_patterns_DEPENDENCIES =
+tests_test_int_patterns_DEPENDENCIES += libquicksorts.la
+tests_test_int_patterns_LDADD =
+tests_test_int_patterns_LDADD += libquicksorts.la
 
 tests-clean:
 	-rm -f tests/*.$(OBJEXT)

@@ -19,12 +19,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 #include <time.h>
 #include "quicksorts/unstable-qsort.h"
 
-#define MAX(x, y) ((x) < (y) ? (y) : (x))
-
 #define MAX_SZ 10000000ULL
+
+typedef const char *sortkind_t;
+#define sortkind_eq(A, B) (strcmp ((A), (B)) == 0)
+
+#define MAX(x, y) ((x) < (y) ? (y) : (x))
 
 #define CHECK(expr)                             \
   if (expr)                                     \
@@ -75,7 +79,8 @@ copy_array (int *dst, int *src, size_t n)
 }
 
 static void
-test_arrays_with_int_keys (void (*init) (size_t i, int *x))
+test_arrays_with_int_keys (sortkind_t sortkind,
+                           void (*init) (size_t i, int *x))
 {
   int *p1 = malloc (MAX_SZ * sizeof (int));
   int *p2 = malloc (MAX_SZ * sizeof (int));
@@ -96,18 +101,28 @@ test_arrays_with_int_keys (void (*init) (size_t i, int *x))
       const long double t22 = get_clock ();
       const long double t2 = t22 - t21;
 #if 0
-      printf ("qsort ------------------------------\n");
+      printf ("system qsort -----------------------\n");
       for (size_t i = 0; i != sz; i += 1)
         printf ("%d\n", p2[i]);
 #endif
 
       copy_array (p3, p1, sz);
-      const long double t31 = get_clock ();
-      unstable_qsort (p3, sz, sizeof (int), intcmp);
-      const long double t32 = get_clock ();
+      long double t31;
+      long double t32;
+      if (sortkind_eq (sortkind, "unstable_qsort"))
+        {
+          t31 = get_clock ();
+          unstable_qsort (p3, sz, sizeof (int), intcmp);
+          t32 = get_clock ();
+        }
+      else
+        {
+          printf ("Invalid command-line argument.\n");
+          exit (1);
+        }
       const long double t3 = t32 - t31;
 #if 0
-      printf ("unstable_qsort ---------------------\n");
+      printf ("my sort ----------------------------\n");
       for (size_t i = 0; i != sz; i += 1)
         printf ("%d\n", p3[i]);
 #endif
@@ -121,7 +136,7 @@ test_arrays_with_int_keys (void (*init) (size_t i, int *x))
           CHECK (p2[i] == p3[i]);
         }
 
-      printf ("  qsort:%Lf  unstable_qsort:%Lf  %zu\n", t2, t3, sz);
+      printf ("  qsort:%Lf  ours:%Lf  %zu\n", t2, t3, sz);
     }
 
   free (p1);
@@ -136,10 +151,10 @@ init_with_random_int (size_t i, int *x)
 }
 
 static void
-test_random_arrays_with_int_keys (void)
+test_random_arrays_with_int_keys (sortkind_t sortkind)
 {
   printf ("Random arrays:\n");
-  test_arrays_with_int_keys (init_with_random_int);
+  test_arrays_with_int_keys (sortkind, init_with_random_int);
 }
 
 static void
@@ -149,10 +164,10 @@ init_with_index (size_t i, int *x)
 }
 
 static void
-test_presorted_arrays_with_int_keys (void)
+test_presorted_arrays_with_int_keys (sortkind_t sortkind)
 {
   printf ("Pre-sorted arrays:\n");
-  test_arrays_with_int_keys (init_with_index);
+  test_arrays_with_int_keys (sortkind, init_with_index);
 }
 
 static void
@@ -162,17 +177,68 @@ init_with_neg_of_index (size_t i, int *x)
 }
 
 static void
-test_reverse_presorted_arrays_with_int_keys (void)
+test_reverse_presorted_arrays_with_int_keys (sortkind_t sortkind)
 {
   printf ("Reverse pre-sorted arrays:\n");
-  test_arrays_with_int_keys (init_with_neg_of_index);
+  test_arrays_with_int_keys (sortkind, init_with_neg_of_index);
+}
+
+static void
+init_with_sign_reversing_random_ints (size_t i, int *x)
+{
+  int r = random_int (-1000, 1000);
+  *x = ((i & 1) == 0) ? r : (-r);
+}
+
+static void
+test_sign_reversal_random_arrays_with_int_keys (sortkind_t sortkind)
+{
+  printf ("Sign-reversal random arrays:\n");
+  test_arrays_with_int_keys
+    (sortkind, init_with_sign_reversing_random_ints);
+}
+
+static void
+init_with_a_constant_int (size_t i, int *x)
+{
+  *x = 1;
+}
+
+static void
+test_constant_arrays_with_int_keys (sortkind_t sortkind)
+{
+  printf ("Constant arrays:\n");
+  test_arrays_with_int_keys (sortkind, init_with_a_constant_int);
+}
+
+static void
+init_with_a_sign_reversing_constant_int (size_t i, int *x)
+{
+  *x = ((i & 1) == 0) ? 1 : (-1);
+}
+
+static void
+test_sign_reversal_constant_arrays_with_int_keys (sortkind_t sortkind)
+{
+  printf ("Sign-reversal constant arrays:\n");
+  test_arrays_with_int_keys
+    (sortkind, init_with_a_sign_reversing_constant_int);
 }
 
 int
 main (int argc, char *argv[])
 {
-  test_random_arrays_with_int_keys ();
-  test_presorted_arrays_with_int_keys ();
-  test_reverse_presorted_arrays_with_int_keys ();
+  if (argc <= 1)
+    {
+      printf ("This program expects a command-line argument.\n");
+      exit (1);
+    }
+  sortkind_t sortkind = argv[1];
+  test_random_arrays_with_int_keys (sortkind);
+  test_presorted_arrays_with_int_keys (sortkind);
+  test_reverse_presorted_arrays_with_int_keys (sortkind);
+  test_sign_reversal_random_arrays_with_int_keys (sortkind);
+  test_constant_arrays_with_int_keys (sortkind);
+  test_sign_reversal_constant_arrays_with_int_keys (sortkind);
   return 0;
 }

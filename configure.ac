@@ -89,6 +89,12 @@ AC_SUBST([GNU],[])
 StM_REQUIRE_GNU_MAKE_IN_PATH
 StM_CONFIG_MAKEFILES
 
+m4_foreach([f],
+  [
+    tests/test-unstable_qsort
+  ],
+  [AC_CONFIG_FILES(f,[chmod +x ]f)])
+
 #AC_CONFIG_FILES([quicksorts.pc])
 
 AC_OUTPUT

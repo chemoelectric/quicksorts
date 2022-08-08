@@ -18987,6 +18987,9 @@ printf "%s\n" "$as_me: WARNING: Please consider installing and using GNU Make:
 
 }
 
+ac_config_files="$ac_config_files tests/test-unstable_qsort"
+
+
 #AC_CONFIG_FILES([quicksorts.pc])
 
 cat >confcache <<\_ACEOF
@@ -20131,6 +20134,7 @@ do
     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "GNUmakefile") CONFIG_FILES="$CONFIG_FILES GNUmakefile:Makefile.in" ;;
+    "tests/test-unstable_qsort") CONFIG_FILES="$CONFIG_FILES tests/test-unstable_qsort" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
@@ -21387,6 +21391,8 @@ _LT_EOF
 EOF
       fi
     ;;
+    "tests/test-unstable_qsort":F) chmod +x tests/test-unstable_qsort
+   ;;
 
   esac
 done # for ac_tag
