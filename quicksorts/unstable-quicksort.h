@@ -79,11 +79,12 @@
     }                                                               \
   while (0)
 
-#define QUICKSORTS__UNSTABLE_QUICKSORT__PARTITION(PFX, LT)              \
+#define QUICKSORTS__UNSTABLE_QUICKSORT__PARTITION(PFX, LT,              \
+                                                  PIVOT_SELECTION)      \
   do                                                                    \
     {                                                                   \
       PFX##i_pivot =                                                    \
-        quicksorts_common__random_size_t_below (PFX##nmemb);            \
+        PIVOT_SELECTION (PFX##arr, PFX##nmemb, PFX##elemsz);            \
       PFX##p_pivot = PFX##arr + (PFX##elemsz * PFX##i_pivot);           \
       char *PFX##p_left = PFX##arr;                                     \
       char *PFX##p_right =                                              \
@@ -140,11 +141,9 @@
     }                                                                   \
   while (0)
 
-#ifndef QUICKSORTS__UNSTABLE_QUICKSORT__SMALL
-#define QUICKSORTS__UNSTABLE_QUICKSORT__SMALL 80
-#endif
-
-#define QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT(PFX, LT)              \
+#define QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT(PFX, LT, SMALL_SIZE,  \
+                                                  SMALL_SORT,           \
+                                                  PIVOT_SELECTION)      \
   do                                                                    \
     {                                                                   \
       if (2 <= PFX##nmemb)                                              \
@@ -157,14 +156,14 @@
           do                                                            \
             {                                                           \
               QUICKSORTS_COMMON__STK_POP (PFX);                         \
-              if (PFX##nmemb <= QUICKSORTS__UNSTABLE_QUICKSORT__SMALL)  \
+              if (PFX##nmemb <= (SMALL_SIZE))                           \
                 {                                                       \
-                  QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT        \
-                    (PFX, LT);                                          \
+                  SMALL_SORT (PFX, LT);                                 \
                 }                                                       \
               else                                                      \
                 {                                                       \
-                  QUICKSORTS__UNSTABLE_QUICKSORT__PARTITION (PFX, LT);  \
+                  QUICKSORTS__UNSTABLE_QUICKSORT__PARTITION             \
+                    (PFX, LT, PIVOT_SELECTION);                         \
                                                                         \
                   /* Push the larger part of the partition first. */    \
                   /* Otherwise the stack may overflow.            */    \
@@ -200,6 +199,43 @@
           while (PFX##stk_depth != 0);                                  \
         }                                                               \
     }                                                                   \
+  while (0)
+
+#define UNSTABLE_QUICKSORT_CONFIGURABLE(BASE, NMEMB, ELEMSZ, LT,    \
+                                        SMALL_SIZE, SMALL_SORT,     \
+                                        PIVOT_SELECTION)            \
+  do                                                                \
+    {                                                               \
+      char *quicksorts__unstable_quicksort__arr =                   \
+        (void *) (BASE);                                            \
+      size_t quicksorts__unstable_quicksort__nmemb =                \
+        (size_t) (NMEMB);                                           \
+      size_t quicksorts__unstable_quicksort__elemsz =               \
+        (size_t) (ELEMSZ);                                          \
+                                                                    \
+      if (quicksorts__unstable_quicksort__elemsz <= 256)            \
+        {                                                           \
+          char quicksorts__unstable_quicksort__elembuf              \
+            [quicksorts__unstable_quicksort__elemsz];               \
+                                                                    \
+          QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT                 \
+            (quicksorts__unstable_quicksort__,                      \
+             LT, SMALL_SIZE, SMALL_SORT, PIVOT_SELECTION);          \
+        }                                                           \
+      else                                                          \
+        {                                                           \
+          /* FIXME: DO WE NEED elembuf? */                          \
+          char *quicksorts__unstable_quicksort__elembuf =           \
+            malloc (quicksorts__unstable_quicksort__elemsz);        \
+          /* FIXME: WHAT TO DO IF THERE IS AN ALLOCATION ERROR? */  \
+                                                                    \
+          QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT                 \
+            (quicksorts__unstable_quicksort__,                      \
+             LT, SMALL_SIZE, SMALL_SORT, PIVOT_SELECTION);          \
+                                                                    \
+          free (quicksorts__unstable_quicksort__elembuf);           \
+        }                                                           \
+    }                                                               \
   while (0)
 
 #endif /* QUICKSORTS__UNSTABLE_QUICKSORT_H__HEADER_GUARD__ */

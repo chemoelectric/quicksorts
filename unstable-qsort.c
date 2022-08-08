@@ -19,25 +19,19 @@
 #include "quicksorts/unstable-qsort.h"
 #include "quicksorts/unstable-quicksort.h"
 
-#define ORDER_PREDICATE(x, y) \
+#define LT(x, y)                                            \
   (quicksorts__unstable_quicksort__compar ((x), (y)) < 0)
 
-/* #undef ORDER_PREDICATE */
-/* #define ORDER_PREDICATE(x, y)    \ */
-/*   (*(const int *) (x) < *(const int *) (y)) */
+#define SMALL_SIZE 80
+#define SMALL_SORT QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT
+#define PIVOT_SELECTION quicksorts_common__random_pivot
 
 void
 unstable_qsort (void *base, size_t nmemb, size_t size,
                 int (*quicksorts__unstable_quicksort__compar)
                 (const void *, const void *))
 {
-  /* FIXME : Put elembuf in the heap if ‘size’ is very large. */
-  char quicksorts__unstable_qsort__elembuf[size];
-
-  char *quicksorts__unstable_qsort__arr = base;
-  size_t quicksorts__unstable_qsort__nmemb = nmemb;
-  size_t quicksorts__unstable_qsort__elemsz = size;
-
-  QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT
-    (quicksorts__unstable_qsort__, ORDER_PREDICATE);
+  UNSTABLE_QUICKSORT_CONFIGURABLE (base, nmemb, size, LT,
+                                   SMALL_SIZE, SMALL_SORT,
+                                   PIVOT_SELECTION);
 }

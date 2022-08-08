@@ -132,6 +132,16 @@ quicksorts_common__random_size_t_below (size_t n)
 }
 
 /*------------------------------------------------------------------*/
+/* Pivot selection mechanisms.                                      */
+
+quicksorts_common__inline size_t
+quicksorts_common__random_pivot (const void *base, size_t nmemb,
+                                 size_t size)
+{
+  return quicksorts_common__random_size_t_below (nmemb);
+}
+
+/*------------------------------------------------------------------*/
 
 #define QUICKSORTS_COMMON__SWAP(PFX)            \
   do                                            \
