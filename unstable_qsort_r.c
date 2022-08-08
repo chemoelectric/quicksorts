@@ -23,13 +23,8 @@
   (quicksorts__unstable_quicksort__compar               \
    ((x), (y), quicksorts__unstable_quicksort__env) < 0)
 
-/* #undef LT             /\*  FIXME : THIS GETS ITS OWN TEST!!!!!!!!!!! *\/ */
-/* #define LT(x, y) (*(const int *) (x) < *(const int *) (y)) */
-
 #define SMALL_SIZE 80
 #define SMALL_SORT QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT
-//#define PIVOT_SELECTION QUICKSORTS_COMMON__PIVOT_RANDOM
-//#define PIVOT_SELECTION QUICKSORTS_COMMON__PIVOT_MIDDLE
 #define PIVOT_SELECTION QUICKSORTS_COMMON__PIVOT_MEDIAN_OF_THREE
 
 void

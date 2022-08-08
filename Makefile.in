@@ -33,7 +33,7 @@
 #
 
 # aminclude_static.am generated automatically by Autoconf
-# from AX_AM_MACROS_STATIC on Mon Aug  8 11:38:49 CDT 2022
+# from AX_AM_MACROS_STATIC on Mon Aug  8 13:14:59 CDT 2022
 
 
 
@@ -138,7 +138,8 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES = tests/test-unstable_qsort \
-	tests/test-unstable_qsort_r
+	tests/test-unstable_qsort_r \
+	tests/test-unstable-insertion-random
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" \
 	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(includedir)" \
@@ -441,6 +442,7 @@ am__DIST_COMMON = $(srcdir)/Makefile.in \
 	$(top_srcdir)/build-aux/ltmain.sh \
 	$(top_srcdir)/build-aux/missing \
 	$(top_srcdir)/build-aux/test-driver \
+	$(top_srcdir)/tests/test-unstable-insertion-random.in \
 	$(top_srcdir)/tests/test-unstable_qsort.in \
 	$(top_srcdir)/tests/test-unstable_qsort_r.in AUTHORS COPYING \
 	INSTALL README build-aux/compile build-aux/config.guess \
@@ -658,7 +660,8 @@ nobase_dist_include_HEADERS = quicksorts/unstable-qsort.h \
 	quicksorts/internal/quicksorts-common.h
 
 #--------------------------------------------------------------------------
-TESTS = tests/test-unstable_qsort tests/test-unstable_qsort_r
+TESTS = tests/test-unstable_qsort tests/test-unstable_qsort_r \
+	tests/test-unstable-insertion-random
 tests_test_int_patterns_SOURCES = tests/test-int-patterns.c
 tests_test_int_patterns_DEPENDENCIES = libquicksorts.la
 tests_test_int_patterns_LDADD = libquicksorts.la
@@ -704,6 +707,8 @@ $(am__aclocal_m4_deps):
 tests/test-unstable_qsort: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable_qsort.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 tests/test-unstable_qsort_r: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable_qsort_r.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tests/test-unstable-insertion-random: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-insertion-random.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
@@ -1136,6 +1141,13 @@ tests/test-unstable_qsort.log: tests/test-unstable_qsort
 tests/test-unstable_qsort_r.log: tests/test-unstable_qsort_r
 	@p='tests/test-unstable_qsort_r'; \
 	b='tests/test-unstable_qsort_r'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+tests/test-unstable-insertion-random.log: tests/test-unstable-insertion-random
+	@p='tests/test-unstable-insertion-random'; \
+	b='tests/test-unstable-insertion-random'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \

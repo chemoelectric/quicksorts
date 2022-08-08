@@ -22,6 +22,7 @@
 #include <string.h>
 #include <time.h>
 #include "quicksorts/unstable-qsort.h"
+#include "quicksorts/unstable-quicksort.h"
 
 #define MAX_SZ 10000000ULL
 
@@ -55,6 +56,21 @@ get_clock (void)
   return ((long double) clock ()) / CLOCKS_PER_SEC;
 }
 
+static void
+initialize_array (int *p, size_t n,
+                  void (*init) (size_t i, int *x))
+{
+  for (size_t i = 0; i != n; i += 1)
+    init (i, &p[i]);
+}
+
+static void
+copy_array (int *dst, int *src, size_t n)
+{
+  for (size_t i = 0; i != n; i += 1)
+    dst[i] = src[i];
+}
+
 static int
 intcmp (const void *px, const void *py)
 {
@@ -72,19 +88,19 @@ intcmp_r (const void *px, const void *py, void *env)
   return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 }
 
-static void
-initialize_array (int *p, size_t n,
-                  void (*init) (size_t i, int *x))
+static inline int
+int_lt (const void *px, const void *py)
 {
-  for (size_t i = 0; i != n; i += 1)
-    init (i, &p[i]);
+  return (*(const int *) px < *(const int *) py);
 }
 
 static void
-copy_array (int *dst, int *src, size_t n)
+unstable_insertion_random (void *base, size_t nmemb)
 {
-  for (size_t i = 0; i != n; i += 1)
-    dst[i] = src[i];
+  UNSTABLE_QUICKSORT_CONFIGURABLE
+    (base, nmemb, sizeof (int), int_lt,
+     80, QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT,
+     QUICKSORTS_COMMON__PIVOT_RANDOM);
 }
 
 static void
@@ -130,6 +146,12 @@ test_arrays_with_int_keys (sortkind_t sortkind,
           void *env = &env_val;
           t31 = get_clock ();
           unstable_qsort_r (p3, sz, sizeof (int), intcmp_r, env);
+          t32 = get_clock ();
+        }
+      else if (sortkind_eq (sortkind, "unstable-insertion-random"))
+        {
+          t31 = get_clock ();
+          unstable_insertion_random (p3, sz);
           t32 = get_clock ();
         }
       else

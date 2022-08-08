@@ -93,6 +93,8 @@ AC_CONFIG_FILES([tests/test-unstable_qsort],
                 [chmod +x tests/test-unstable_qsort])
 AC_CONFIG_FILES([tests/test-unstable_qsort_r],
                 [chmod +x tests/test-unstable_qsort_r])
+AC_CONFIG_FILES([tests/test-unstable-insertion-random],
+                [chmod +x tests/test-unstable-insertion-random])
 
 #AC_CONFIG_FILES([quicksorts.pc])
 

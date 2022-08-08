@@ -94,6 +94,7 @@ nobase_dist_include_HEADERS += quicksorts/internal/quicksorts-common.h
 TESTS =
 TESTS += tests/test-unstable_qsort
 TESTS += tests/test-unstable_qsort_r
+TESTS += tests/test-unstable-insertion-random
 
 check: tests/test-int-patterns
 
