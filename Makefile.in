@@ -33,7 +33,7 @@
 #
 
 # aminclude_static.am generated automatically by Autoconf
-# from AX_AM_MACROS_STATIC on Mon Aug  8 11:14:59 CDT 2022
+# from AX_AM_MACROS_STATIC on Mon Aug  8 11:38:49 CDT 2022
 
 
 
@@ -137,7 +137,8 @@ DIST_COMMON = $(srcdir)/Makefile.am $(top_srcdir)/configure \
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES = tests/test-unstable_qsort
+CONFIG_CLEAN_FILES = tests/test-unstable_qsort \
+	tests/test-unstable_qsort_r
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" \
 	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(includedir)" \
@@ -173,8 +174,8 @@ am__uninstall_files_from_dir = { \
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libquicksorts_la_LIBADD =
 am__objects_1 =
-am_libquicksorts_la_OBJECTS = unstable-qsort.lo lcg-seed.lo \
-	$(am__objects_1)
+am_libquicksorts_la_OBJECTS = unstable_qsort.lo unstable_qsort_r.lo \
+	lcg-seed.lo $(am__objects_1)
 libquicksorts_la_OBJECTS = $(am_libquicksorts_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -201,7 +202,8 @@ DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/lcg-seed.Plo \
-	./$(DEPDIR)/unstable-qsort.Plo \
+	./$(DEPDIR)/unstable_qsort.Plo \
+	./$(DEPDIR)/unstable_qsort_r.Plo \
 	tests/$(DEPDIR)/test-int-patterns.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -439,7 +441,8 @@ am__DIST_COMMON = $(srcdir)/Makefile.in \
 	$(top_srcdir)/build-aux/ltmain.sh \
 	$(top_srcdir)/build-aux/missing \
 	$(top_srcdir)/build-aux/test-driver \
-	$(top_srcdir)/tests/test-unstable_qsort.in AUTHORS COPYING \
+	$(top_srcdir)/tests/test-unstable_qsort.in \
+	$(top_srcdir)/tests/test-unstable_qsort_r.in AUTHORS COPYING \
 	INSTALL README build-aux/compile build-aux/config.guess \
 	build-aux/config.sub build-aux/depcomp build-aux/install-sh \
 	build-aux/ltmain.sh build-aux/missing
@@ -648,14 +651,14 @@ space := $(empty) $(empty)
 
 # Escape things for sed expressions, etc.
 escape = $(subst $$,\$$,$(subst ^,\^,$(subst ],\],$(subst [,\[,$(subst .,\.,$(subst \,\\,$(1)))))))
-libquicksorts_la_SOURCES = unstable-qsort.c lcg-seed.c \
-	$(nobase_dist_include_HEADERS)
+libquicksorts_la_SOURCES = unstable_qsort.c unstable_qsort_r.c \
+	lcg-seed.c $(nobase_dist_include_HEADERS)
 nobase_dist_include_HEADERS = quicksorts/unstable-qsort.h \
 	quicksorts/unstable-quicksort.h \
 	quicksorts/internal/quicksorts-common.h
 
 #--------------------------------------------------------------------------
-TESTS = tests/test-unstable_qsort
+TESTS = tests/test-unstable_qsort tests/test-unstable_qsort_r
 tests_test_int_patterns_SOURCES = tests/test-int-patterns.c
 tests_test_int_patterns_DEPENDENCIES = libquicksorts.la
 tests_test_int_patterns_LDADD = libquicksorts.la
@@ -699,6 +702,8 @@ $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	$(am__cd) $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 $(am__aclocal_m4_deps):
 tests/test-unstable_qsort: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable_qsort.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tests/test-unstable_qsort_r: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable_qsort_r.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
@@ -808,7 +813,8 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lcg-seed.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unstable-qsort.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unstable_qsort.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unstable_qsort_r.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test-int-patterns.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
@@ -1127,6 +1133,13 @@ tests/test-unstable_qsort.log: tests/test-unstable_qsort
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+tests/test-unstable_qsort_r.log: tests/test-unstable_qsort_r
+	@p='tests/test-unstable_qsort_r'; \
+	b='tests/test-unstable_qsort_r'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 .test.log:
 	@p='$<'; \
 	$(am__set_b); \
@@ -1375,7 +1388,8 @@ clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 		-rm -f ./$(DEPDIR)/lcg-seed.Plo
-	-rm -f ./$(DEPDIR)/unstable-qsort.Plo
+	-rm -f ./$(DEPDIR)/unstable_qsort.Plo
+	-rm -f ./$(DEPDIR)/unstable_qsort_r.Plo
 	-rm -f tests/$(DEPDIR)/test-int-patterns.Po
 	-rm -f GNUmakefile
 distclean-am: clean-am distclean-compile distclean-generic \
@@ -1427,7 +1441,8 @@ maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
 		-rm -f ./$(DEPDIR)/lcg-seed.Plo
-	-rm -f ./$(DEPDIR)/unstable-qsort.Plo
+	-rm -f ./$(DEPDIR)/unstable_qsort.Plo
+	-rm -f ./$(DEPDIR)/unstable_qsort_r.Plo
 	-rm -f tests/$(DEPDIR)/test-int-patterns.Po
 	-rm -f GNUmakefile
 maintainer-clean-am: distclean-am maintainer-clean-generic

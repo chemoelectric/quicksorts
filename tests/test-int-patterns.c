@@ -63,6 +63,15 @@ intcmp (const void *px, const void *py)
   return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 }
 
+static int
+intcmp_r (const void *px, const void *py, void *env)
+{
+  CHECK (*(int *) env == 1234);
+  const int x = *((const int *) px);
+  const int y = *((const int *) py);
+  return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+}
+
 static void
 initialize_array (int *p, size_t n,
                   void (*init) (size_t i, int *x))
@@ -113,6 +122,14 @@ test_arrays_with_int_keys (sortkind_t sortkind,
         {
           t31 = get_clock ();
           unstable_qsort (p3, sz, sizeof (int), intcmp);
+          t32 = get_clock ();
+        }
+      else if (sortkind_eq (sortkind, "unstable_qsort_r"))
+        {
+          int env_val = 1234;
+          void *env = &env_val;
+          t31 = get_clock ();
+          unstable_qsort_r (p3, sz, sizeof (int), intcmp_r, env);
           t32 = get_clock ();
         }
       else
