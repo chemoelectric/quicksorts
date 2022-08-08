@@ -271,13 +271,10 @@ quicksorts_common__subcirculate_right (char *p_left, char *p_right,
             {                                                       \
               size_t PFX##pos;                                      \
               QUICKSORTS_COMMON__INSERTION_POSITION (PFX, LT);      \
-              size_t PFX##left = PFX##pos;                          \
-              size_t PFX##right = PFX##i;                           \
-              if (PFX##left != PFX##right)                          \
-                quicksorts_common__subcirculate_right               \
-                  (PFX##arr + (PFX##elemsz * PFX##left),            \
-                   PFX##arr + (PFX##elemsz * PFX##right),           \
-                   PFX##elemsz);                                    \
+              quicksorts_common__subcirculate_right                 \
+                (PFX##arr + (PFX##elemsz * PFX##pos),               \
+                 PFX##arr + (PFX##elemsz * PFX##i),                 \
+                 PFX##elemsz);                                      \
               PFX##i += 1;                                          \
             }                                                       \
         }                                                           \
