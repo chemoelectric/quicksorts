@@ -314,7 +314,52 @@ quicksorts_common__subcirculate_right (char *p_left, char *p_right,
     }
 }
 
-#define QUICKSORTS_COMMON__INSERTION_SORT(PFX, LT,                  \
+quicksorts_common__inline void
+quicksorts_common__subcirculate_right_with_gap (char *p_left,
+                                                char *p_right,
+                                                size_t elemsz,
+                                                size_t gap)
+{
+  char elembuf
+    [QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE];
+
+  if (p_left != p_right)
+    {
+      const size_t chargap = elemsz * gap;
+
+      if (elemsz <=
+          QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE)
+        {
+          QUICKSORTS_COMMON__MEMCPY (elembuf, p_right, elemsz);
+          for (char *p = p_right; p != p_left; p -= chargap)
+            QUICKSORTS_COMMON__MEMCPY (p, p - chargap, elemsz);
+          QUICKSORTS_COMMON__MEMCPY (p_left, elembuf, elemsz);
+        }
+      else
+        {
+          const size_t elembuf_sz =
+            QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE;
+
+          for (size_t i = 0;
+               i != elemsz;
+               i += (((elemsz - i) < elembuf_sz) ?
+                     (elemsz - i) : elembuf_sz))
+            {
+              const size_t blocksz =
+                ((elemsz - i) < elembuf_sz) ?
+                (elemsz - i) : elembuf_sz;
+              QUICKSORTS_COMMON__MEMCPY (elembuf, p_right, blocksz);
+              for (char *p = p_right; p != p_left; p -= chargap)
+                QUICKSORTS_COMMON__MEMCPY (p, p - chargap, blocksz);
+              QUICKSORTS_COMMON__MEMCPY (p_left, elembuf, blocksz);
+              p_right += blocksz;
+              p_left += blocksz;
+            }
+        }
+    }
+}
+
+#define QUICKSORTS_COMMON__INSERTION_SORT(PFX, LT, SMALL_SIZE,      \
                                           MAKE_AN_ORDERED_PREFIX)   \
   do                                                                \
     {                                                               \

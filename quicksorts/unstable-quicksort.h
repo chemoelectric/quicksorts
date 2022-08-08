@@ -58,9 +58,59 @@
     }                                                               \
   while (0)
 
-#define QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT(PFX, LT)     \
+#define QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT(PFX, LT,     \
+                                                       SMALL_SIZE)  \
   QUICKSORTS_COMMON__INSERTION_SORT                                 \
-  (PFX, LT, QUICKSORTS__UNSTABLE_QUICKSORT__MAKE_AN_ORDERED_PREFIX)
+  (PFX, LT, SMALL_SIZE,                                             \
+   QUICKSORTS__UNSTABLE_QUICKSORT__MAKE_AN_ORDERED_PREFIX)
+
+#define QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, GAP)      \
+  do                                                                \
+    {                                                               \
+      const size_t PFX##gap = (GAP);                                \
+      for (size_t PFX##i = PFX##gap;                                \
+           PFX##i < PFX##nmemb;                                     \
+           PFX##i += 1)                                             \
+        {                                                           \
+          char *PFX##p_right = PFX##arr + (PFX##elemsz * PFX##i);   \
+          size_t PFX##j = PFX##i;                                   \
+          while (PFX##gap <= PFX##j &&                              \
+                 (LT (PFX##p_right,                                 \
+                      (PFX##arr +                                   \
+                       (PFX##elemsz * (PFX##j - PFX##gap))))))      \
+            PFX##j -= PFX##gap;                                     \
+          char *PFX##p_left = PFX##arr + (PFX##elemsz * PFX##j);    \
+          quicksorts_common__subcirculate_right_with_gap            \
+            (PFX##p_left, PFX##p_right, PFX##elemsz, PFX##gap);     \
+        }                                                           \
+    }                                                               \
+  while (0)
+
+#define QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT(PFX, LT,         \
+                                                   SMALL_SIZE)      \
+  do                                                                \
+    {                                                               \
+      /* The famous gap sequence of Marcin Ciura and */             \
+      /* Roman Dovgopol: https://oeis.org/A102549    */             \
+      if ((SMALL_SIZE) >= 1750 && PFX##nmemb >= 1750)               \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, 1750);    \
+      if ((SMALL_SIZE) >= 701 && PFX##nmemb >= 701)                 \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, 701);     \
+      if ((SMALL_SIZE) >= 301 && PFX##nmemb >= 301)                 \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, 301);     \
+      if ((SMALL_SIZE) >= 132 && PFX##nmemb >= 132)                 \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, 132);     \
+      if ((SMALL_SIZE) >= 57 && PFX##nmemb >= 57)                   \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, 57);      \
+      if ((SMALL_SIZE) >= 23 && PFX##nmemb >= 23)                   \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, 23);      \
+      if ((SMALL_SIZE) >= 10 && PFX##nmemb >= 10)                   \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, 10);      \
+      if ((SMALL_SIZE) >= 4 && PFX##nmemb >= 4)                     \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, 4);       \
+      QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, 1);         \
+    }                                                               \
+  while (0)
 
 #define QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_RIGHTWARDS(PFX, LT)    \
   do                                                                \
@@ -152,7 +202,7 @@
               QUICKSORTS_COMMON__STK_POP (PFX);                         \
               if (PFX##nmemb <= (SMALL_SIZE))                           \
                 {                                                       \
-                  SMALL_SORT (PFX, LT);                                 \
+                  SMALL_SORT (PFX, LT, SMALL_SIZE);                     \
                 }                                                       \
               else                                                      \
                 {                                                       \
