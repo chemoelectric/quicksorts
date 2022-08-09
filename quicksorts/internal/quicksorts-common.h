@@ -332,7 +332,7 @@ quicksorts_common__subcirculate_right_with_gap (char *p_left,
         {
           QUICKSORTS_COMMON__MEMCPY (elembuf, p_right, elemsz);
           if (gap == 1)
-            QUICKSORTS_COMMON__MEMMOVE (p_left, p_left + elemsz,
+            QUICKSORTS_COMMON__MEMMOVE (p_left + elemsz, p_left,
                                         p_right - p_left);
           else
             for (char *p = p_right; p != p_left; p -= chargap)
