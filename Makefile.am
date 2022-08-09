@@ -96,7 +96,11 @@ TESTS += tests/test-unstable_qsort
 TESTS += tests/test-unstable_qsort_r
 TESTS += tests/test-unstable-defaults
 TESTS += tests/test-unstable-random-insertion
+TESTS += tests/test-unstable-middle-insertion
+TESTS += tests/test-unstable-median3-insertion
+TESTS += tests/test-unstable-random-shell
 TESTS += tests/test-unstable-middle-shell
+TESTS += tests/test-unstable-median3-shell
 
 check: tests/test-int-patterns
 

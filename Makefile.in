@@ -33,7 +33,7 @@
 #
 
 # aminclude_static.am generated automatically by Autoconf
-# from AX_AM_MACROS_STATIC on Tue Aug  9 11:47:37 CDT 2022
+# from AX_AM_MACROS_STATIC on Tue Aug  9 12:55:26 CDT 2022
 
 
 
@@ -140,7 +140,11 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES = tests/test-unstable_qsort \
 	tests/test-unstable_qsort_r tests/test-unstable-defaults \
 	tests/test-unstable-random-insertion \
-	tests/test-unstable-middle-shell quicksorts.pc
+	tests/test-unstable-middle-insertion \
+	tests/test-unstable-median3-insertion \
+	tests/test-unstable-random-shell \
+	tests/test-unstable-middle-shell \
+	tests/test-unstable-median3-shell quicksorts.pc
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" \
 	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(includedir)" \
@@ -444,8 +448,12 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/quicksorts.pc.in \
 	$(top_srcdir)/build-aux/missing \
 	$(top_srcdir)/build-aux/test-driver \
 	$(top_srcdir)/tests/test-unstable-defaults.in \
+	$(top_srcdir)/tests/test-unstable-median3-insertion.in \
+	$(top_srcdir)/tests/test-unstable-median3-shell.in \
+	$(top_srcdir)/tests/test-unstable-middle-insertion.in \
 	$(top_srcdir)/tests/test-unstable-middle-shell.in \
 	$(top_srcdir)/tests/test-unstable-random-insertion.in \
+	$(top_srcdir)/tests/test-unstable-random-shell.in \
 	$(top_srcdir)/tests/test-unstable_qsort.in \
 	$(top_srcdir)/tests/test-unstable_qsort_r.in AUTHORS COPYING \
 	INSTALL README build-aux/compile build-aux/config.guess \
@@ -668,7 +676,11 @@ nobase_dist_include_HEADERS = quicksorts/unstable-qsort.h \
 TESTS = tests/test-unstable_qsort tests/test-unstable_qsort_r \
 	tests/test-unstable-defaults \
 	tests/test-unstable-random-insertion \
-	tests/test-unstable-middle-shell
+	tests/test-unstable-middle-insertion \
+	tests/test-unstable-median3-insertion \
+	tests/test-unstable-random-shell \
+	tests/test-unstable-middle-shell \
+	tests/test-unstable-median3-shell
 tests_test_int_patterns_SOURCES = tests/test-int-patterns.c
 tests_test_int_patterns_DEPENDENCIES = libquicksorts.la
 tests_test_int_patterns_LDADD = libquicksorts.la
@@ -719,7 +731,15 @@ tests/test-unstable-defaults: $(top_builddir)/config.status $(top_srcdir)/tests/
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 tests/test-unstable-random-insertion: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-random-insertion.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+tests/test-unstable-middle-insertion: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-middle-insertion.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tests/test-unstable-median3-insertion: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-median3-insertion.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tests/test-unstable-random-shell: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-random-shell.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 tests/test-unstable-middle-shell: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-middle-shell.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tests/test-unstable-median3-shell: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-median3-shell.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 quicksorts.pc: $(top_builddir)/config.status $(srcdir)/quicksorts.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
@@ -1172,9 +1192,37 @@ tests/test-unstable-random-insertion.log: tests/test-unstable-random-insertion
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+tests/test-unstable-middle-insertion.log: tests/test-unstable-middle-insertion
+	@p='tests/test-unstable-middle-insertion'; \
+	b='tests/test-unstable-middle-insertion'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+tests/test-unstable-median3-insertion.log: tests/test-unstable-median3-insertion
+	@p='tests/test-unstable-median3-insertion'; \
+	b='tests/test-unstable-median3-insertion'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+tests/test-unstable-random-shell.log: tests/test-unstable-random-shell
+	@p='tests/test-unstable-random-shell'; \
+	b='tests/test-unstable-random-shell'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 tests/test-unstable-middle-shell.log: tests/test-unstable-middle-shell
 	@p='tests/test-unstable-middle-shell'; \
 	b='tests/test-unstable-middle-shell'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+tests/test-unstable-median3-shell.log: tests/test-unstable-median3-shell
+	@p='tests/test-unstable-median3-shell'; \
+	b='tests/test-unstable-median3-shell'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \

@@ -18995,7 +18995,15 @@ ac_config_files="$ac_config_files tests/test-unstable-defaults"
 
 ac_config_files="$ac_config_files tests/test-unstable-random-insertion"
 
+ac_config_files="$ac_config_files tests/test-unstable-middle-insertion"
+
+ac_config_files="$ac_config_files tests/test-unstable-median3-insertion"
+
+ac_config_files="$ac_config_files tests/test-unstable-random-shell"
+
 ac_config_files="$ac_config_files tests/test-unstable-middle-shell"
+
+ac_config_files="$ac_config_files tests/test-unstable-median3-shell"
 
 
 ac_config_files="$ac_config_files quicksorts.pc"
@@ -20147,7 +20155,11 @@ do
     "tests/test-unstable_qsort_r") CONFIG_FILES="$CONFIG_FILES tests/test-unstable_qsort_r" ;;
     "tests/test-unstable-defaults") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-defaults" ;;
     "tests/test-unstable-random-insertion") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-insertion" ;;
+    "tests/test-unstable-middle-insertion") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-middle-insertion" ;;
+    "tests/test-unstable-median3-insertion") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-median3-insertion" ;;
+    "tests/test-unstable-random-shell") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-shell" ;;
     "tests/test-unstable-middle-shell") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-middle-shell" ;;
+    "tests/test-unstable-median3-shell") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-median3-shell" ;;
     "quicksorts.pc") CONFIG_FILES="$CONFIG_FILES quicksorts.pc" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
@@ -21409,7 +21421,11 @@ EOF
     "tests/test-unstable_qsort_r":F) chmod +x tests/test-unstable_qsort_r ;;
     "tests/test-unstable-defaults":F) chmod +x tests/test-unstable-defaults ;;
     "tests/test-unstable-random-insertion":F) chmod +x tests/test-unstable-random-insertion ;;
+    "tests/test-unstable-middle-insertion":F) chmod +x tests/test-unstable-middle-insertion ;;
+    "tests/test-unstable-median3-insertion":F) chmod +x tests/test-unstable-median3-insertion ;;
+    "tests/test-unstable-random-shell":F) chmod +x tests/test-unstable-random-shell ;;
     "tests/test-unstable-middle-shell":F) chmod +x tests/test-unstable-middle-shell ;;
+    "tests/test-unstable-median3-shell":F) chmod +x tests/test-unstable-median3-shell ;;
 
   esac
 done # for ac_tag
