@@ -331,8 +331,12 @@ quicksorts_common__subcirculate_right_with_gap (char *p_left,
           QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE)
         {
           QUICKSORTS_COMMON__MEMCPY (elembuf, p_right, elemsz);
-          for (char *p = p_right; p != p_left; p -= chargap)
-            QUICKSORTS_COMMON__MEMCPY (p, p - chargap, elemsz);
+          if (gap == 1)
+            QUICKSORTS_COMMON__MEMMOVE (p_left, p_left + elemsz,
+                                        p_right - p_left);
+          else
+            for (char *p = p_right; p != p_left; p -= chargap)
+              QUICKSORTS_COMMON__MEMCPY (p, p - chargap, elemsz);
           QUICKSORTS_COMMON__MEMCPY (p_left, elembuf, elemsz);
         }
       else
