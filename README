@@ -1,4 +1,12 @@
 Quicksorts for C
 ----------------
 
-THIS IS A WORK IN PROGRESS.
+* Unstable quicksorts
+
+  -- Configurable quicksorts, inlined via C macros.
+
+  -- Plug-in replacements for qsort and (GNU-style) qsort_r.
+
+* Stable quicksorts
+
+  -- Stable quicksorts are still a work in progress.
