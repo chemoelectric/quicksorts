@@ -19,13 +19,22 @@
 #include "quicksorts/unstable-qsort.h"
 #include "quicksorts/unstable-quicksort.h"
 
-#define LT(x, y)                                        \
+#undef LT_PREDICATE
+#define LT_PREDICATE(x, y)                              \
   (quicksorts__unstable_quicksort__compar               \
    ((x), (y), quicksorts__unstable_quicksort__env) < 0)
 
-#define SMALL_SIZE 80
-#define SMALL_SORT QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT
+#ifndef PIVOT_SELECTION
 #define PIVOT_SELECTION QUICKSORTS_COMMON__PIVOT_MEDIAN_OF_THREE
+#endif
+
+#ifndef SMALL_SIZE
+#define SMALL_SIZE 80
+#endif
+
+#ifndef SMALL_SORT
+#define SMALL_SORT QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT
+#endif
 
 void
 unstable_qsort_r (void *base, size_t nmemb, size_t size,
@@ -33,7 +42,8 @@ unstable_qsort_r (void *base, size_t nmemb, size_t size,
                   (const void *, const void *, void *),
                   void *quicksorts__unstable_quicksort__env)
 {
-  UNSTABLE_QUICKSORT_CONFIGURABLE (base, nmemb, size, LT,
+  UNSTABLE_QUICKSORT_CONFIGURABLE (base, nmemb, size,
+                                   LT_PREDICATE,
                                    PIVOT_SELECTION,
                                    SMALL_SIZE, SMALL_SORT);
 }
