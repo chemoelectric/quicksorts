@@ -18998,7 +18998,8 @@ ac_config_files="$ac_config_files tests/test-unstable-random-insertion"
 ac_config_files="$ac_config_files tests/test-unstable-middle-shell"
 
 
-#AC_CONFIG_FILES([quicksorts.pc])
+ac_config_files="$ac_config_files quicksorts.pc"
+
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -20147,6 +20148,7 @@ do
     "tests/test-unstable-defaults") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-defaults" ;;
     "tests/test-unstable-random-insertion") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-insertion" ;;
     "tests/test-unstable-middle-shell") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-middle-shell" ;;
+    "quicksorts.pc") CONFIG_FILES="$CONFIG_FILES quicksorts.pc" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

@@ -100,7 +100,7 @@ AC_CONFIG_FILES([tests/test-unstable-random-insertion],
 AC_CONFIG_FILES([tests/test-unstable-middle-shell],
                 [chmod +x tests/test-unstable-middle-shell])
 
-#AC_CONFIG_FILES([quicksorts.pc])
+AC_CONFIG_FILES([quicksorts.pc])
 
 AC_OUTPUT
 

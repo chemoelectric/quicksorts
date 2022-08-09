@@ -114,7 +114,7 @@ tests-clean:
 
 #--------------------------------------------------------------------------
 
-#nodist_pkgconfig_DATA += quicksorts.pc
+nodist_pkgconfig_DATA += quicksorts.pc
 
 #--------------------------------------------------------------------------
 # local variables:

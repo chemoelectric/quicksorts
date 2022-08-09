@@ -33,7 +33,7 @@
 #
 
 # aminclude_static.am generated automatically by Autoconf
-# from AX_AM_MACROS_STATIC on Tue Aug  9 11:17:57 CDT 2022
+# from AX_AM_MACROS_STATIC on Tue Aug  9 11:47:37 CDT 2022
 
 
 
@@ -140,7 +140,7 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES = tests/test-unstable_qsort \
 	tests/test-unstable_qsort_r tests/test-unstable-defaults \
 	tests/test-unstable-random-insertion \
-	tests/test-unstable-middle-shell
+	tests/test-unstable-middle-shell quicksorts.pc
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" \
 	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(includedir)" \
@@ -433,7 +433,7 @@ TEST_LOGS = $(am__test_logs2:.test.log=.log)
 TEST_LOG_DRIVER = $(SHELL) $(top_srcdir)/build-aux/test-driver
 TEST_LOG_COMPILE = $(TEST_LOG_COMPILER) $(AM_TEST_LOG_FLAGS) \
 	$(TEST_LOG_FLAGS)
-am__DIST_COMMON = $(srcdir)/Makefile.in \
+am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/quicksorts.pc.in \
 	$(top_srcdir)/aminclude_static.am \
 	$(top_srcdir)/build-aux/compile \
 	$(top_srcdir)/build-aux/config.guess \
@@ -643,7 +643,9 @@ LDADD = $(CODE_COVERAGE_LIBS)
 # #--------------------------------------------------------------------------
 lib_LTLIBRARIES = libquicksorts.la
 nobase_nodist_pkginclude_HEADERS = 
-nodist_pkgconfig_DATA = 
+
+#--------------------------------------------------------------------------
+nodist_pkgconfig_DATA = quicksorts.pc
 CODE_COVERAGE_IGNORE_PATTERN = /usr/include/* /usr/include/*/*
 
 #---------------------------------------------------------------------
@@ -718,6 +720,8 @@ tests/test-unstable-defaults: $(top_builddir)/config.status $(top_srcdir)/tests/
 tests/test-unstable-random-insertion: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-random-insertion.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 tests/test-unstable-middle-shell: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-middle-shell.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+quicksorts.pc: $(top_builddir)/config.status $(srcdir)/quicksorts.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
@@ -1644,10 +1648,6 @@ check: tests/test-int-patterns
 
 tests-clean:
 	-rm -f tests/*.$(OBJEXT)
-
-#--------------------------------------------------------------------------
-
-#nodist_pkgconfig_DATA += quicksorts.pc
 
 #--------------------------------------------------------------------------
 # local variables:
