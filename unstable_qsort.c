@@ -32,6 +32,6 @@ unstable_qsort (void *base, size_t nmemb, size_t size,
                 (const void *, const void *))
 {
   UNSTABLE_QUICKSORT_CONFIGURABLE (base, nmemb, size, LT,
-                                   SMALL_SIZE, SMALL_SORT,
-                                   PIVOT_SELECTION);
+                                   PIVOT_SELECTION,
+                                   SMALL_SIZE, SMALL_SORT);
 }

@@ -58,11 +58,20 @@
     }                                                               \
   while (0)
 
-#define QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT(PFX, LT,     \
+#define QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT(PFX, BASE,   \
+                                                       NMEMB,       \
+                                                       ELEMSZ, LT,  \
                                                        SMALL_SIZE)  \
-  QUICKSORTS_COMMON__INSERTION_SORT                                 \
-  (PFX, LT, SMALL_SIZE,                                             \
-   QUICKSORTS__UNSTABLE_QUICKSORT__MAKE_AN_ORDERED_PREFIX)
+  do                                                                \
+    {                                                               \
+      char *PFX##insertion_sort__arr = (void *) (BASE);             \
+      size_t PFX##insertion_sort__nmemb = (size_t) (NMEMB);         \
+      size_t PFX##insertion_sort__elemsz = (size_t) (ELEMSZ);       \
+      QUICKSORTS_COMMON__INSERTION_SORT                             \
+        (PFX##insertion_sort__, LT, SMALL_SIZE,                     \
+         QUICKSORTS__UNSTABLE_QUICKSORT__MAKE_AN_ORDERED_PREFIX);   \
+    }                                                               \
+  while (0)
 
 #define QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, GAP)      \
   do                                                                \
@@ -86,29 +95,43 @@
     }                                                               \
   while (0)
 
-#define QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT(PFX, LT,         \
-                                                   SMALL_SIZE)      \
+#define QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT(PFX, BASE,       \
+                                                   NMEMB, ELEMSZ,   \
+                                                   LT, SMALL_SIZE)  \
   do                                                                \
     {                                                               \
+      char *PFX##shell_sort__arr = (ARR);                           \
+      size_t PFX##shell_sort__nmemb = (NMEMB);                      \
+      size_t PFX##shell_sort__elemsz = (ELEMSZ);                    \
+                                                                    \
       /* The famous gap sequence of Marcin Ciura and */             \
       /* Roman Dovgopol: https://oeis.org/A102549    */             \
-      if ((SMALL_SIZE) >= 1750 && PFX##nmemb >= 1750)               \
-        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, 1750);    \
-      if ((SMALL_SIZE) >= 701 && PFX##nmemb >= 701)                 \
-        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, 701);     \
-      if ((SMALL_SIZE) >= 301 && PFX##nmemb >= 301)                 \
-        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, 301);     \
-      if ((SMALL_SIZE) >= 132 && PFX##nmemb >= 132)                 \
-        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, 132);     \
-      if ((SMALL_SIZE) >= 57 && PFX##nmemb >= 57)                   \
-        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, 57);      \
-      if ((SMALL_SIZE) >= 23 && PFX##nmemb >= 23)                   \
-        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, 23);      \
-      if ((SMALL_SIZE) >= 10 && PFX##nmemb >= 10)                   \
-        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, 10);      \
-      if ((SMALL_SIZE) >= 4 && PFX##nmemb >= 4)                     \
-        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, 4);       \
-      QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, 1);         \
+      if ((SMALL_SIZE) >= 1750 && PFX##shell_sort__nmemb >= 1750)   \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS                    \
+          (PFX##shell_sort__, LT, 1750);                            \
+      if ((SMALL_SIZE) >= 701 && PFX##shell_sort__nmemb >= 701)     \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS                    \
+          (PFX##shell_sort__, LT, 701);                             \
+      if ((SMALL_SIZE) >= 301 && PFX##shell_sort__nmemb >= 301)     \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS                    \
+          (PFX##shell_sort__, LT, 301);                             \
+      if ((SMALL_SIZE) >= 132 && PFX##shell_sort__nmemb >= 132)     \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS                    \
+          (PFX##shell_sort__, LT, 132);                             \
+      if ((SMALL_SIZE) >= 57 && PFX##shell_sort__nmemb >= 57)       \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS                    \
+          (PFX##shell_sort__, LT, 57);                              \
+      if ((SMALL_SIZE) >= 23 && PFX##shell_sort__nmemb >= 23)       \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS                    \
+          (PFX##shell_sort__, LT, 23);                              \
+      if ((SMALL_SIZE) >= 10 && PFX##shell_sort__nmemb >= 10)       \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS                    \
+          (PFX##shell_sort__, LT, 10);                              \
+      if ((SMALL_SIZE) >= 4 && PFX##shell_sort__nmemb >= 4)         \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS                    \
+          (PFX##shell_sort__, LT, 4);                               \
+      QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS                      \
+        (PFX##shell_sort__, LT, 1);                                 \
     }                                                               \
   while (0)
 
@@ -185,11 +208,17 @@
     }                                                                   \
   while (0)
 
-#define QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT(PFX, LT, SMALL_SIZE,  \
-                                                  SMALL_SORT,           \
-                                                  PIVOT_SELECTION)      \
+#define QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT(PFX, BASE, NMEMB,     \
+                                                  ELEMSZ, LT,           \
+                                                  PIVOT_SELECTION,      \
+                                                  SMALL_SIZE,           \
+                                                  SMALL_SORT)           \
   do                                                                    \
     {                                                                   \
+      char *PFX##arr = (void *) (BASE);                                 \
+      size_t PFX##nmemb = (size_t) (NMEMB);                             \
+      size_t PFX##elemsz = (size_t) (ELEMSZ);                           \
+                                                                        \
       if (2 <= PFX##nmemb)                                              \
         {                                                               \
           size_t PFX##i_pivot;                                          \
@@ -202,7 +231,8 @@
               QUICKSORTS_COMMON__STK_POP (PFX);                         \
               if (PFX##nmemb <= (SMALL_SIZE))                           \
                 {                                                       \
-                  SMALL_SORT (PFX, LT, SMALL_SIZE);                     \
+                  SMALL_SORT (PFX, PFX##arr, PFX##nmemb, PFX##elemsz,   \
+                              LT, SMALL_SIZE);                          \
                 }                                                       \
               else                                                      \
                 {                                                       \
@@ -246,20 +276,14 @@
   while (0)
 
 #define UNSTABLE_QUICKSORT_CONFIGURABLE(BASE, NMEMB, ELEMSZ, LT,    \
-                                        SMALL_SIZE, SMALL_SORT,     \
-                                        PIVOT_SELECTION)            \
+                                        PIVOT_SELECTION,            \
+                                        SMALL_SIZE, SMALL_SORT)     \
   do                                                                \
     {                                                               \
-      char *quicksorts__unstable_quicksort__arr =                   \
-        (void *) (BASE);                                            \
-      size_t quicksorts__unstable_quicksort__nmemb =                \
-        (size_t) (NMEMB);                                           \
-      size_t quicksorts__unstable_quicksort__elemsz =               \
-        (size_t) (ELEMSZ);                                          \
-                                                                    \
       QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT                     \
         (quicksorts__unstable_quicksort__,                          \
-         LT, SMALL_SIZE, SMALL_SORT, PIVOT_SELECTION);              \
+         (BASE), (NMEMB), (ELEMSZ),                                 \
+         LT, PIVOT_SELECTION, (SMALL_SIZE), SMALL_SORT);            \
     }                                                               \
   while (0)
 

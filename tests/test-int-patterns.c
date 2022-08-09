@@ -99,8 +99,8 @@ unstable_insertion_random (void *base, size_t nmemb)
 {
   UNSTABLE_QUICKSORT_CONFIGURABLE
     (base, nmemb, sizeof (int), int_lt,
-     80, QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT,
-     QUICKSORTS_COMMON__PIVOT_RANDOM);
+     QUICKSORTS_COMMON__PIVOT_RANDOM,
+     80, QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT);
 }
 
 static void
