@@ -95,12 +95,27 @@ int_lt (const void *px, const void *py)
 }
 
 static void
-unstable_insertion_random (void *base, size_t nmemb)
+unstable_defaults (void *base, size_t nmemb)
 {
-  UNSTABLE_QUICKSORT_CONFIGURABLE
+  UNSTABLE_QUICKSORT (base, nmemb, sizeof (int), int_lt);
+}
+
+static void
+unstable_random_insertion (void *base, size_t nmemb)
+{
+  UNSTABLE_QUICKSORT_7ARGS
     (base, nmemb, sizeof (int), int_lt,
      QUICKSORTS_COMMON__PIVOT_RANDOM,
      80, QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT);
+}
+
+static void
+unstable_middle_shell (void *base, size_t nmemb)
+{
+  UNSTABLE_QUICKSORT_7ARGS
+    (base, nmemb, sizeof (int), int_lt,
+     QUICKSORTS_COMMON__PIVOT_MIDDLE,
+     150, QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT);
 }
 
 static void
@@ -148,10 +163,22 @@ test_arrays_with_int_keys (sortkind_t sortkind,
           unstable_qsort_r (p3, sz, sizeof (int), intcmp_r, env);
           t32 = get_clock ();
         }
-      else if (sortkind_eq (sortkind, "unstable-insertion-random"))
+      else if (sortkind_eq (sortkind, "unstable-defaults"))
         {
           t31 = get_clock ();
-          unstable_insertion_random (p3, sz);
+          unstable_defaults (p3, sz);
+          t32 = get_clock ();
+        }
+      else if (sortkind_eq (sortkind, "unstable-random-insertion"))
+        {
+          t31 = get_clock ();
+          unstable_random_insertion (p3, sz);
+          t32 = get_clock ();
+        }
+      else if (sortkind_eq (sortkind, "unstable-middle-shell"))
+        {
+          t31 = get_clock ();
+          unstable_middle_shell (p3, sz);
           t32 = get_clock ();
         }
       else

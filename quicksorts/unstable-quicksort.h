@@ -100,7 +100,7 @@
                                                    LT, SMALL_SIZE)  \
   do                                                                \
     {                                                               \
-      char *PFX##shell_sort__arr = (ARR);                           \
+      char *PFX##shell_sort__arr = (BASE);                          \
       size_t PFX##shell_sort__nmemb = (NMEMB);                      \
       size_t PFX##shell_sort__elemsz = (ELEMSZ);                    \
                                                                     \
@@ -275,9 +275,9 @@
     }                                                                   \
   while (0)
 
-#define UNSTABLE_QUICKSORT_CONFIGURABLE(BASE, NMEMB, ELEMSZ, LT,    \
-                                        PIVOT_SELECTION,            \
-                                        SMALL_SIZE, SMALL_SORT)     \
+#define UNSTABLE_QUICKSORT_7ARGS(BASE, NMEMB, ELEMSZ, LT,           \
+                                 PIVOT_SELECTION,                   \
+                                 SMALL_SIZE, SMALL_SORT)            \
   do                                                                \
     {                                                               \
       QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT                     \
@@ -286,5 +286,33 @@
          LT, PIVOT_SELECTION, (SMALL_SIZE), SMALL_SORT);            \
     }                                                               \
   while (0)
+
+#ifndef UNSTABLE_QUICKSORT__DEFAULT__PIVOT_SELECTION
+#define UNSTABLE_QUICKSORT__DEFAULT__PIVOT_SELECTION    \
+  QUICKSORTS_COMMON__PIVOT_MEDIAN_OF_THREE
+#endif
+
+#ifndef UNSTABLE_QUICKSORT__DEFAULT__SMALL_SIZE
+#define UNSTABLE_QUICKSORT__DEFAULT__SMALL_SIZE 80
+#endif
+
+#ifndef UNSTABLE_QUICKSORT__DEFAULT__SMALL_SORT
+#define UNSTABLE_QUICKSORT__DEFAULT__SMALL_SORT     \
+  QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT
+#endif
+
+#define UNSTABLE_QUICKSORT_4ARGS(BASE, NMEMB, ELEMSZ, LT)   \
+  do                                                        \
+    {                                                       \
+      QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT             \
+        (quicksorts__unstable_quicksort__,                  \
+         (BASE), (NMEMB), (ELEMSZ), LT,                     \
+         UNSTABLE_QUICKSORT__DEFAULT__PIVOT_SELECTION,      \
+         (UNSTABLE_QUICKSORT__DEFAULT__SMALL_SIZE),         \
+         UNSTABLE_QUICKSORT__DEFAULT__SMALL_SORT);          \
+    }                                                       \
+  while (0)
+
+#define UNSTABLE_QUICKSORT UNSTABLE_QUICKSORT_4ARGS
 
 #endif /* QUICKSORTS__UNSTABLE_QUICKSORT_H__HEADER_GUARD__ */

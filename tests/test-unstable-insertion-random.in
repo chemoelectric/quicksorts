@@ -1,2 +1,0 @@
-#!@SHELL@
-exec @abs_builddir@/test-int-patterns unstable-insertion-random

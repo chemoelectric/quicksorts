@@ -33,7 +33,7 @@
 #
 
 # aminclude_static.am generated automatically by Autoconf
-# from AX_AM_MACROS_STATIC on Mon Aug  8 13:14:59 CDT 2022
+# from AX_AM_MACROS_STATIC on Tue Aug  9 11:17:57 CDT 2022
 
 
 
@@ -138,8 +138,9 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES = tests/test-unstable_qsort \
-	tests/test-unstable_qsort_r \
-	tests/test-unstable-insertion-random
+	tests/test-unstable_qsort_r tests/test-unstable-defaults \
+	tests/test-unstable-random-insertion \
+	tests/test-unstable-middle-shell
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" \
 	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(includedir)" \
@@ -442,7 +443,9 @@ am__DIST_COMMON = $(srcdir)/Makefile.in \
 	$(top_srcdir)/build-aux/ltmain.sh \
 	$(top_srcdir)/build-aux/missing \
 	$(top_srcdir)/build-aux/test-driver \
-	$(top_srcdir)/tests/test-unstable-insertion-random.in \
+	$(top_srcdir)/tests/test-unstable-defaults.in \
+	$(top_srcdir)/tests/test-unstable-middle-shell.in \
+	$(top_srcdir)/tests/test-unstable-random-insertion.in \
 	$(top_srcdir)/tests/test-unstable_qsort.in \
 	$(top_srcdir)/tests/test-unstable_qsort_r.in AUTHORS COPYING \
 	INSTALL README build-aux/compile build-aux/config.guess \
@@ -661,7 +664,9 @@ nobase_dist_include_HEADERS = quicksorts/unstable-qsort.h \
 
 #--------------------------------------------------------------------------
 TESTS = tests/test-unstable_qsort tests/test-unstable_qsort_r \
-	tests/test-unstable-insertion-random
+	tests/test-unstable-defaults \
+	tests/test-unstable-random-insertion \
+	tests/test-unstable-middle-shell
 tests_test_int_patterns_SOURCES = tests/test-int-patterns.c
 tests_test_int_patterns_DEPENDENCIES = libquicksorts.la
 tests_test_int_patterns_LDADD = libquicksorts.la
@@ -708,7 +713,11 @@ tests/test-unstable_qsort: $(top_builddir)/config.status $(top_srcdir)/tests/tes
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 tests/test-unstable_qsort_r: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable_qsort_r.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
-tests/test-unstable-insertion-random: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-insertion-random.in
+tests/test-unstable-defaults: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-defaults.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tests/test-unstable-random-insertion: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-random-insertion.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tests/test-unstable-middle-shell: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-middle-shell.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
@@ -1145,9 +1154,23 @@ tests/test-unstable_qsort_r.log: tests/test-unstable_qsort_r
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
-tests/test-unstable-insertion-random.log: tests/test-unstable-insertion-random
-	@p='tests/test-unstable-insertion-random'; \
-	b='tests/test-unstable-insertion-random'; \
+tests/test-unstable-defaults.log: tests/test-unstable-defaults
+	@p='tests/test-unstable-defaults'; \
+	b='tests/test-unstable-defaults'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+tests/test-unstable-random-insertion.log: tests/test-unstable-random-insertion
+	@p='tests/test-unstable-random-insertion'; \
+	b='tests/test-unstable-random-insertion'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+tests/test-unstable-middle-shell.log: tests/test-unstable-middle-shell
+	@p='tests/test-unstable-middle-shell'; \
+	b='tests/test-unstable-middle-shell'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \

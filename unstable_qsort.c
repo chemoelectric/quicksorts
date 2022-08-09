@@ -40,8 +40,7 @@ unstable_qsort (void *base, size_t nmemb, size_t size,
                 int (*quicksorts__unstable_quicksort__compar)
                 (const void *, const void *))
 {
-  UNSTABLE_QUICKSORT_CONFIGURABLE (base, nmemb, size,
-                                   LT_PREDICATE,
-                                   PIVOT_SELECTION,
-                                   SMALL_SIZE, SMALL_SORT);
+  UNSTABLE_QUICKSORT_7ARGS (base, nmemb, size,
+                            LT_PREDICATE, PIVOT_SELECTION,
+                            SMALL_SIZE, SMALL_SORT);
 }

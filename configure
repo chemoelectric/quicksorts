@@ -18991,7 +18991,11 @@ ac_config_files="$ac_config_files tests/test-unstable_qsort"
 
 ac_config_files="$ac_config_files tests/test-unstable_qsort_r"
 
-ac_config_files="$ac_config_files tests/test-unstable-insertion-random"
+ac_config_files="$ac_config_files tests/test-unstable-defaults"
+
+ac_config_files="$ac_config_files tests/test-unstable-random-insertion"
+
+ac_config_files="$ac_config_files tests/test-unstable-middle-shell"
 
 
 #AC_CONFIG_FILES([quicksorts.pc])
@@ -20140,7 +20144,9 @@ do
     "GNUmakefile") CONFIG_FILES="$CONFIG_FILES GNUmakefile:Makefile.in" ;;
     "tests/test-unstable_qsort") CONFIG_FILES="$CONFIG_FILES tests/test-unstable_qsort" ;;
     "tests/test-unstable_qsort_r") CONFIG_FILES="$CONFIG_FILES tests/test-unstable_qsort_r" ;;
-    "tests/test-unstable-insertion-random") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-insertion-random" ;;
+    "tests/test-unstable-defaults") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-defaults" ;;
+    "tests/test-unstable-random-insertion") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-insertion" ;;
+    "tests/test-unstable-middle-shell") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-middle-shell" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
@@ -21399,7 +21405,9 @@ EOF
     ;;
     "tests/test-unstable_qsort":F) chmod +x tests/test-unstable_qsort ;;
     "tests/test-unstable_qsort_r":F) chmod +x tests/test-unstable_qsort_r ;;
-    "tests/test-unstable-insertion-random":F) chmod +x tests/test-unstable-insertion-random ;;
+    "tests/test-unstable-defaults":F) chmod +x tests/test-unstable-defaults ;;
+    "tests/test-unstable-random-insertion":F) chmod +x tests/test-unstable-random-insertion ;;
+    "tests/test-unstable-middle-shell":F) chmod +x tests/test-unstable-middle-shell ;;
 
   esac
 done # for ac_tag
