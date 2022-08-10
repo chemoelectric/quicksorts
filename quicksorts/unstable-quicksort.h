@@ -178,8 +178,6 @@
                     (PFX##p_right - PFX##p_left) / (PFX##elemsz << 1);  \
                   PFX##p_pivot =                                        \
                     PFX##p_right - (PFX##elemsz * PFX##half_diff);      \
-                  PFX##i_pivot =                                        \
-                    (PFX##p_pivot - PFX##arr) / PFX##elemsz;            \
                   quicksorts_common__elem_swap                          \
                     (PFX##p_pivot, PFX##p_right, PFX##elemsz);          \
                   PFX##p_left += PFX##elemsz;                           \
@@ -191,8 +189,6 @@
                     (PFX##p_right - PFX##p_left) / (PFX##elemsz << 1);  \
                   PFX##p_pivot =                                        \
                     PFX##p_left + (PFX##elemsz * PFX##half_diff);       \
-                  PFX##i_pivot =                                        \
-                    (PFX##p_pivot - PFX##arr) / PFX##elemsz;            \
                   quicksorts_common__elem_swap                          \
                     (PFX##p_left, PFX##p_pivot, PFX##elemsz);           \
                   PFX##p_right -= PFX##elemsz;                          \
@@ -205,6 +201,7 @@
             }                                                           \
         }                                                               \
       while (PFX##p_left != PFX##p_right);                              \
+      PFX##i_pivot = (PFX##p_pivot - PFX##arr) / PFX##elemsz;           \
     }                                                                   \
   while (0)
 
