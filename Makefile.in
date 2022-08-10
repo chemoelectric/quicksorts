@@ -33,7 +33,7 @@
 #
 
 # aminclude_static.am generated automatically by Autoconf
-# from AX_AM_MACROS_STATIC on Tue Aug  9 12:55:26 CDT 2022
+# from AX_AM_MACROS_STATIC on Wed Aug 10 11:57:04 CDT 2022
 
 
 
@@ -113,7 +113,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS =
-EXTRA_PROGRAMS = tests/test-int-patterns$(EXEEXT)
+EXTRA_PROGRAMS = tests/test-int-patterns$(EXEEXT) \
+	tests/test-big$(EXEEXT)
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_ac_append_to_file.m4 \
@@ -144,7 +145,9 @@ CONFIG_CLEAN_FILES = tests/test-unstable_qsort \
 	tests/test-unstable-median3-insertion \
 	tests/test-unstable-random-shell \
 	tests/test-unstable-middle-shell \
-	tests/test-unstable-median3-shell quicksorts.pc
+	tests/test-unstable-median3-shell \
+	tests/test-unstable-random-insertion-big \
+	tests/test-unstable-random-shell-big quicksorts.pc
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" \
 	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(includedir)" \
@@ -188,6 +191,8 @@ am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
 am__dirstamp = $(am__leading_dot)dirstamp
+am_tests_test_big_OBJECTS = tests/test-big.$(OBJEXT)
+tests_test_big_OBJECTS = $(am_tests_test_big_OBJECTS)
 am_tests_test_int_patterns_OBJECTS =  \
 	tests/test-int-patterns.$(OBJEXT)
 tests_test_int_patterns_OBJECTS =  \
@@ -209,7 +214,7 @@ depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/lcg-seed.Plo \
 	./$(DEPDIR)/unstable_qsort.Plo \
-	./$(DEPDIR)/unstable_qsort_r.Plo \
+	./$(DEPDIR)/unstable_qsort_r.Plo tests/$(DEPDIR)/test-big.Po \
 	tests/$(DEPDIR)/test-int-patterns.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -230,9 +235,9 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(libquicksorts_la_SOURCES) \
+SOURCES = $(libquicksorts_la_SOURCES) $(tests_test_big_SOURCES) \
 	$(tests_test_int_patterns_SOURCES)
-DIST_SOURCES = $(libquicksorts_la_SOURCES) \
+DIST_SOURCES = $(libquicksorts_la_SOURCES) $(tests_test_big_SOURCES) \
 	$(tests_test_int_patterns_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
@@ -452,7 +457,9 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/quicksorts.pc.in \
 	$(top_srcdir)/tests/test-unstable-median3-shell.in \
 	$(top_srcdir)/tests/test-unstable-middle-insertion.in \
 	$(top_srcdir)/tests/test-unstable-middle-shell.in \
+	$(top_srcdir)/tests/test-unstable-random-insertion-big.in \
 	$(top_srcdir)/tests/test-unstable-random-insertion.in \
+	$(top_srcdir)/tests/test-unstable-random-shell-big.in \
 	$(top_srcdir)/tests/test-unstable-random-shell.in \
 	$(top_srcdir)/tests/test-unstable_qsort.in \
 	$(top_srcdir)/tests/test-unstable_qsort_r.in AUTHORS COPYING \
@@ -640,7 +647,7 @@ AUTOMAKE_OPTIONS = foreign subdir-objects
 @CODE_COVERAGE_ENABLED_TRUE@AM_DISTCHECK_CONFIGURE_FLAGS := $(AM_DISTCHECK_CONFIGURE_FLAGS) --disable-code-coverage
 EXTRA_DIST = $(srcdir)/silent-rules.mk COPYING INSTALL README AUTHORS
 MOSTLYCLEANFILES = 
-CLEANFILES = tests/test-int-patterns
+CLEANFILES = tests/test-int-patterns tests/test-big
 DISTCLEANFILES = Makefile GNUmakefile
 BUILT_SOURCES = 
 AM_CPPFLAGS = -I$(builddir) -I$(srcdir)
@@ -680,10 +687,15 @@ TESTS = tests/test-unstable_qsort tests/test-unstable_qsort_r \
 	tests/test-unstable-median3-insertion \
 	tests/test-unstable-random-shell \
 	tests/test-unstable-middle-shell \
-	tests/test-unstable-median3-shell
+	tests/test-unstable-median3-shell \
+	tests/test-unstable-random-insertion-big \
+	tests/test-unstable-random-shell-big
 tests_test_int_patterns_SOURCES = tests/test-int-patterns.c
 tests_test_int_patterns_DEPENDENCIES = libquicksorts.la
 tests_test_int_patterns_LDADD = libquicksorts.la
+tests_test_big_SOURCES = tests/test-big.c
+tests_test_big_DEPENDENCIES = libquicksorts.la
+tests_test_big_LDADD = libquicksorts.la
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -740,6 +752,10 @@ tests/test-unstable-random-shell: $(top_builddir)/config.status $(top_srcdir)/te
 tests/test-unstable-middle-shell: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-middle-shell.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 tests/test-unstable-median3-shell: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-median3-shell.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tests/test-unstable-random-insertion-big: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-random-insertion-big.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tests/test-unstable-random-shell-big: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-random-shell-big.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 quicksorts.pc: $(top_builddir)/config.status $(srcdir)/quicksorts.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
@@ -836,6 +852,12 @@ tests/$(am__dirstamp):
 tests/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) tests/$(DEPDIR)
 	@: > tests/$(DEPDIR)/$(am__dirstamp)
+tests/test-big.$(OBJEXT): tests/$(am__dirstamp) \
+	tests/$(DEPDIR)/$(am__dirstamp)
+
+tests/test-big$(EXEEXT): $(tests_test_big_OBJECTS) $(tests_test_big_DEPENDENCIES) $(EXTRA_tests_test_big_DEPENDENCIES) tests/$(am__dirstamp)
+	@rm -f tests/test-big$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(tests_test_big_OBJECTS) $(tests_test_big_LDADD) $(LIBS)
 tests/test-int-patterns.$(OBJEXT): tests/$(am__dirstamp) \
 	tests/$(DEPDIR)/$(am__dirstamp)
 
@@ -853,6 +875,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lcg-seed.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unstable_qsort.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unstable_qsort_r.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test-big.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test-int-patterns.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
@@ -1227,6 +1250,20 @@ tests/test-unstable-median3-shell.log: tests/test-unstable-median3-shell
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+tests/test-unstable-random-insertion-big.log: tests/test-unstable-random-insertion-big
+	@p='tests/test-unstable-random-insertion-big'; \
+	b='tests/test-unstable-random-insertion-big'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+tests/test-unstable-random-shell-big.log: tests/test-unstable-random-shell-big
+	@p='tests/test-unstable-random-shell-big'; \
+	b='tests/test-unstable-random-shell-big'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 .test.log:
 	@p='$<'; \
 	$(am__set_b); \
@@ -1477,6 +1514,7 @@ distclean: distclean-am
 		-rm -f ./$(DEPDIR)/lcg-seed.Plo
 	-rm -f ./$(DEPDIR)/unstable_qsort.Plo
 	-rm -f ./$(DEPDIR)/unstable_qsort_r.Plo
+	-rm -f tests/$(DEPDIR)/test-big.Po
 	-rm -f tests/$(DEPDIR)/test-int-patterns.Po
 	-rm -f GNUmakefile
 distclean-am: clean-am distclean-compile distclean-generic \
@@ -1530,6 +1568,7 @@ maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/lcg-seed.Plo
 	-rm -f ./$(DEPDIR)/unstable_qsort.Plo
 	-rm -f ./$(DEPDIR)/unstable_qsort_r.Plo
+	-rm -f tests/$(DEPDIR)/test-big.Po
 	-rm -f tests/$(DEPDIR)/test-int-patterns.Po
 	-rm -f GNUmakefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
@@ -1693,6 +1732,7 @@ clean-local: code-coverage-clean tests-clean
 distclean-local: code-coverage-dist-clean
 
 check: tests/test-int-patterns
+check: tests/test-big
 
 tests-clean:
 	-rm -f tests/*.$(OBJEXT)

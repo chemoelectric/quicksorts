@@ -101,8 +101,11 @@ TESTS += tests/test-unstable-median3-insertion
 TESTS += tests/test-unstable-random-shell
 TESTS += tests/test-unstable-middle-shell
 TESTS += tests/test-unstable-median3-shell
+TESTS += tests/test-unstable-random-insertion-big
+TESTS += tests/test-unstable-random-shell-big
 
 check: tests/test-int-patterns
+check: tests/test-big
 
 EXTRA_PROGRAMS += tests/test-int-patterns
 CLEANFILES += tests/test-int-patterns
@@ -112,6 +115,15 @@ tests_test_int_patterns_DEPENDENCIES =
 tests_test_int_patterns_DEPENDENCIES += libquicksorts.la
 tests_test_int_patterns_LDADD =
 tests_test_int_patterns_LDADD += libquicksorts.la
+
+EXTRA_PROGRAMS += tests/test-big
+CLEANFILES += tests/test-big
+tests_test_big_SOURCES =
+tests_test_big_SOURCES += tests/test-big.c
+tests_test_big_DEPENDENCIES =
+tests_test_big_DEPENDENCIES += libquicksorts.la
+tests_test_big_LDADD =
+tests_test_big_LDADD += libquicksorts.la
 
 tests-clean:
 	-rm -f tests/*.$(OBJEXT)

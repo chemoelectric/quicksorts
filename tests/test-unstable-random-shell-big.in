@@ -1,0 +1,2 @@
+#!@SHELL@
+exec @abs_builddir@/test-big unstable-random-shell-big
