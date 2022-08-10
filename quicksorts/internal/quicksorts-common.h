@@ -27,7 +27,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if defined __GNUC__
+#define quicksorts_common__inline \
+  static __attribute__((__always_inline__)) inline
+#else
 #define quicksorts_common__inline static inline
+#endif
 
 #if defined __GNUC__
 #define QUICKSORTS_COMMON__MEMSET __builtin_memset
