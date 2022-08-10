@@ -57,70 +57,51 @@ get_clock (void)
 }
 
 #define BIG_SIZE 2048
-typedef struct {
-  char s[BIG_SIZE];
-} string_t;
-
-static void
-num_into_string (size_t num, string_t str)
-{
-  memset (str.s, '\0', BIG_SIZE);
-  sprintf (str.s, "%zu", num);
-}
-
-static int
-string_t_cmp (const void *x, const void *y)
-{
-  return (strcmp (((const string_t *) x)->s,
-                  ((const string_t *) y)->s));
-}
 
 static inline bool
-string_t_lt (const void *x, const void *y)
+string_lt (const void *x, const void *y)
 {
-  return (strcmp (((const string_t *) x)->s,
-                  ((const string_t *) y)->s)
-          < 0);
+  return (strcmp (x, y) < 0);
 }
 
 static void
-initialize_array (string_t *p, size_t n)
+initialize_array (char *p, size_t n)
 {
+  memset (p, '\0', BIG_SIZE * n);
   for (size_t i = 0; i != n; i += 1)
-    num_into_string (i, *p);
+    sprintf (p + (i * BIG_SIZE), "%zu", i);
 }
 
 static void
-copy_array (string_t *dst, string_t *src, size_t n)
+copy_array (char *dst, char *src, size_t n)
 {
-  for (size_t i = 0; i != n; i += 1)
-    dst[i] = src[i];
+  memcpy (dst, src, n * BIG_SIZE);
 }
 
 static void
 unstable_random_insertion_big (void *base, size_t nmemb)
 {
   UNSTABLE_QUICKSORT_7ARGS
-    (base, nmemb, sizeof (string_t), string_t_lt,
+    (base, nmemb, BIG_SIZE, string_lt,
      QUICKSORTS_COMMON__PIVOT_RANDOM,
-     320, QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT);
+     80, QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT);
 }
 
 static void
 unstable_random_shell_big (void *base, size_t nmemb)
 {
   UNSTABLE_QUICKSORT_7ARGS
-    (base, nmemb, sizeof (string_t), string_t_lt,
+    (base, nmemb, BIG_SIZE, string_lt,
      QUICKSORTS_COMMON__PIVOT_RANDOM,
-     4000, QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT);
+     350, QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT);
 }
 
 static void
 test_arrays (sortkind_t sortkind)
 {
-  string_t *p1 = malloc (MAX_SZ * sizeof (string_t));
-  string_t *p2 = malloc (MAX_SZ * sizeof (string_t));
-  string_t *p3 = malloc (MAX_SZ * sizeof (string_t));
+  char *p1 = malloc (MAX_SZ * BIG_SIZE);
+  char *p2 = malloc (MAX_SZ * BIG_SIZE);
+  char *p3 = malloc (MAX_SZ * BIG_SIZE);
 
   for (size_t sz = 0; sz <= MAX_SZ; sz = MAX (1, 10 * sz))
     {
@@ -128,18 +109,19 @@ test_arrays (sortkind_t sortkind)
 #if 0
       printf ("unsorted ---------------------------\n");
       for (size_t i = 0; i != sz; i += 1)
-        printf ("%s\n", p1[i].s);
+        printf ("%s\n", p1[i]);
 #endif
 
       copy_array (p2, p1, sz);
       const long double t21 = get_clock ();
-      qsort (p2, sz, sizeof (string_t), string_t_cmp);
+      qsort (p2, sz, BIG_SIZE,
+             (int (*) (const void *, const void *)) strcmp);
       const long double t22 = get_clock ();
       const long double t2 = t22 - t21;
 #if 0
       printf ("system qsort -----------------------\n");
       for (size_t i = 0; i != sz; i += 1)
-        printf ("%s\n", p2[i].s);
+        printf ("%s\n", p2[i]);
 #endif
 
       copy_array (p3, p1, sz);
@@ -166,17 +148,17 @@ test_arrays (sortkind_t sortkind)
 #if 0
       printf ("my sort ----------------------------\n");
       for (size_t i = 0; i != sz; i += 1)
-        printf ("%s\n", p3[i].s);
+        printf ("%s\n", &p3[i * BIG_SIZE]);
 #endif
 
       for (size_t i = 0; i != sz; i += 1)
         {
 #if 0
-          printf ("i = %zu  p2[i].s = %s,  p3[i].s = %s\n",
-                  i, p2[i].s, p3[i].s);
+          printf ("i = %zu  p2[i] = %s,  p3[i] = %s\n",
+                  i, &p2[i * BIG_SIZE], &p3[i * BIG_SIZE]);
 #endif
           for (size_t j = 0; j != BIG_SIZE; j += 1)
-            CHECK (p2[i].s[j] == p3[i].s[j]);
+            CHECK (p2[(i * BIG_SIZE) + j] == p3[(i * BIG_SIZE) + j]);
         }
 
       printf ("  qsort:%Lf  ours:%Lf  %zu\n", t2, t3, sz);
