@@ -29,7 +29,7 @@
 
 #if defined __GNUC__
 #define quicksorts_common__inline \
-  static __attribute__((__always_inline__)) inline
+  __attribute__((__always_inline__)) static inline
 #else
 #define quicksorts_common__inline static inline
 #endif
