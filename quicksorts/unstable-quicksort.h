@@ -138,19 +138,21 @@
 #define QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_RIGHTWARDS(PFX, LT)    \
   do                                                                \
     {                                                               \
-      while (PFX##p_left != PFX##p_pivot &&                         \
-             (LT ((void *) PFX##p_left, (void *) PFX##p_pivot)))    \
+      while (PFX##p_left != PFX##p_right &&                         \
+             (LT ((const void *) PFX##p_left,                       \
+                  (const void *) PFX##p_pivot)))                    \
         PFX##p_left += PFX##elemsz;                                 \
     }                                                               \
   while (0)
 
-#define QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_LEFTWARDS(PFX, LT)     \
-  do                                                                \
-    {                                                               \
-      while (PFX##p_right != PFX##p_pivot &&                        \
-             (LT ((void *) PFX##p_pivot, (void *) PFX##p_right)))   \
-        PFX##p_right -= PFX##elemsz;                                \
-    }                                                               \
+#define QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_LEFTWARDS(PFX, LT) \
+  do                                                            \
+    {                                                           \
+      while (PFX##p_left != PFX##p_right &&                     \
+             (LT ((const void *) PFX##p_pivot,                  \
+                  (const void *) PFX##p_right)))                \
+        PFX##p_right -= PFX##elemsz;                            \
+    }                                                           \
   while (0)
 
 #define QUICKSORTS__UNSTABLE_QUICKSORT__PARTITION(PFX, LT,              \
@@ -160,47 +162,83 @@
       PIVOT_SELECTION (PFX##arr, PFX##nmemb, PFX##elemsz, LT,           \
                        PFX##i_pivot);                                   \
       PFX##p_pivot = PFX##arr + (PFX##elemsz * PFX##i_pivot);           \
+                                                                        \
+      /* Put the pivot in the middle, so it will be as near to */       \
+      /* other elements as possible.                           */       \
+      char *PFX##p_middle =                                             \
+        PFX##arr + ((PFX##nmemb >> 1) * PFX##elemsz);                   \
+      quicksorts_common__elem_swap                                      \
+        ((void *) PFX##p_pivot, (void *) PFX##p_middle, PFX##elemsz);   \
+      PFX##p_pivot = PFX##p_middle;                                     \
+                                                                        \
       char *PFX##p_left = PFX##arr;                                     \
-      char *PFX##p_right =                                              \
-        PFX##arr + (PFX##elemsz * (PFX##nmemb - 1));                    \
-      do                                                                \
+      char *PFX##p_right = PFX##arr + ((PFX##nmemb - 1) * PFX##elemsz); \
+      while (PFX##p_left != PFX##p_right)                               \
         {                                                               \
           QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_RIGHTWARDS (PFX, LT);    \
           QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_LEFTWARDS (PFX, LT);     \
+                                                                        \
           if (PFX##p_left != PFX##p_right)                              \
             {                                                           \
               quicksorts_common__elem_swap                              \
-                (PFX##p_left, PFX##p_right, PFX##elemsz);               \
-              if (PFX##p_left == PFX##p_pivot)                          \
-                {                                                       \
-                  /* Keep the pivot between p_left and p_right. */      \
-                  size_t PFX##half_diff =                               \
-                    (PFX##p_right - PFX##p_left) / (PFX##elemsz << 1);  \
-                  PFX##p_pivot =                                        \
-                    PFX##p_right - (PFX##elemsz * PFX##half_diff);      \
-                  quicksorts_common__elem_swap                          \
-                    (PFX##p_pivot, PFX##p_right, PFX##elemsz);          \
-                  PFX##p_left += PFX##elemsz;                           \
-                }                                                       \
-              else if (PFX##p_right == PFX##p_pivot)                    \
-                {                                                       \
-                  /* Keep the pivot between p_left and p_right. */      \
-                  size_t PFX##half_diff =                               \
-                    (PFX##p_right - PFX##p_left) / (PFX##elemsz << 1);  \
-                  PFX##p_pivot =                                        \
-                    PFX##p_left + (PFX##elemsz * PFX##half_diff);       \
-                  quicksorts_common__elem_swap                          \
-                    (PFX##p_left, PFX##p_pivot, PFX##elemsz);           \
-                  PFX##p_right -= PFX##elemsz;                          \
-                }                                                       \
-              else                                                      \
-                {                                                       \
-                  PFX##p_left += PFX##elemsz;                           \
-                  PFX##p_right -= PFX##elemsz;                          \
-                }                                                       \
+                ((void *) PFX##p_left, (void *) PFX##p_right,           \
+                 PFX##elemsz);                                          \
+                                                                        \
+              /* The pivot’s position may have been changed by the */   \
+              /* swap.                                             */   \
+              if (PFX##p_pivot == PFX##p_left)                          \
+                PFX##p_pivot = PFX##p_right;                            \
+              else if (PFX##p_pivot == PFX##p_right)                    \
+                PFX##p_pivot = PFX##p_left;                             \
+                                                                        \
+              PFX##p_left += PFX##elemsz;                               \
+                                                                        \
+              if (PFX##p_left != PFX##p_right)                          \
+                PFX##p_right -= PFX##elemsz;                            \
             }                                                           \
         }                                                               \
-      while (PFX##p_left != PFX##p_right);                              \
+                                                                        \
+      /* Put the pivot between the two parts of the partition. */       \
+      if (LT ((const void *) PFX##p_pivot,                              \
+              (const void *) PFX##p_right))                             \
+        {                                                               \
+          if (PFX##p_pivot < PFX##p_right)                              \
+            {                                                           \
+              quicksorts_common__elem_swap                              \
+                ((void *) PFX##p_pivot,                                 \
+                 (void *) (PFX##p_right - PFX##elemsz),                 \
+                 PFX##elemsz);                                          \
+              PFX##p_pivot = PFX##p_right - PFX##elemsz;                \
+            }                                                           \
+          else                                                          \
+            {                                                           \
+              quicksorts_common__elem_swap                              \
+                ((void *) PFX##p_pivot,                                 \
+                 (void *) PFX##p_right,                                 \
+                 PFX##elemsz);                                          \
+              PFX##p_pivot = PFX##p_right;                              \
+            }                                                           \
+        }                                                               \
+      else                                                              \
+        {                                                               \
+          if (PFX##p_right < PFX##p_pivot)                              \
+            {                                                           \
+              quicksorts_common__elem_swap                              \
+                ((void *) PFX##p_pivot,                                 \
+                 (void *) (PFX##p_right + PFX##elemsz),                 \
+                 PFX##elemsz);                                          \
+              PFX##p_pivot = PFX##p_right + PFX##elemsz;                \
+            }                                                           \
+          else                                                          \
+            {                                                           \
+              quicksorts_common__elem_swap                              \
+                ((void *) PFX##p_pivot,                                 \
+                 (void *) PFX##p_right,                                 \
+                 PFX##elemsz);                                          \
+              PFX##p_pivot = PFX##p_right;                              \
+            }                                                           \
+        }                                                               \
+                                                                        \
       PFX##i_pivot = (PFX##p_pivot - PFX##arr) / PFX##elemsz;           \
     }                                                                   \
   while (0)

@@ -69,7 +69,7 @@ initialize_array (char *p, size_t n)
 {
   memset (p, '\0', BIG_SIZE * n);
   for (size_t i = 0; i != n; i += 1)
-    sprintf (p + (i * BIG_SIZE), "%zu", i);
+    sprintf (p + (i * BIG_SIZE), "%d", random_int (-1000, 1000));
 }
 
 static void
