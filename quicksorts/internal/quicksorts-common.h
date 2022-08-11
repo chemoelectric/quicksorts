@@ -279,6 +279,8 @@ quicksorts_common__reverse_prefix (char *arr, size_t pfx_len,
 
 #define QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE 128
 
+#if 1
+/* One implementation of subcirculate_right. */
 quicksorts_common__inline void
 quicksorts_common__subcirculate_right (char *p_left, char *p_right,
                                        size_t elemsz)
@@ -318,7 +320,27 @@ quicksorts_common__subcirculate_right (char *p_left, char *p_right,
         }
     }
 }
+#else
+/* Another implementation of subcirculate_right. */
+quicksorts_common__inline void
+quicksorts_common__subcirculate_right (char *p_left, char *p_right,
+                                       size_t elemsz)
+{
+  if (p_left != p_right)
+    for (size_t i = 0; i != elemsz; i += 1)
+      {
+        char tmp = *p_right;
+        for (char *p = p_right; p != p_left; p -= elemsz)
+          *p = *(p - elemsz);
+        *p_left = tmp;
+        p_left += 1;
+        p_right += 1;
+      }
+}
+#endif
 
+#if 1
+/* One implementation of subcirculate_right_with_gap. */
 quicksorts_common__inline void
 quicksorts_common__subcirculate_right_with_gap (char *p_left,
                                                 char *p_right,
@@ -367,6 +389,31 @@ quicksorts_common__subcirculate_right_with_gap (char *p_left,
         }
     }
 }
+#else
+/* Another implementation of subcirculate_right_with_gap. I have
+   gotten bad performance from it, however. */
+quicksorts_common__inline void
+quicksorts_common__subcirculate_right_with_gap (char *p_left,
+                                                char *p_right,
+                                                size_t elemsz,
+                                                size_t gap)
+{
+  if (p_left != p_right)
+    {
+      const size_t chargap = elemsz * gap;
+
+      for (size_t i = 0; i != elemsz; i += 1)
+        {
+          char tmp = *p_right;
+          for (char *p = p_right; p != p_left; p -= chargap)
+            *p = *(p - chargap);
+          *p_left = tmp;
+          p_left += 1;
+          p_right += 1;
+        }
+    }
+}
+#endif
 
 #define QUICKSORTS_COMMON__INSERTION_SORT(PFX, LT, SMALL_SIZE,      \
                                           MAKE_AN_ORDERED_PREFIX)   \

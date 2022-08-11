@@ -84,7 +84,7 @@ unstable_random_insertion_big (void *base, size_t nmemb)
   UNSTABLE_QUICKSORT_7ARGS
     (base, nmemb, BIG_SIZE, string_lt,
      QUICKSORTS_COMMON__PIVOT_RANDOM,
-     80, QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT);
+     32, QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT);
 }
 
 static void
@@ -93,7 +93,7 @@ unstable_random_shell_big (void *base, size_t nmemb)
   UNSTABLE_QUICKSORT_7ARGS
     (base, nmemb, BIG_SIZE, string_lt,
      QUICKSORTS_COMMON__PIVOT_RANDOM,
-     350, QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT);
+     150, QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT);
 }
 
 static void

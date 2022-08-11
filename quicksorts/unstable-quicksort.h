@@ -254,7 +254,7 @@
       size_t PFX##nmemb = (size_t) (NMEMB);                             \
       size_t PFX##elemsz = (size_t) (ELEMSZ);                           \
                                                                         \
-      if (2 <= PFX##nmemb)                                              \
+      if (0 < PFX##elemsz && 2 <= PFX##nmemb)                           \
         {                                                               \
           size_t PFX##i_pivot;                                          \
           char *PFX##p_pivot;                                           \
