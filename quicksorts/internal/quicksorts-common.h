@@ -204,20 +204,76 @@ quicksorts_common__random_size_t_below (size_t n)
 
 /*------------------------------------------------------------------*/
 
+quicksorts_common__inline void
+quicksorts_common__elem_swap1 (char *p1, char *p2)
+{
+  const char tmp = *p1;
+  *p1 = *p2;
+  *p2 = tmp;
+}     
+
+quicksorts_common__inline void
+quicksorts_common__elem_swap2 (char *p1, char *p2)
+{
+  quicksorts_common__elem_swap1 (p1, p2);
+  quicksorts_common__elem_swap1 (p1 + 1, p2 + 1);
+}     
+
+quicksorts_common__inline void
+quicksorts_common__elem_swap4 (char *p1, char *p2)
+{
+  quicksorts_common__elem_swap2 (p1, p2);
+  quicksorts_common__elem_swap2 (p1 + 2, p2 + 2);
+}     
+
+quicksorts_common__inline void
+quicksorts_common__elem_swap8 (char *p1, char *p2)
+{
+  quicksorts_common__elem_swap4 (p1, p2);
+  quicksorts_common__elem_swap4 (p1 + 4, p2 + 4);
+}     
+
+quicksorts_common__inline void
+quicksorts_common__elem_swap16 (char *p1, char *p2)
+{
+  quicksorts_common__elem_swap8 (p1, p2);
+  quicksorts_common__elem_swap8 (p1 + 8, p2 + 8);
+}     
+
 /* Swap two elements. */
 quicksorts_common__inline void
 quicksorts_common__elem_swap (char *p1, char *p2, size_t elemsz)
 {
-  do
+  switch (elemsz)
     {
-      const char tmp = *p1;
-      *p1 = *p2;
-      *p2 = tmp;
-      p1 += 1;
-      p2 += 1;
-      elemsz -= 1;
+    case 4:
+      quicksorts_common__elem_swap4 (p1, p2);
+      break;
+    case 8:
+      quicksorts_common__elem_swap8 (p1, p2);
+      break;
+    case 16:
+      quicksorts_common__elem_swap16 (p1, p2);
+      break;
+    case 2:
+      quicksorts_common__elem_swap2 (p1, p2);
+      break;
+    case 1:
+      quicksorts_common__elem_swap1 (p1, p2);
+      break;
+    default:
+      do
+        {
+          const char tmp = *p1;
+          *p1 = *p2;
+          *p2 = tmp;
+          p1 += 1;
+          p2 += 1;
+          elemsz -= 1;
+        }
+      while (elemsz != 0);
+      break;
     }
-  while (elemsz != 0);
 }
 
 /* Reverse a prefix of pfx_len >= 2. */
