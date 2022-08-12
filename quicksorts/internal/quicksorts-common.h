@@ -353,7 +353,9 @@ quicksorts_common__reverse_prefix (char *arr, size_t pfx_len,
 /**/
 #endif
 
+#ifndef QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE
 #define QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE 128
+#endif
 
 #if 1
 /* One implementation of subcirculate_right. */
