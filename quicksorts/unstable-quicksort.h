@@ -280,32 +280,24 @@
                                                                         \
                   size_t PFX##n_le = PFX##i_pivot;                      \
                   size_t PFX##n_ge = PFX##nmemb - 1 - PFX##i_pivot;     \
-                  if (PFX##n_le == 0)                                   \
+                  if (PFX##n_le < PFX##n_ge)                            \
                     {                                                   \
                       QUICKSORTS_COMMON__STK_PUSH                       \
                         (PFX, PFX##p_pivot + PFX##elemsz, PFX##n_ge);   \
-                    }                                                   \
-                  else if (PFX##n_le < PFX##n_ge)                       \
-                    {                                                   \
-                      QUICKSORTS_COMMON__STK_PUSH                       \
-                        (PFX, PFX##p_pivot + PFX##elemsz, PFX##n_ge);   \
-                      QUICKSORTS_COMMON__STK_PUSH                       \
-                        (PFX, PFX##arr, PFX##n_le);                     \
-                    }                                                   \
-                  else if (PFX##n_ge == 0)                              \
-                    {                                                   \
-                      QUICKSORTS_COMMON__STK_PUSH                       \
-                        (PFX, PFX##arr, PFX##n_le);                     \
+                      if (PFX##n_le != 0)                               \
+                        QUICKSORTS_COMMON__STK_PUSH                     \
+                          (PFX, PFX##arr, PFX##n_le);                   \
                     }                                                   \
                   else                                                  \
                     {                                                   \
                       QUICKSORTS_COMMON__STK_PUSH                       \
                         (PFX, PFX##arr, PFX##n_le);                     \
-                      QUICKSORTS_COMMON__STK_PUSH                       \
-                        (PFX, PFX##p_pivot + PFX##elemsz, PFX##n_ge);   \
+                      if (PFX##n_ge != 0)                               \
+                        QUICKSORTS_COMMON__STK_PUSH                     \
+                          (PFX, PFX##p_pivot + PFX##elemsz, PFX##n_ge); \
                     }                                                   \
                 }                                                       \
-              }                                                         \
+            }                                                           \
           while (PFX##stk_depth != 0);                                  \
         }                                                               \
     }                                                                   \
