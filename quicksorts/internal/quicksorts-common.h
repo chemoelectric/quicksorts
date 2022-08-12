@@ -310,28 +310,28 @@ quicksorts_common__reverse_prefix (char *arr, size_t pfx_len,
 #define QUICKSORTS_COMMON__INSERTION_POSITION(PFX, LT)              \
   do                                                                \
     {                                                               \
-      size_t PFX##j = 0;                                            \
-      size_t PFX##k = PFX##i - 1;                                   \
+      char *PFX##pj = PFX##arr;                                     \
+      char *PFX##pk = PFX##pi - PFX##elemsz;                        \
                                                                     \
-      while (PFX##j != PFX##k)                                      \
+      while (PFX##pj != PFX##pk)                                    \
         {                                                           \
           /* Ceiling of the midway point: */                        \
-          size_t PFX##h = PFX##k - ((PFX##k - PFX##j) >> 1);        \
+          char *PFX##ph =                                           \
+            PFX##pk - (PFX##elemsz *                                \
+                       (((PFX##pk - PFX##pj) / PFX##elemsz) >> 1)); \
                                                                     \
-          if (LT ((void *) (PFX##arr + (PFX##elemsz * PFX##i)),     \
-                  (void *) (PFX##arr + (PFX##elemsz * PFX##h))))    \
-            PFX##k = PFX##h - 1;                                    \
+          if (LT ((void *) PFX##pi, (void *) PFX##ph))              \
+            PFX##pk = PFX##ph - PFX##elemsz;                        \
           else                                                      \
-            PFX##j = PFX##h;                                        \
+            PFX##pj = PFX##ph;                                      \
         }                                                           \
                                                                     \
-      if (PFX##j != 0)                                              \
-        PFX##pos = PFX##j + 1;                                      \
-      else if (LT ((void *) (PFX##arr + (PFX##elemsz * PFX##i)),    \
-                   (void *) PFX##arr))                              \
-        PFX##pos = 0;                                               \
+      if (PFX##pj != PFX##arr)                                      \
+        PFX##pos = PFX##pj + PFX##elemsz;                           \
+      else if (LT ((void *) PFX##pi, (void *) PFX##arr))            \
+        PFX##pos = PFX##arr;                                        \
       else                                                          \
-        PFX##pos = 1;                                               \
+        PFX##pos = PFX##arr + PFX##elemsz;                          \
     }                                                               \
   while (0)
 /**/
@@ -339,17 +339,16 @@ quicksorts_common__reverse_prefix (char *arr, size_t pfx_len,
 /**/
 /* Here is a position-finder for a *non-binary* (ordinary) insertion
    sort. */
-#define QUICKSORTS_COMMON__INSERTION_POSITION(PFX, LT)          \
-  do                                                            \
-    {                                                           \
-      size_t PFX##j = PFX##i;                                   \
-      while (PFX##j != 0 &&                                     \
-             LT ((void *) (PFX##arr + (PFX##elemsz * PFX##i)),  \
-                 (void *) (PFX##arr + (PFX##elemsz * PFX##j)    \
-                           - PFX##elemsz)))                     \
-        PFX##j -= 1;                                            \
-      PFX##pos = PFX##j;                                        \
-    }                                                           \
+#define QUICKSORTS_COMMON__INSERTION_POSITION(PFX, LT)  \
+  do                                                    \
+    {                                                   \
+      char *PFX##pj = PFX##pi;                          \
+      while (PFX##pj != PFX##arr &&                     \
+             LT ((void *) PFX##pi,                      \
+                 (void *) (PFX##pj - PFX##elemsz)))     \
+        PFX##pj -= PFX##elemsz;                         \
+      PFX##pos = PFX##pj;                               \
+    }                                                   \
   while (0)
 /**/
 #endif
@@ -503,12 +502,11 @@ quicksorts_common__subcirculate_right_with_gap (char *p_left,
           size_t PFX##i = PFX##pfx_len;                             \
           while (PFX##i != PFX##nmemb)                              \
             {                                                       \
-              size_t PFX##pos;                                      \
+              char *PFX##pi = PFX##arr + (PFX##elemsz * PFX##i);    \
+              char *PFX##pos;                                       \
               QUICKSORTS_COMMON__INSERTION_POSITION (PFX, LT);      \
               quicksorts_common__subcirculate_right                 \
-                (PFX##arr + (PFX##elemsz * PFX##pos),               \
-                 PFX##arr + (PFX##elemsz * PFX##i),                 \
-                 PFX##elemsz);                                      \
+                (PFX##pos, PFX##pi, PFX##elemsz);                   \
               PFX##i += 1;                                          \
             }                                                       \
         }                                                           \
