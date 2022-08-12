@@ -26,8 +26,14 @@
 
 #define MAX_SZ 10000ULL
 
+#if __GNUC__
+#define STRCMP __builtin_strcmp
+#else
+#define STRCMP strcmp
+#endif
+
 typedef const char *sortkind_t;
-#define sortkind_eq(A, B) (strcmp ((A), (B)) == 0)
+#define sortkind_eq(A, B) (STRCMP ((A), (B)) == 0)
 
 #define MAX(x, y) ((x) < (y) ? (y) : (x))
 
@@ -61,7 +67,7 @@ get_clock (void)
 static inline bool
 string_lt (const void *x, const void *y)
 {
-  return (strcmp (x, y) < 0);
+  return (STRCMP (x, y) < 0);
 }
 
 static void
