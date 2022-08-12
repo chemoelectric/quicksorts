@@ -73,26 +73,26 @@
     }                                                               \
   while (0)
 
-#define QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, GAP)      \
-  do                                                                \
-    {                                                               \
-      const size_t PFX##gap = (GAP);                                \
-      for (size_t PFX##i = PFX##gap;                                \
-           PFX##i < PFX##nmemb;                                     \
-           PFX##i += 1)                                             \
-        {                                                           \
-          char *PFX##p_right = PFX##arr + (PFX##elemsz * PFX##i);   \
-          size_t PFX##j = PFX##i;                                   \
-          while (PFX##gap <= PFX##j &&                              \
-                 (LT (PFX##p_right,                                 \
-                      (PFX##arr +                                   \
-                       (PFX##elemsz * (PFX##j - PFX##gap))))))      \
-            PFX##j -= PFX##gap;                                     \
-          char *PFX##p_left = PFX##arr + (PFX##elemsz * PFX##j);    \
-          quicksorts_common__subcirculate_right_with_gap            \
-            (PFX##p_left, PFX##p_right, PFX##elemsz, PFX##gap);     \
-        }                                                           \
-    }                                                               \
+#define QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, GAP)          \
+  do                                                                    \
+    {                                                                   \
+      const size_t PFX##gap = (GAP);                                    \
+      const size_t PFX##chargap = PFX##elemsz * PFX##gap;               \
+      char *PFX##p_lstop = PFX##arr + PFX##chargap;                     \
+      char *PFX##p_rstop = PFX##arr + (PFX##elemsz * PFX##nmemb);       \
+      for (char *PFX##p_right = PFX##p_lstop;                           \
+           PFX##p_right != PFX##p_rstop;                                \
+           PFX##p_right += PFX##elemsz)                                 \
+        {                                                               \
+          char *PFX##p_left = PFX##p_right;                             \
+          while (PFX##p_lstop <= PFX##p_left &&                         \
+                 (LT ((const void *) PFX##p_right,                      \
+                      (const void *) (PFX##p_left - PFX##chargap))))    \
+            PFX##p_left -= PFX##chargap;                                \
+          quicksorts_common__subcirculate_right_with_gap                \
+            (PFX##p_left, PFX##p_right, PFX##elemsz, PFX##gap);         \
+        }                                                               \
+    }                                                                   \
   while (0)
 
 #define QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT(PFX, BASE,       \
