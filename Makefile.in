@@ -33,7 +33,7 @@
 #
 
 # aminclude_static.am generated automatically by Autoconf
-# from AX_AM_MACROS_STATIC on Wed Aug 10 11:57:04 CDT 2022
+# from AX_AM_MACROS_STATIC on Fri Aug 12 06:57:09 CDT 2022
 
 
 
@@ -147,7 +147,9 @@ CONFIG_CLEAN_FILES = tests/test-unstable_qsort \
 	tests/test-unstable-middle-shell \
 	tests/test-unstable-median3-shell \
 	tests/test-unstable-random-insertion-big \
-	tests/test-unstable-random-shell-big quicksorts.pc
+	tests/test-unstable-median3-insertion-big \
+	tests/test-unstable-random-shell-big \
+	tests/test-unstable-median3-shell-big quicksorts.pc
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" \
 	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(includedir)" \
@@ -453,7 +455,9 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/quicksorts.pc.in \
 	$(top_srcdir)/build-aux/missing \
 	$(top_srcdir)/build-aux/test-driver \
 	$(top_srcdir)/tests/test-unstable-defaults.in \
+	$(top_srcdir)/tests/test-unstable-median3-insertion-big.in \
 	$(top_srcdir)/tests/test-unstable-median3-insertion.in \
+	$(top_srcdir)/tests/test-unstable-median3-shell-big.in \
 	$(top_srcdir)/tests/test-unstable-median3-shell.in \
 	$(top_srcdir)/tests/test-unstable-middle-insertion.in \
 	$(top_srcdir)/tests/test-unstable-middle-shell.in \
@@ -689,7 +693,9 @@ TESTS = tests/test-unstable_qsort tests/test-unstable_qsort_r \
 	tests/test-unstable-middle-shell \
 	tests/test-unstable-median3-shell \
 	tests/test-unstable-random-insertion-big \
-	tests/test-unstable-random-shell-big
+	tests/test-unstable-median3-insertion-big \
+	tests/test-unstable-random-shell-big \
+	tests/test-unstable-median3-shell-big
 tests_test_int_patterns_SOURCES = tests/test-int-patterns.c
 tests_test_int_patterns_DEPENDENCIES = libquicksorts.la
 tests_test_int_patterns_LDADD = libquicksorts.la
@@ -755,7 +761,11 @@ tests/test-unstable-median3-shell: $(top_builddir)/config.status $(top_srcdir)/t
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 tests/test-unstable-random-insertion-big: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-random-insertion-big.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+tests/test-unstable-median3-insertion-big: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-median3-insertion-big.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 tests/test-unstable-random-shell-big: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-random-shell-big.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tests/test-unstable-median3-shell-big: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-median3-shell-big.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 quicksorts.pc: $(top_builddir)/config.status $(srcdir)/quicksorts.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
@@ -1257,9 +1267,23 @@ tests/test-unstable-random-insertion-big.log: tests/test-unstable-random-inserti
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+tests/test-unstable-median3-insertion-big.log: tests/test-unstable-median3-insertion-big
+	@p='tests/test-unstable-median3-insertion-big'; \
+	b='tests/test-unstable-median3-insertion-big'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 tests/test-unstable-random-shell-big.log: tests/test-unstable-random-shell-big
 	@p='tests/test-unstable-random-shell-big'; \
 	b='tests/test-unstable-random-shell-big'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+tests/test-unstable-median3-shell-big.log: tests/test-unstable-median3-shell-big
+	@p='tests/test-unstable-median3-shell-big'; \
+	b='tests/test-unstable-median3-shell-big'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \

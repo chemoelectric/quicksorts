@@ -102,7 +102,9 @@ TESTS += tests/test-unstable-random-shell
 TESTS += tests/test-unstable-middle-shell
 TESTS += tests/test-unstable-median3-shell
 TESTS += tests/test-unstable-random-insertion-big
+TESTS += tests/test-unstable-median3-insertion-big
 TESTS += tests/test-unstable-random-shell-big
+TESTS += tests/test-unstable-median3-shell-big
 
 check: tests/test-int-patterns
 check: tests/test-big

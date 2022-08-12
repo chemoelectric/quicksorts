@@ -24,7 +24,7 @@
 #include <time.h>
 #include "quicksorts/unstable-quicksort.h"
 
-#define MAX_SZ 1000000ULL
+#define MAX_SZ 10000ULL
 
 typedef const char *sortkind_t;
 #define sortkind_eq(A, B) (strcmp ((A), (B)) == 0)
@@ -69,7 +69,10 @@ initialize_array (char *p, size_t n)
 {
   memset (p, '\0', BIG_SIZE * n);
   for (size_t i = 0; i != n; i += 1)
-    sprintf (p + (i * BIG_SIZE), "%d", random_int (-1000, 1000));
+    {
+      for (size_t j = 0; j < BIG_SIZE; j += 1)
+        p[(i * BIG_SIZE) + j] = (char) random_int ('0', '9');
+    }
 }
 
 static void
@@ -84,7 +87,16 @@ unstable_random_insertion_big (void *base, size_t nmemb)
   UNSTABLE_QUICKSORT_7ARGS
     (base, nmemb, BIG_SIZE, string_lt,
      QUICKSORTS_COMMON__PIVOT_RANDOM,
-     32, QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT);
+     80, QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT);
+}
+
+static void
+unstable_median3_insertion_big (void *base, size_t nmemb)
+{
+  UNSTABLE_QUICKSORT_7ARGS
+    (base, nmemb, BIG_SIZE, string_lt,
+     QUICKSORTS_COMMON__PIVOT_MEDIAN_OF_THREE,
+     80, QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT);
 }
 
 static void
@@ -93,7 +105,16 @@ unstable_random_shell_big (void *base, size_t nmemb)
   UNSTABLE_QUICKSORT_7ARGS
     (base, nmemb, BIG_SIZE, string_lt,
      QUICKSORTS_COMMON__PIVOT_RANDOM,
-     150, QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT);
+     350, QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT);
+}
+
+static void
+unstable_median3_shell_big (void *base, size_t nmemb)
+{
+  UNSTABLE_QUICKSORT_7ARGS
+    (base, nmemb, BIG_SIZE, string_lt,
+     QUICKSORTS_COMMON__PIVOT_MEDIAN_OF_THREE,
+     350, QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT);
 }
 
 static void
@@ -133,10 +154,22 @@ test_arrays (sortkind_t sortkind)
           unstable_random_insertion_big (p3, sz);
           t32 = get_clock ();
         }
+      else if (sortkind_eq (sortkind, "unstable-median3-insertion-big"))
+        {
+          t31 = get_clock ();
+          unstable_median3_insertion_big (p3, sz);
+          t32 = get_clock ();
+        }
       else if (sortkind_eq (sortkind, "unstable-random-shell-big"))
         {
           t31 = get_clock ();
           unstable_random_shell_big (p3, sz);
+          t32 = get_clock ();
+        }
+      else if (sortkind_eq (sortkind, "unstable-median3-shell-big"))
+        {
+          t31 = get_clock ();
+          unstable_median3_shell_big (p3, sz);
           t32 = get_clock ();
         }
       else

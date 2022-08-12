@@ -109,8 +109,12 @@ AC_CONFIG_FILES([tests/test-unstable-median3-shell],
                 [chmod +x tests/test-unstable-median3-shell])
 AC_CONFIG_FILES([tests/test-unstable-random-insertion-big],
                 [chmod +x tests/test-unstable-random-insertion-big])
+AC_CONFIG_FILES([tests/test-unstable-median3-insertion-big],
+                [chmod +x tests/test-unstable-median3-insertion-big])
 AC_CONFIG_FILES([tests/test-unstable-random-shell-big],
                 [chmod +x tests/test-unstable-random-shell-big])
+AC_CONFIG_FILES([tests/test-unstable-median3-shell-big],
+                [chmod +x tests/test-unstable-median3-shell-big])
 
 AC_CONFIG_FILES([quicksorts.pc])
 

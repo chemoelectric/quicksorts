@@ -7,11 +7,6 @@ Quicksorts for C
 
   -- Plug-in replacements for qsort and (GNU-style) qsort_r.
 
-* Stable quicksorts with O(n) temporary storage requirement
-
-  -- Stable quicksorts are still a work in progress.
-
-
 Random pivot selection is implemented with a built-in linear
 congruential generator, and is fast. Middle-element and
 median-of-three also are implemented.
@@ -21,3 +16,8 @@ sort or with a Shell sort.
 
 It is possible to implement one’s own pivot selection and
 small-subarray sort implementations.
+
+---
+
+Stable quicksorts, with O(n) temporary storage requirement, may be
+added later.
