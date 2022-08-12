@@ -173,29 +173,30 @@
                                                                         \
       char *PFX##p_left = PFX##arr;                                     \
       char *PFX##p_right = PFX##arr + ((PFX##nmemb - 1) * PFX##elemsz); \
+                                                                        \
+      QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_RIGHTWARDS (PFX, LT);        \
+      QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_LEFTWARDS (PFX, LT);         \
+                                                                        \
       while (PFX##p_left != PFX##p_right)                               \
         {                                                               \
-          QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_RIGHTWARDS (PFX, LT);    \
-          QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_LEFTWARDS (PFX, LT);     \
+          quicksorts_common__elem_swap                                  \
+            ((void *) PFX##p_left, (void *) PFX##p_right,               \
+             PFX##elemsz);                                              \
+                                                                        \
+          /* The pivot’s position may have been changed by the */       \
+          /* swap.                                             */       \
+          if (PFX##p_pivot == PFX##p_left)                              \
+            PFX##p_pivot = PFX##p_right;                                \
+          else if (PFX##p_pivot == PFX##p_right)                        \
+            PFX##p_pivot = PFX##p_left;                                 \
+                                                                        \
+          PFX##p_left += PFX##elemsz;                                   \
                                                                         \
           if (PFX##p_left != PFX##p_right)                              \
-            {                                                           \
-              quicksorts_common__elem_swap                              \
-                ((void *) PFX##p_left, (void *) PFX##p_right,           \
-                 PFX##elemsz);                                          \
+            PFX##p_right -= PFX##elemsz;                                \
                                                                         \
-              /* The pivot’s position may have been changed by the */   \
-              /* swap.                                             */   \
-              if (PFX##p_pivot == PFX##p_left)                          \
-                PFX##p_pivot = PFX##p_right;                            \
-              else if (PFX##p_pivot == PFX##p_right)                    \
-                PFX##p_pivot = PFX##p_left;                             \
-                                                                        \
-              PFX##p_left += PFX##elemsz;                               \
-                                                                        \
-              if (PFX##p_left != PFX##p_right)                          \
-                PFX##p_right -= PFX##elemsz;                            \
-            }                                                           \
+          QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_RIGHTWARDS (PFX, LT);    \
+          QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_LEFTWARDS (PFX, LT);     \
         }                                                               \
                                                                         \
       /* Put the pivot between the two parts of the partition. */       \
