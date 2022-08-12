@@ -267,7 +267,7 @@
               if (PFX##nmemb <= (SMALL_SIZE))                           \
                 {                                                       \
                   SMALL_SORT (PFX, PFX##arr, PFX##nmemb, PFX##elemsz,   \
-                              LT, SMALL_SIZE);                          \
+                              LT, (SMALL_SIZE));                        \
                 }                                                       \
               else                                                      \
                 {                                                       \
