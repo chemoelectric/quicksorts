@@ -292,6 +292,8 @@ quicksorts_common__reverse_prefix (char *arr, size_t pfx_len,
   while (p_left < p_right);
 }
 
+#if 1
+/**/
 /*
   The insertion position is found by a binary search.
 
@@ -332,6 +334,25 @@ quicksorts_common__reverse_prefix (char *arr, size_t pfx_len,
         PFX##pos = 1;                                               \
     }                                                               \
   while (0)
+/**/
+#else
+/**/
+/* Here is a position-finder for a *non-binary* (ordinary) insertion
+   sort. */
+#define QUICKSORTS_COMMON__INSERTION_POSITION(PFX, LT)          \
+  do                                                            \
+    {                                                           \
+      size_t PFX##j = PFX##i;                                   \
+      while (PFX##j != 0 &&                                     \
+             LT ((void *) (PFX##arr + (PFX##elemsz * PFX##i)),  \
+                 (void *) (PFX##arr + (PFX##elemsz * PFX##j)    \
+                           - PFX##elemsz)))                     \
+        PFX##j -= 1;                                            \
+      PFX##pos = PFX##j;                                        \
+    }                                                           \
+  while (0)
+/**/
+#endif
 
 #define QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE 128
 
