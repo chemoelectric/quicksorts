@@ -19011,7 +19011,11 @@ ac_config_files="$ac_config_files tests/test-unstable-median3-insertion-typed"
 
 ac_config_files="$ac_config_files tests/test-unstable-random-shell"
 
+ac_config_files="$ac_config_files tests/test-unstable-random-shell-typed"
+
 ac_config_files="$ac_config_files tests/test-unstable-middle-shell"
+
+ac_config_files="$ac_config_files tests/test-unstable-middle-shell-typed"
 
 ac_config_files="$ac_config_files tests/test-unstable-median3-shell"
 
@@ -20182,7 +20186,9 @@ do
     "tests/test-unstable-median3-insertion") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-median3-insertion" ;;
     "tests/test-unstable-median3-insertion-typed") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-median3-insertion-typed" ;;
     "tests/test-unstable-random-shell") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-shell" ;;
+    "tests/test-unstable-random-shell-typed") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-shell-typed" ;;
     "tests/test-unstable-middle-shell") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-middle-shell" ;;
+    "tests/test-unstable-middle-shell-typed") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-middle-shell-typed" ;;
     "tests/test-unstable-median3-shell") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-median3-shell" ;;
     "tests/test-unstable-median3-shell-typed") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-median3-shell-typed" ;;
     "tests/test-unstable-random-insertion-big") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-insertion-big" ;;
@@ -21457,7 +21463,9 @@ EOF
     "tests/test-unstable-median3-insertion":F) chmod +x tests/test-unstable-median3-insertion ;;
     "tests/test-unstable-median3-insertion-typed":F) chmod +x tests/test-unstable-median3-insertion-typed ;;
     "tests/test-unstable-random-shell":F) chmod +x tests/test-unstable-random-shell ;;
+    "tests/test-unstable-random-shell-typed":F) chmod +x tests/test-unstable-random-shell-typed ;;
     "tests/test-unstable-middle-shell":F) chmod +x tests/test-unstable-middle-shell ;;
+    "tests/test-unstable-middle-shell-typed":F) chmod +x tests/test-unstable-middle-shell-typed ;;
     "tests/test-unstable-median3-shell":F) chmod +x tests/test-unstable-median3-shell ;;
     "tests/test-unstable-median3-shell-typed":F) chmod +x tests/test-unstable-median3-shell-typed ;;
     "tests/test-unstable-random-insertion-big":F) chmod +x tests/test-unstable-random-insertion-big ;;

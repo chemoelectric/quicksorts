@@ -176,12 +176,30 @@ unstable_random_shell (void *base, size_t nmemb)
 }
 
 static void
+unstable_random_shell_typed (void *base, size_t nmemb)
+{
+  UNSTABLE_QUICKSORT_TYPED_7ARGS
+    (int, base, nmemb, int_lt,
+     QUICKSORTS_COMMON__PIVOT_RANDOM,
+     350, QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT__TYPED);
+}
+
+static void
 unstable_middle_shell (void *base, size_t nmemb)
 {
   UNSTABLE_QUICKSORT_7ARGS
     (base, nmemb, sizeof (int), int_lt,
      QUICKSORTS_COMMON__PIVOT_MIDDLE,
      350, QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT);
+}
+
+static void
+unstable_middle_shell_typed (void *base, size_t nmemb)
+{
+  UNSTABLE_QUICKSORT_TYPED_7ARGS
+    (int, base, nmemb, int_lt,
+     QUICKSORTS_COMMON__PIVOT_MIDDLE,
+     350, QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT__TYPED);
 }
 
 static void
@@ -301,10 +319,22 @@ test_arrays_with_int_keys (sortkind_t sortkind,
           unstable_random_shell (p3, sz);
           t32 = get_clock ();
         }
+      else if (sortkind_eq (sortkind, "unstable-random-shell-typed"))
+        {
+          t31 = get_clock ();
+          unstable_random_shell_typed (p3, sz);
+          t32 = get_clock ();
+        }
       else if (sortkind_eq (sortkind, "unstable-middle-shell"))
         {
           t31 = get_clock ();
           unstable_middle_shell (p3, sz);
+          t32 = get_clock ();
+        }
+      else if (sortkind_eq (sortkind, "unstable-middle-shell-typed"))
+        {
+          t31 = get_clock ();
+          unstable_middle_shell_typed (p3, sz);
           t32 = get_clock ();
         }
       else if (sortkind_eq (sortkind, "unstable-median3-shell"))
