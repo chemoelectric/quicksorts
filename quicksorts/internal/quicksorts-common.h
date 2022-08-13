@@ -240,6 +240,18 @@ quicksorts_common__elem_swap (char *p1, char *p2, size_t elemsz)
     }
 }
 
+/* Swap two typed elements. */
+#define QUICKSORTS_COMMON__ELEM_SWAP__TYPED(PFX, T, P1, P2) \
+  do                                                        \
+    {                                                       \
+      T *PFX##swap__p1 = (T *) (P1);                        \
+      T *PFX##swap__p2 = (T *) (P2);                        \
+      T tmp = *PFX##swap__p1;                               \
+      *PFX##swap__p1 = *PFX##swap__p2;                      \
+      *PFX##swap__p2 = tmp;                                 \
+    }                                                       \
+  while (0)
+
 /* Reverse a prefix of pfx_len >= 2. */
 quicksorts_common__inline void
 quicksorts_common__reverse_prefix (char *arr, size_t pfx_len,
@@ -255,6 +267,31 @@ quicksorts_common__reverse_prefix (char *arr, size_t pfx_len,
     }
   while (p_left < p_right);
 }
+
+/* Reverse a prefix of pfx_len >= 2. */
+#define QUICKSORTS_COMMON__REVERSE_PREFIX__TYPED(PFX, T, ARR,   \
+                                                 PFX_LEN)       \
+  do                                                            \
+    {                                                           \
+      const size_t PFX##reverse_prefix__pfx_len =               \
+        (size_t) (PFX_LEN);                                     \
+      T *PFX##reverse_prefix__p_left = (T *) (ARR);             \
+      T *PFX##reverse_prefix__p_right =                         \
+        (PFX##reverse_prefix__p_left +                          \
+         PFX##reverse_prefix__pfx_len - 1);                     \
+      do                                                        \
+        {                                                       \
+          QUICKSORTS_COMMON__ELEM_SWAP__TYPED                   \
+            (PFX##__reverse_prefix__, T,                        \
+             PFX##reverse_prefix__p_left,                       \
+             PFX##reverse_prefix__p_right);                     \
+          PFX##reverse_prefix__p_left += 1;                     \
+          PFX##reverse_prefix__p_right -= 1;                    \
+        }                                                       \
+      while (PFX##reverse_prefix__p_left                        \
+             < PFX##reverse_prefix__p_right);                   \
+    }                                                           \
+  while (0)
 
 #if 1
 /**/
@@ -317,6 +354,32 @@ quicksorts_common__reverse_prefix (char *arr, size_t pfx_len,
 /**/
 #endif
 
+#define QUICKSORTS_COMMON__INSERTION_POSITION__TYPED(PFX, T, LT)    \
+  do                                                                \
+    {                                                               \
+      T *PFX##pj = PFX##arr;                                        \
+      T *PFX##pk = PFX##pi - 1;                                     \
+                                                                    \
+      while (PFX##pj != PFX##pk)                                    \
+        {                                                           \
+          /* Ceiling of the midway point: */                        \
+          T *PFX##ph = PFX##pk - ((PFX##pk - PFX##pj) >> 1);        \
+                                                                    \
+          if (LT (PFX##pi, PFX##ph))                                \
+            PFX##pk = PFX##ph - 1;                                  \
+          else                                                      \
+            PFX##pj = PFX##ph;                                      \
+        }                                                           \
+                                                                    \
+      if (PFX##pj != PFX##arr)                                      \
+        PFX##pos = PFX##pj + 1;                                     \
+      else if (LT (PFX##pi, PFX##arr))                              \
+        PFX##pos = PFX##arr;                                        \
+      else                                                          \
+        PFX##pos = PFX##arr + 1;                                    \
+    }                                                               \
+  while (0)
+
 #if 1
 /* One implementation of subcirculate_right. */
 quicksorts_common__inline void
@@ -373,6 +436,26 @@ quicksorts_common__subcirculate_right (char *p_left, char *p_right,
       }
 }
 #endif
+
+#define QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__TYPED(PFX, T,        \
+                                                     P_LEFT,        \
+                                                     P_RIGHT)       \
+  do                                                                \
+    {                                                               \
+      T *PFX##subcircrt__p_left = (T *) (P_LEFT);                   \
+      T *PFX##subcircrt__p_right = (T *) (P_RIGHT);                 \
+      if (PFX##subcircrt__p_left != PFX##subcircrt__p_right)        \
+        {                                                           \
+          T PFX##subcircrt__tmp = *PFX##subcircrt__p_right;         \
+          QUICKSORTS_COMMON__MEMMOVE                                \
+            (PFX##subcircrt__p_left + 1,                            \
+             PFX##subcircrt__p_left,                                \
+             ((PFX##subcircrt__p_right - PFX##subcircrt__p_left)    \
+              * sizeof (T)));                                       \
+          *PFX##subcircrt__p_left = PFX##subcircrt__tmp;            \
+        }                                                           \
+    }                                                               \
+  while (0)
 
 #if 1
 /* One implementation of subcirculate_right_with_gap. */
@@ -446,6 +529,27 @@ quicksorts_common__subcirculate_right_with_gap (char *p_left,
 }
 #endif
 
+#define QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT_WITH_GAP__TYPED(PFX, T,   \
+                                                              P_LEFT,   \
+                                                              P_RIGHT,  \
+                                                              GAP)      \
+  do                                                                    \
+    {                                                                   \
+      T *PFX##subcrtgap__p_left = (T *) (P_LEFT);                       \
+      T *PFX##subcrtgap__p_right = (T *) (P_RIGHT);                     \
+      if (PFX##subcrtgap__p_left != PFX##subcrtgap_p_right)             \
+        {                                                               \
+          T PFX##subcrtgap__tmp = *PFX##subcrtgap_p_right;              \
+          for (T *PFX##subcrtgap__p = PFX##subcrtgap__p_right;          \
+               PFX##subcrtgap__p != PFX##subcrtgap__p_left;             \
+               PFX##subcrtgap__p -= PFX##subcrtgap__gap)                \
+            *PFX##subcrtgap__p =                                        \
+              *(PFX##subcrtgap__p - PFX##subcrtgap__gap);               \
+          *PFX##subcrtgap_p_left = PFX##subcrtgap__tmp;                 \
+        }                                                               \
+    }                                                                   \
+  while (0)
+
 #define QUICKSORTS_COMMON__INSERTION_SORT(PFX, LT, SMALL_SIZE,      \
                                           MAKE_AN_ORDERED_PREFIX)   \
   do                                                                \
@@ -468,8 +572,32 @@ quicksorts_common__subcirculate_right_with_gap (char *p_left,
     }                                                               \
   while (0)
 
+#define QUICKSORTS_COMMON__INSERTION_SORT__TYPED(PFX, T, LT,            \
+                                                 SMALL_SIZE,            \
+                                                 MAKE_AN_ORDERED_PREFIX) \
+  do                                                                    \
+    {                                                                   \
+      if (PFX##nmemb > 1)                                               \
+        {                                                               \
+          size_t PFX##pfx_len;                                          \
+          MAKE_AN_ORDERED_PREFIX (PFX, T, LT);                          \
+          size_t PFX##i = PFX##pfx_len;                                 \
+          while (PFX##i != PFX##nmemb)                                  \
+            {                                                           \
+              T *PFX##pi = ((T *) PFX##arr) + PFX##i;                   \
+              T *PFX##pos;                                              \
+              QUICKSORTS_COMMON__INSERTION_POSITION__TYPED              \
+                (PFX, T, LT);                                           \
+              QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__TYPED              \
+                (PFX, T, PFX##pos, PFX##pi);                            \
+              PFX##i += 1;                                              \
+            }                                                           \
+        }                                                               \
+    }                                                                   \
+  while (0)
+
 #define QUICKSORTS_COMMON__STK_MAKE(PFX)                    \
-  typedef struct {char *p; size_t n;} PFX##stk_entry_t;     \
+  typedef struct {void *p; size_t n;} PFX##stk_entry_t;     \
   PFX##stk_entry_t PFX##stk[CHAR_BIT * sizeof (size_t)];    \
   QUICKSORTS_COMMON__MEMSET                                 \
   (PFX##stk, 0,                                             \

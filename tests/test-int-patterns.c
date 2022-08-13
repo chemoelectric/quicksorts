@@ -107,6 +107,12 @@ unstable_defaults (void *base, size_t nmemb)
 }
 
 static void
+unstable_defaults_typed (void *base, size_t nmemb)
+{
+  UNSTABLE_QUICKSORT_TYPED (int, base, nmemb, int_lt);
+}
+
+static void
 unstable_random_insertion (void *base, size_t nmemb)
 {
   UNSTABLE_QUICKSORT_7ARGS
@@ -209,6 +215,12 @@ test_arrays_with_int_keys (sortkind_t sortkind,
         {
           t31 = get_clock ();
           unstable_defaults (p3, sz);
+          t32 = get_clock ();
+        }
+      else if (sortkind_eq (sortkind, "unstable-defaults-typed"))
+        {
+          t31 = get_clock ();
+          unstable_defaults_typed (p3, sz);
           t32 = get_clock ();
         }
       else if (sortkind_eq (sortkind, "unstable-random-insertion"))

@@ -95,6 +95,8 @@ AC_CONFIG_FILES([tests/test-unstable_qsort_r],
                 [chmod +x tests/test-unstable_qsort_r])
 AC_CONFIG_FILES([tests/test-unstable-defaults],
                 [chmod +x tests/test-unstable-defaults])
+AC_CONFIG_FILES([tests/test-unstable-defaults-typed],
+                [chmod +x tests/test-unstable-defaults-typed])
 AC_CONFIG_FILES([tests/test-unstable-random-insertion],
                 [chmod +x tests/test-unstable-random-insertion])
 AC_CONFIG_FILES([tests/test-unstable-middle-insertion],

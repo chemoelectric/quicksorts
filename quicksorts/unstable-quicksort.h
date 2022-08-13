@@ -58,6 +58,37 @@
     }                                                               \
   while (0)
 
+#define QUICKSORTS__UNSTABLE_QUICKSORT__MAKE_AN_ORDERED_PREFIX__TYPED(PFX, T, LT) \
+  do                                                                    \
+    {                                                                   \
+      PFX##pfx_len = 2;                                                 \
+      T *PFX##p = PFX##arr + 2;                                         \
+                                                                        \
+      if (!(LT (PFX##arr + 1, PFX##arr)))                               \
+        {                                                               \
+          /* Non-decreasing order. */                                   \
+          while (PFX##pfx_len < PFX##nmemb &&                           \
+                 !(LT (PFX##p, PFX##p - 1)))                            \
+            {                                                           \
+              PFX##pfx_len += 1;                                        \
+              PFX##p += 1;                                              \
+            }                                                           \
+        }                                                               \
+      else                                                              \
+        {                                                               \
+          /* Decreasing order. This branch sorts unstably. */           \
+          while (PFX##pfx_len < PFX##nmemb &&                           \
+                 !(LT (PFX##p - 1, PFX##p)))                            \
+            {                                                           \
+              PFX##pfx_len += 1;                                        \
+              PFX##p += 1;                                              \
+            }                                                           \
+          QUICKSORTS_COMMON__REVERSE_PREFIX__TYPED                      \
+            (PFX, T, PFX##arr, PFX##pfx_len);                           \
+        }                                                               \
+    }                                                                   \
+  while (0)
+
 #define QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT(PFX, BASE,   \
                                                        NMEMB,       \
                                                        ELEMSZ, LT,  \
@@ -71,6 +102,21 @@
         (PFX##insertion_sort__, LT, SMALL_SIZE,                     \
          QUICKSORTS__UNSTABLE_QUICKSORT__MAKE_AN_ORDERED_PREFIX);   \
     }                                                               \
+  while (0)
+
+#define QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT__TYPED(PFX, T,   \
+                                                              BASE,     \
+                                                              NMEMB,    \
+                                                              LT,       \
+                                                              SMALL_SIZE) \
+  do                                                                    \
+    {                                                                   \
+      T *PFX##insertion_sort__arr = (T *) (BASE);                       \
+      size_t PFX##insertion_sort__nmemb = (size_t) (NMEMB);             \
+      QUICKSORTS_COMMON__INSERTION_SORT__TYPED                          \
+        (PFX##insertion_sort__, T, LT, SMALL_SIZE,                      \
+         QUICKSORTS__UNSTABLE_QUICKSORT__MAKE_AN_ORDERED_PREFIX__TYPED); \
+    }                                                                   \
   while (0)
 
 #define QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS(PFX, LT, GAP)          \
@@ -95,14 +141,35 @@
     }                                                                   \
   while (0)
 
+#define QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS__TYPED(PFX, T, LT, \
+                                                        GAP)        \
+  do                                                                \
+    {                                                               \
+      const size_t PFX##gap = (GAP);                                \
+      T *PFX##p_lstop = PFX##arr + PFX##gap;                        \
+      T *PFX##p_rstop = PFX##arr + PFX##nmemb;                      \
+      for (T *PFX##p_right = PFX##p_lstop;                          \
+           PFX##p_right != PFX##p_rstop;                            \
+           PFX##p_right += 1)                                       \
+        {                                                           \
+          T *PFX##p_left = PFX##p_right;                            \
+          while (PFX##p_lstop <= PFX##p_left &&                     \
+                 (LT (PFX##p_right, PFX##p_left - PFX##gap)))       \
+            PFX##p_left -= PFX##gap;                                \
+          QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT_WITH_GAP__TYPED     \
+            (PFX, T, PFX##p_left, PFX##p_right, PFX##gap);          \
+        }                                                           \
+    }                                                               \
+  while (0)
+
 #define QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT(PFX, BASE,       \
                                                    NMEMB, ELEMSZ,   \
                                                    LT, SMALL_SIZE)  \
   do                                                                \
     {                                                               \
-      char *PFX##shell_sort__arr = (BASE);                          \
-      size_t PFX##shell_sort__nmemb = (NMEMB);                      \
-      size_t PFX##shell_sort__elemsz = (ELEMSZ);                    \
+      char *PFX##shell_sort__arr = (void *) (BASE);                 \
+      size_t PFX##shell_sort__nmemb = (size_t) (NMEMB);             \
+      size_t PFX##shell_sort__elemsz = (size_t) (ELEMSZ);           \
                                                                     \
       /* The famous gap sequence of Marcin Ciura and */             \
       /* Roman Dovgopol: https://oeis.org/A102549    */             \
@@ -135,6 +202,46 @@
     }                                                               \
   while (0)
 
+#define QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT__TYPED(PFX, T,       \
+                                                          BASE,         \
+                                                          NMEMB, LT,    \
+                                                          SMALL_SIZE)   \
+  do                                                                \
+    {                                                               \
+      T *PFX##shell_sort__arr = (T *) (BASE);                       \
+      size_t PFX##shell_sort__nmemb = (size_t) (NMEMB);             \
+                                                                    \
+      /* The famous gap sequence of Marcin Ciura and */             \
+      /* Roman Dovgopol: https://oeis.org/A102549    */             \
+      if ((SMALL_SIZE) >= 1750 && PFX##shell_sort__nmemb >= 1750)   \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS__TYPED             \
+          (PFX##shell_sort__, T, LT, 1750);                         \
+      if ((SMALL_SIZE) >= 701 && PFX##shell_sort__nmemb >= 701)     \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS__TYPED             \
+          (PFX##shell_sort__, T, LT, 701);                          \
+      if ((SMALL_SIZE) >= 301 && PFX##shell_sort__nmemb >= 301)     \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS__TYPED             \
+          (PFX##shell_sort__, T, LT, 301);                          \
+      if ((SMALL_SIZE) >= 132 && PFX##shell_sort__nmemb >= 132)     \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS__TYPED             \
+          (PFX##shell_sort__, T, LT, 132);                          \
+      if ((SMALL_SIZE) >= 57 && PFX##shell_sort__nmemb >= 57)       \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS__TYPED             \
+          (PFX##shell_sort__, T, LT, 57);                           \
+      if ((SMALL_SIZE) >= 23 && PFX##shell_sort__nmemb >= 23)       \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS__TYPED             \
+          (PFX##shell_sort__, T, LT, 23);                           \
+      if ((SMALL_SIZE) >= 10 && PFX##shell_sort__nmemb >= 10)       \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS__TYPED             \
+          (PFX##shell_sort__, T, LT, 10);                           \
+      if ((SMALL_SIZE) >= 4 && PFX##shell_sort__nmemb >= 4)         \
+        QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS__TYPED             \
+          (PFX##shell_sort__, T, LT, 4);                            \
+      QUICKSORTS__UNSTABLE_QUICKSORT__GAP_PASS__TYPED               \
+        (PFX##shell_sort__, T, LT, 1);                              \
+    }                                                               \
+  while (0)
+
 #define QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_RIGHTWARDS(PFX, LT)    \
   do                                                                \
     {                                                               \
@@ -153,6 +260,26 @@
                   (const void *) PFX##p_right)))                \
         PFX##p_right -= PFX##elemsz;                            \
     }                                                           \
+  while (0)
+
+#define QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_RIGHTWARDS__TYPED(PFX, T,  \
+                                                               LT)      \
+  do                                                                    \
+    {                                                                   \
+      while (PFX##p_left != PFX##p_right &&                             \
+             (LT (PFX##p_left, PFX##p_pivot)))                          \
+        PFX##p_left += 1;                                               \
+    }                                                                   \
+  while (0)
+
+#define QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_LEFTWARDS__TYPED(PFX, T,   \
+                                                              LT)       \
+  do                                                                    \
+    {                                                                   \
+      while (PFX##p_left != PFX##p_right &&                             \
+             (LT (PFX##p_pivot, PFX##p_right)))                         \
+        PFX##p_right -= 1;                                              \
+    }                                                                   \
   while (0)
 
 #define QUICKSORTS__UNSTABLE_QUICKSORT__PARTITION(PFX, LT,              \
@@ -244,6 +371,88 @@
     }                                                                   \
   while (0)
 
+#define QUICKSORTS__UNSTABLE_QUICKSORT__PARTITION__TYPED(PFX, T, LT,    \
+                                                         PIVOT_SELECTION) \
+  do                                                                    \
+    {                                                                   \
+      PIVOT_SELECTION (PFX##arr, PFX##nmemb, sizeof (T), LT,            \
+                       PFX##i_pivot);                                   \
+      PFX##p_pivot = PFX##arr + PFX##i_pivot;                           \
+                                                                        \
+      /* Put the pivot in the middle, so it will be as near to */       \
+      /* other elements as possible.                           */       \
+      T *PFX##p_middle = PFX##arr + (PFX##nmemb >> 1);                  \
+      QUICKSORTS_COMMON__ELEM_SWAP__TYPED                               \
+        (PFX, T, PFX##p_pivot, PFX##p_middle);                          \
+      PFX##p_pivot = PFX##p_middle;                                     \
+                                                                        \
+      T *PFX##p_left = PFX##arr;                                        \
+      T *PFX##p_right = PFX##arr + (PFX##nmemb - 1);                    \
+                                                                        \
+      QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_RIGHTWARDS__TYPED            \
+        (PFX, T, LT);                                                   \
+      QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_LEFTWARDS__TYPED             \
+        (PFX, T, LT);                                                   \
+                                                                        \
+      while (PFX##p_left != PFX##p_right)                               \
+        {                                                               \
+          QUICKSORTS_COMMON__ELEM_SWAP__TYPED                           \
+            (PFX, T, PFX##p_left, PFX##p_right);                        \
+                                                                        \
+          /* The pivot’s position may have been changed by the */       \
+          /* swap.                                             */       \
+          if (PFX##p_pivot == PFX##p_left)                              \
+            PFX##p_pivot = PFX##p_right;                                \
+          else if (PFX##p_pivot == PFX##p_right)                        \
+            PFX##p_pivot = PFX##p_left;                                 \
+                                                                        \
+          PFX##p_left += 1;                                             \
+                                                                        \
+          if (PFX##p_left != PFX##p_right)                              \
+            PFX##p_right -= 1;                                          \
+                                                                        \
+          QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_RIGHTWARDS__TYPED        \
+            (PFX, T, LT);                                               \
+          QUICKSORTS__UNSTABLE_QUICKSORT__MOVE_LEFTWARDS__TYPED         \
+            (PFX, T, LT);                                               \
+        }                                                               \
+                                                                        \
+      /* Put the pivot between the two parts of the partition. */       \
+      if (LT (PFX##p_pivot, PFX##p_right))                              \
+        {                                                               \
+          if (PFX##p_pivot < PFX##p_right)                              \
+            {                                                           \
+              QUICKSORTS_COMMON__ELEM_SWAP__TYPED                       \
+                (PFX, T, PFX##p_pivot, PFX##p_right - 1);               \
+              PFX##p_pivot = PFX##p_right - 1;                          \
+            }                                                           \
+          else                                                          \
+            {                                                           \
+              QUICKSORTS_COMMON__ELEM_SWAP__TYPED                       \
+                (PFX, T, PFX##p_pivot, PFX##p_right);                   \
+              PFX##p_pivot = PFX##p_right;                              \
+            }                                                           \
+        }                                                               \
+      else                                                              \
+        {                                                               \
+          if (PFX##p_right < PFX##p_pivot)                              \
+            {                                                           \
+              QUICKSORTS_COMMON__ELEM_SWAP__TYPED                       \
+                (PFX, T, PFX##p_pivot, PFX##p_right + 1);               \
+              PFX##p_pivot = PFX##p_right + 1;                          \
+            }                                                           \
+          else                                                          \
+            {                                                           \
+              QUICKSORTS_COMMON__ELEM_SWAP__TYPED                       \
+                (PFX, T, PFX##p_pivot, PFX##p_right);                   \
+              PFX##p_pivot = PFX##p_right;                              \
+            }                                                           \
+        }                                                               \
+                                                                        \
+      PFX##i_pivot = PFX##p_pivot - PFX##arr;                           \
+    }                                                                   \
+  while (0)
+
 #define QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT(PFX, BASE, NMEMB,     \
                                                   ELEMSZ, LT,           \
                                                   PIVOT_SELECTION,      \
@@ -303,6 +512,64 @@
     }                                                                   \
   while (0)
 
+#define QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT__TYPED(PFX, T, BASE, \
+                                                         NMEMB, LT,     \
+                                                         PIVOT_SELECTION, \
+                                                         SMALL_SIZE,    \
+                                                         SMALL_SORT)    \
+  do                                                                    \
+    {                                                                   \
+      T *PFX##arr = (T *) (BASE);                                       \
+      size_t PFX##nmemb = (size_t) (NMEMB);                             \
+                                                                        \
+      if (0 < sizeof (T) && 2 <= PFX##nmemb)                            \
+        {                                                               \
+          size_t PFX##i_pivot;                                          \
+          T *PFX##p_pivot;                                              \
+                                                                        \
+          QUICKSORTS_COMMON__STK_MAKE (PFX);                            \
+          QUICKSORTS_COMMON__STK_PUSH (PFX, PFX##arr, PFX##nmemb);      \
+          do                                                            \
+            {                                                           \
+              QUICKSORTS_COMMON__STK_POP (PFX);                         \
+              if (PFX##nmemb <= (SMALL_SIZE))                           \
+                {                                                       \
+                  SMALL_SORT (PFX, T, PFX##arr, PFX##nmemb, LT,         \
+                              (SMALL_SIZE));                            \
+                }                                                       \
+              else                                                      \
+                {                                                       \
+                  QUICKSORTS__UNSTABLE_QUICKSORT__PARTITION__TYPED      \
+                    (PFX, T, LT, PIVOT_SELECTION);                      \
+                                                                        \
+                  /* Push the larger part of the partition first. */    \
+                  /* Otherwise the stack may overflow.            */    \
+                                                                        \
+                  size_t PFX##n_le = PFX##i_pivot;                      \
+                  size_t PFX##n_ge = PFX##nmemb - 1 - PFX##i_pivot;     \
+                  if (PFX##n_le < PFX##n_ge)                            \
+                    {                                                   \
+                      QUICKSORTS_COMMON__STK_PUSH                       \
+                        (PFX, PFX##p_pivot + 1, PFX##n_ge);             \
+                      if (PFX##n_le != 0)                               \
+                        QUICKSORTS_COMMON__STK_PUSH                     \
+                          (PFX, PFX##arr, PFX##n_le);                   \
+                    }                                                   \
+                  else                                                  \
+                    {                                                   \
+                      QUICKSORTS_COMMON__STK_PUSH                       \
+                        (PFX, PFX##arr, PFX##n_le);                     \
+                      if (PFX##n_ge != 0)                               \
+                        QUICKSORTS_COMMON__STK_PUSH                     \
+                          (PFX, PFX##p_pivot + 1, PFX##n_ge);           \
+                    }                                                   \
+                }                                                       \
+            }                                                           \
+          while (PFX##stk_depth != 0);                                  \
+        }                                                               \
+    }                                                                   \
+  while (0)
+
 #define UNSTABLE_QUICKSORT_7ARGS(BASE, NMEMB, ELEMSZ, LT,           \
                                  PIVOT_SELECTION,                   \
                                  SMALL_SIZE, SMALL_SORT)            \
@@ -313,6 +580,18 @@
          (BASE), (NMEMB), (ELEMSZ),                                 \
          LT, PIVOT_SELECTION, (SMALL_SIZE), SMALL_SORT);            \
     }                                                               \
+  while (0)
+
+#define UNSTABLE_QUICKSORT_TYPED_7ARGS(T, BASE, NMEMB, LT,      \
+                                       PIVOT_SELECTION,         \
+                                       SMALL_SIZE, SMALL_SORT)  \
+  do                                                            \
+    {                                                           \
+      QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT__TYPED          \
+        (quicksorts__unstable_quicksort__typed__, T,            \
+         (BASE), (NMEMB), LT, PIVOT_SELECTION,                  \
+         (SMALL_SIZE), SMALL_SORT);                             \
+    }                                                           \
   while (0)
 
 #ifndef UNSTABLE_QUICKSORT__DEFAULT__PIVOT_SELECTION
@@ -329,6 +608,11 @@
   QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT
 #endif
 
+#ifndef UNSTABLE_QUICKSORT__DEFAULT__SMALL_SORT__TYPED
+#define UNSTABLE_QUICKSORT__DEFAULT__SMALL_SORT__TYPED  \
+  QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT__TYPED
+#endif
+
 #define UNSTABLE_QUICKSORT_4ARGS(BASE, NMEMB, ELEMSZ, LT)   \
   do                                                        \
     {                                                       \
@@ -341,6 +625,19 @@
     }                                                       \
   while (0)
 
+#define UNSTABLE_QUICKSORT_TYPED_4ARGS(T, BASE, NMEMB, LT)  \
+  do                                                        \
+    {                                                       \
+      QUICKSORTS__UNSTABLE_QUICKSORT__QUICKSORT__TYPED      \
+        (quicksorts__unstable_quicksort__typed__,           \
+         T, (BASE), (NMEMB), LT,                            \
+         UNSTABLE_QUICKSORT__DEFAULT__PIVOT_SELECTION,      \
+         (UNSTABLE_QUICKSORT__DEFAULT__SMALL_SIZE),         \
+         UNSTABLE_QUICKSORT__DEFAULT__SMALL_SORT__TYPED);   \
+    }                                                       \
+  while (0)
+
 #define UNSTABLE_QUICKSORT UNSTABLE_QUICKSORT_4ARGS
+#define UNSTABLE_QUICKSORT_TYPED UNSTABLE_QUICKSORT_TYPED_4ARGS
 
 #endif /* QUICKSORTS__UNSTABLE_QUICKSORT_H__HEADER_GUARD__ */
