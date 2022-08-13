@@ -140,12 +140,30 @@ unstable_middle_insertion (void *base, size_t nmemb)
 }
 
 static void
+unstable_middle_insertion_typed (void *base, size_t nmemb)
+{
+  UNSTABLE_QUICKSORT_TYPED_7ARGS
+    (int, base, nmemb, int_lt,
+     QUICKSORTS_COMMON__PIVOT_MIDDLE,
+     80, QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT__TYPED);
+}
+
+static void
 unstable_median3_insertion (void *base, size_t nmemb)
 {
   UNSTABLE_QUICKSORT_7ARGS
     (base, nmemb, sizeof (int), int_lt,
      QUICKSORTS_COMMON__PIVOT_MEDIAN_OF_THREE,
      80, QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT);
+}
+
+static void
+unstable_median3_insertion_typed (void *base, size_t nmemb)
+{
+  UNSTABLE_QUICKSORT_TYPED_7ARGS
+    (int, base, nmemb, int_lt,
+     QUICKSORTS_COMMON__PIVOT_MEDIAN_OF_THREE,
+     80, QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT__TYPED);
 }
 
 static void
@@ -173,6 +191,15 @@ unstable_median3_shell (void *base, size_t nmemb)
     (base, nmemb, sizeof (int), int_lt,
      QUICKSORTS_COMMON__PIVOT_MEDIAN_OF_THREE,
      350, QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT);
+}
+
+static void
+unstable_median3_shell_typed (void *base, size_t nmemb)
+{
+  UNSTABLE_QUICKSORT_TYPED_7ARGS
+    (int, base, nmemb, int_lt,
+     QUICKSORTS_COMMON__PIVOT_MEDIAN_OF_THREE,
+     350, QUICKSORTS__UNSTABLE_QUICKSORT__SHELL_SORT__TYPED);
 }
 
 static void
@@ -250,10 +277,22 @@ test_arrays_with_int_keys (sortkind_t sortkind,
           unstable_middle_insertion (p3, sz);
           t32 = get_clock ();
         }
+      else if (sortkind_eq (sortkind, "unstable-middle-insertion-typed"))
+        {
+          t31 = get_clock ();
+          unstable_middle_insertion_typed (p3, sz);
+          t32 = get_clock ();
+        }
       else if (sortkind_eq (sortkind, "unstable-median3-insertion"))
         {
           t31 = get_clock ();
           unstable_median3_insertion (p3, sz);
+          t32 = get_clock ();
+        }
+      else if (sortkind_eq (sortkind, "unstable-median3-insertion-typed"))
+        {
+          t31 = get_clock ();
+          unstable_median3_insertion_typed (p3, sz);
           t32 = get_clock ();
         }
       else if (sortkind_eq (sortkind, "unstable-random-shell"))
@@ -272,6 +311,12 @@ test_arrays_with_int_keys (sortkind_t sortkind,
         {
           t31 = get_clock ();
           unstable_median3_shell (p3, sz);
+          t32 = get_clock ();
+        }
+      else if (sortkind_eq (sortkind, "unstable-median3-shell-typed"))
+        {
+          t31 = get_clock ();
+          unstable_median3_shell_typed (p3, sz);
           t32 = get_clock ();
         }
       else

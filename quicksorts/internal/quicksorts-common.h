@@ -535,17 +535,18 @@ quicksorts_common__subcirculate_right_with_gap (char *p_left,
                                                               GAP)      \
   do                                                                    \
     {                                                                   \
+      size_t PFX##subcrtgap__gap = (size_t) (GAP);                      \
       T *PFX##subcrtgap__p_left = (T *) (P_LEFT);                       \
       T *PFX##subcrtgap__p_right = (T *) (P_RIGHT);                     \
-      if (PFX##subcrtgap__p_left != PFX##subcrtgap_p_right)             \
+      if (PFX##subcrtgap__p_left != PFX##subcrtgap__p_right)            \
         {                                                               \
-          T PFX##subcrtgap__tmp = *PFX##subcrtgap_p_right;              \
+          T PFX##subcrtgap__tmp = *PFX##subcrtgap__p_right;             \
           for (T *PFX##subcrtgap__p = PFX##subcrtgap__p_right;          \
                PFX##subcrtgap__p != PFX##subcrtgap__p_left;             \
                PFX##subcrtgap__p -= PFX##subcrtgap__gap)                \
             *PFX##subcrtgap__p =                                        \
               *(PFX##subcrtgap__p - PFX##subcrtgap__gap);               \
-          *PFX##subcrtgap_p_left = PFX##subcrtgap__tmp;                 \
+          *PFX##subcrtgap__p_left = PFX##subcrtgap__tmp;                \
         }                                                               \
     }                                                                   \
   while (0)

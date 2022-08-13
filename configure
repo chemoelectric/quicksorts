@@ -19003,13 +19003,19 @@ ac_config_files="$ac_config_files tests/test-unstable-random-insertion-typed"
 
 ac_config_files="$ac_config_files tests/test-unstable-middle-insertion"
 
+ac_config_files="$ac_config_files tests/test-unstable-middle-insertion-typed"
+
 ac_config_files="$ac_config_files tests/test-unstable-median3-insertion"
+
+ac_config_files="$ac_config_files tests/test-unstable-median3-insertion-typed"
 
 ac_config_files="$ac_config_files tests/test-unstable-random-shell"
 
 ac_config_files="$ac_config_files tests/test-unstable-middle-shell"
 
 ac_config_files="$ac_config_files tests/test-unstable-median3-shell"
+
+ac_config_files="$ac_config_files tests/test-unstable-median3-shell-typed"
 
 ac_config_files="$ac_config_files tests/test-unstable-random-insertion-big"
 
@@ -20172,10 +20178,13 @@ do
     "tests/test-unstable-random-insertion") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-insertion" ;;
     "tests/test-unstable-random-insertion-typed") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-insertion-typed" ;;
     "tests/test-unstable-middle-insertion") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-middle-insertion" ;;
+    "tests/test-unstable-middle-insertion-typed") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-middle-insertion-typed" ;;
     "tests/test-unstable-median3-insertion") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-median3-insertion" ;;
+    "tests/test-unstable-median3-insertion-typed") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-median3-insertion-typed" ;;
     "tests/test-unstable-random-shell") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-shell" ;;
     "tests/test-unstable-middle-shell") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-middle-shell" ;;
     "tests/test-unstable-median3-shell") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-median3-shell" ;;
+    "tests/test-unstable-median3-shell-typed") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-median3-shell-typed" ;;
     "tests/test-unstable-random-insertion-big") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-insertion-big" ;;
     "tests/test-unstable-median3-insertion-big") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-median3-insertion-big" ;;
     "tests/test-unstable-random-shell-big") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-shell-big" ;;
@@ -21444,10 +21453,13 @@ EOF
     "tests/test-unstable-random-insertion":F) chmod +x tests/test-unstable-random-insertion ;;
     "tests/test-unstable-random-insertion-typed":F) chmod +x tests/test-unstable-random-insertion-typed ;;
     "tests/test-unstable-middle-insertion":F) chmod +x tests/test-unstable-middle-insertion ;;
+    "tests/test-unstable-middle-insertion-typed":F) chmod +x tests/test-unstable-middle-insertion-typed ;;
     "tests/test-unstable-median3-insertion":F) chmod +x tests/test-unstable-median3-insertion ;;
+    "tests/test-unstable-median3-insertion-typed":F) chmod +x tests/test-unstable-median3-insertion-typed ;;
     "tests/test-unstable-random-shell":F) chmod +x tests/test-unstable-random-shell ;;
     "tests/test-unstable-middle-shell":F) chmod +x tests/test-unstable-middle-shell ;;
     "tests/test-unstable-median3-shell":F) chmod +x tests/test-unstable-median3-shell ;;
+    "tests/test-unstable-median3-shell-typed":F) chmod +x tests/test-unstable-median3-shell-typed ;;
     "tests/test-unstable-random-insertion-big":F) chmod +x tests/test-unstable-random-insertion-big ;;
     "tests/test-unstable-median3-insertion-big":F) chmod +x tests/test-unstable-median3-insertion-big ;;
     "tests/test-unstable-random-shell-big":F) chmod +x tests/test-unstable-random-shell-big ;;
