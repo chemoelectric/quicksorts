@@ -18987,6 +18987,8 @@ printf "%s\n" "$as_me: WARNING: Please consider installing and using GNU Make:
 
 }
 
+
+
 ac_config_files="$ac_config_files tests/test-unstable_qsort"
 
 ac_config_files="$ac_config_files tests/test-unstable_qsort_r"
@@ -18996,6 +18998,8 @@ ac_config_files="$ac_config_files tests/test-unstable-defaults"
 ac_config_files="$ac_config_files tests/test-unstable-defaults-typed"
 
 ac_config_files="$ac_config_files tests/test-unstable-random-insertion"
+
+ac_config_files="$ac_config_files tests/test-unstable-random-insertion-typed"
 
 ac_config_files="$ac_config_files tests/test-unstable-middle-insertion"
 
@@ -20166,6 +20170,7 @@ do
     "tests/test-unstable-defaults") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-defaults" ;;
     "tests/test-unstable-defaults-typed") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-defaults-typed" ;;
     "tests/test-unstable-random-insertion") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-insertion" ;;
+    "tests/test-unstable-random-insertion-typed") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-insertion-typed" ;;
     "tests/test-unstable-middle-insertion") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-middle-insertion" ;;
     "tests/test-unstable-median3-insertion") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-median3-insertion" ;;
     "tests/test-unstable-random-shell") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-shell" ;;
@@ -21437,6 +21442,7 @@ EOF
     "tests/test-unstable-defaults":F) chmod +x tests/test-unstable-defaults ;;
     "tests/test-unstable-defaults-typed":F) chmod +x tests/test-unstable-defaults-typed ;;
     "tests/test-unstable-random-insertion":F) chmod +x tests/test-unstable-random-insertion ;;
+    "tests/test-unstable-random-insertion-typed":F) chmod +x tests/test-unstable-random-insertion-typed ;;
     "tests/test-unstable-middle-insertion":F) chmod +x tests/test-unstable-middle-insertion ;;
     "tests/test-unstable-median3-insertion":F) chmod +x tests/test-unstable-median3-insertion ;;
     "tests/test-unstable-random-shell":F) chmod +x tests/test-unstable-random-shell ;;

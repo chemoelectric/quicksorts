@@ -33,7 +33,7 @@
 #
 
 # aminclude_static.am generated automatically by Autoconf
-# from AX_AM_MACROS_STATIC on Sat Aug 13 14:12:43 CDT 2022
+# from AX_AM_MACROS_STATIC on Sat Aug 13 14:34:35 CDT 2022
 
 
 
@@ -142,6 +142,7 @@ CONFIG_CLEAN_FILES = tests/test-unstable_qsort \
 	tests/test-unstable_qsort_r tests/test-unstable-defaults \
 	tests/test-unstable-defaults-typed \
 	tests/test-unstable-random-insertion \
+	tests/test-unstable-random-insertion-typed \
 	tests/test-unstable-middle-insertion \
 	tests/test-unstable-median3-insertion \
 	tests/test-unstable-random-shell \
@@ -464,6 +465,7 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/quicksorts.pc.in \
 	$(top_srcdir)/tests/test-unstable-middle-insertion.in \
 	$(top_srcdir)/tests/test-unstable-middle-shell.in \
 	$(top_srcdir)/tests/test-unstable-random-insertion-big.in \
+	$(top_srcdir)/tests/test-unstable-random-insertion-typed.in \
 	$(top_srcdir)/tests/test-unstable-random-insertion.in \
 	$(top_srcdir)/tests/test-unstable-random-shell-big.in \
 	$(top_srcdir)/tests/test-unstable-random-shell.in \
@@ -690,6 +692,7 @@ TESTS = tests/test-unstable_qsort tests/test-unstable_qsort_r \
 	tests/test-unstable-defaults \
 	tests/test-unstable-defaults-typed \
 	tests/test-unstable-random-insertion \
+	tests/test-unstable-random-insertion-typed \
 	tests/test-unstable-middle-insertion \
 	tests/test-unstable-median3-insertion \
 	tests/test-unstable-random-shell \
@@ -753,6 +756,8 @@ tests/test-unstable-defaults: $(top_builddir)/config.status $(top_srcdir)/tests/
 tests/test-unstable-defaults-typed: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-defaults-typed.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 tests/test-unstable-random-insertion: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-random-insertion.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tests/test-unstable-random-insertion-typed: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-random-insertion-typed.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 tests/test-unstable-middle-insertion: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-middle-insertion.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
@@ -1233,6 +1238,13 @@ tests/test-unstable-defaults-typed.log: tests/test-unstable-defaults-typed
 tests/test-unstable-random-insertion.log: tests/test-unstable-random-insertion
 	@p='tests/test-unstable-random-insertion'; \
 	b='tests/test-unstable-random-insertion'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+tests/test-unstable-random-insertion-typed.log: tests/test-unstable-random-insertion-typed
+	@p='tests/test-unstable-random-insertion-typed'; \
+	b='tests/test-unstable-random-insertion-typed'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \

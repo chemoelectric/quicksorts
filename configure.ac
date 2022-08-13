@@ -89,34 +89,24 @@ AC_SUBST([GNU],[])
 StM_REQUIRE_GNU_MAKE_IN_PATH
 StM_CONFIG_MAKEFILES
 
-AC_CONFIG_FILES([tests/test-unstable_qsort],
-                [chmod +x tests/test-unstable_qsort])
-AC_CONFIG_FILES([tests/test-unstable_qsort_r],
-                [chmod +x tests/test-unstable_qsort_r])
-AC_CONFIG_FILES([tests/test-unstable-defaults],
-                [chmod +x tests/test-unstable-defaults])
-AC_CONFIG_FILES([tests/test-unstable-defaults-typed],
-                [chmod +x tests/test-unstable-defaults-typed])
-AC_CONFIG_FILES([tests/test-unstable-random-insertion],
-                [chmod +x tests/test-unstable-random-insertion])
-AC_CONFIG_FILES([tests/test-unstable-middle-insertion],
-                [chmod +x tests/test-unstable-middle-insertion])
-AC_CONFIG_FILES([tests/test-unstable-median3-insertion],
-                [chmod +x tests/test-unstable-median3-insertion])
-AC_CONFIG_FILES([tests/test-unstable-random-shell],
-                [chmod +x tests/test-unstable-random-shell])
-AC_CONFIG_FILES([tests/test-unstable-middle-shell],
-                [chmod +x tests/test-unstable-middle-shell])
-AC_CONFIG_FILES([tests/test-unstable-median3-shell],
-                [chmod +x tests/test-unstable-median3-shell])
-AC_CONFIG_FILES([tests/test-unstable-random-insertion-big],
-                [chmod +x tests/test-unstable-random-insertion-big])
-AC_CONFIG_FILES([tests/test-unstable-median3-insertion-big],
-                [chmod +x tests/test-unstable-median3-insertion-big])
-AC_CONFIG_FILES([tests/test-unstable-random-shell-big],
-                [chmod +x tests/test-unstable-random-shell-big])
-AC_CONFIG_FILES([tests/test-unstable-median3-shell-big],
-                [chmod +x tests/test-unstable-median3-shell-big])
+m4_define([my_config_executable],
+    [AC_CONFIG_FILES([$1],[chmod +x $1])])
+
+my_config_executable([tests/test-unstable_qsort])
+my_config_executable([tests/test-unstable_qsort_r])
+my_config_executable([tests/test-unstable-defaults])
+my_config_executable([tests/test-unstable-defaults-typed])
+my_config_executable([tests/test-unstable-random-insertion])
+my_config_executable([tests/test-unstable-random-insertion-typed])
+my_config_executable([tests/test-unstable-middle-insertion])
+my_config_executable([tests/test-unstable-median3-insertion])
+my_config_executable([tests/test-unstable-random-shell])
+my_config_executable([tests/test-unstable-middle-shell])
+my_config_executable([tests/test-unstable-median3-shell])
+my_config_executable([tests/test-unstable-random-insertion-big])
+my_config_executable([tests/test-unstable-median3-insertion-big])
+my_config_executable([tests/test-unstable-random-shell-big])
+my_config_executable([tests/test-unstable-median3-shell-big])
 
 AC_CONFIG_FILES([quicksorts.pc])
 

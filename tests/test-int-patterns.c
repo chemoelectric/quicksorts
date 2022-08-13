@@ -122,6 +122,15 @@ unstable_random_insertion (void *base, size_t nmemb)
 }
 
 static void
+unstable_random_insertion_typed (void *base, size_t nmemb)
+{
+  UNSTABLE_QUICKSORT_TYPED_7ARGS
+    (int, base, nmemb, int_lt,
+     QUICKSORTS_COMMON__PIVOT_RANDOM,
+     80, QUICKSORTS__UNSTABLE_QUICKSORT__INSERTION_SORT__TYPED);
+}
+
+static void
 unstable_middle_insertion (void *base, size_t nmemb)
 {
   UNSTABLE_QUICKSORT_7ARGS
@@ -227,6 +236,12 @@ test_arrays_with_int_keys (sortkind_t sortkind,
         {
           t31 = get_clock ();
           unstable_random_insertion (p3, sz);
+          t32 = get_clock ();
+        }
+      else if (sortkind_eq (sortkind, "unstable-random-insertion-typed"))
+        {
+          t31 = get_clock ();
+          unstable_random_insertion_typed (p3, sz);
           t32 = get_clock ();
         }
       else if (sortkind_eq (sortkind, "unstable-middle-insertion"))

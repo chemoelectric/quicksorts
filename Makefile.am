@@ -97,6 +97,7 @@ TESTS += tests/test-unstable_qsort_r
 TESTS += tests/test-unstable-defaults
 TESTS += tests/test-unstable-defaults-typed
 TESTS += tests/test-unstable-random-insertion
+TESTS += tests/test-unstable-random-insertion-typed
 TESTS += tests/test-unstable-middle-insertion
 TESTS += tests/test-unstable-median3-insertion
 TESTS += tests/test-unstable-random-shell
