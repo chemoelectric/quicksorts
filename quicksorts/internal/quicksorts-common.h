@@ -27,6 +27,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef QUICKSORTS_COMMON__ELEMBUF_SIZE
+#define QUICKSORTS_COMMON__ELEMBUF_SIZE 128
+#endif
+
 #if defined __GNUC__
 #define quicksorts_common__inline \
   __attribute__((__always_inline__)) static inline
@@ -204,75 +208,35 @@ quicksorts_common__random_size_t_below (size_t n)
 
 /*------------------------------------------------------------------*/
 
-quicksorts_common__inline void
-quicksorts_common__elem_swap1 (char *p1, char *p2)
-{
-  const char tmp = *p1;
-  *p1 = *p2;
-  *p2 = tmp;
-}     
-
-quicksorts_common__inline void
-quicksorts_common__elem_swap2 (char *p1, char *p2)
-{
-  quicksorts_common__elem_swap1 (p1, p2);
-  quicksorts_common__elem_swap1 (p1 + 1, p2 + 1);
-}     
-
-quicksorts_common__inline void
-quicksorts_common__elem_swap4 (char *p1, char *p2)
-{
-  quicksorts_common__elem_swap2 (p1, p2);
-  quicksorts_common__elem_swap2 (p1 + 2, p2 + 2);
-}     
-
-quicksorts_common__inline void
-quicksorts_common__elem_swap8 (char *p1, char *p2)
-{
-  quicksorts_common__elem_swap4 (p1, p2);
-  quicksorts_common__elem_swap4 (p1 + 4, p2 + 4);
-}     
-
-quicksorts_common__inline void
-quicksorts_common__elem_swap16 (char *p1, char *p2)
-{
-  quicksorts_common__elem_swap8 (p1, p2);
-  quicksorts_common__elem_swap8 (p1 + 8, p2 + 8);
-}     
-
 /* Swap two elements. */
 quicksorts_common__inline void
 quicksorts_common__elem_swap (char *p1, char *p2, size_t elemsz)
 {
-  switch (elemsz)
+  char elembuf[QUICKSORTS_COMMON__ELEMBUF_SIZE];
+
+  if (elemsz <= (QUICKSORTS_COMMON__ELEMBUF_SIZE))
     {
-    case 4:
-      quicksorts_common__elem_swap4 (p1, p2);
-      break;
-    case 8:
-      quicksorts_common__elem_swap8 (p1, p2);
-      break;
-    case 16:
-      quicksorts_common__elem_swap16 (p1, p2);
-      break;
-    case 2:
-      quicksorts_common__elem_swap2 (p1, p2);
-      break;
-    case 1:
-      quicksorts_common__elem_swap1 (p1, p2);
-      break;
-    default:
-      do
+      QUICKSORTS_COMMON__MEMCPY (elembuf, p1, elemsz);
+      QUICKSORTS_COMMON__MEMCPY (p1, p2, elemsz);
+      QUICKSORTS_COMMON__MEMCPY (p2, elembuf, elemsz);
+    }
+  else
+    {
+      for (size_t i = 0;
+           i != elemsz;
+           i +=
+             (((elemsz - i) < (QUICKSORTS_COMMON__ELEMBUF_SIZE)) ?
+              (elemsz - i) : (QUICKSORTS_COMMON__ELEMBUF_SIZE)))
         {
-          const char tmp = *p1;
-          *p1 = *p2;
-          *p2 = tmp;
-          p1 += 1;
-          p2 += 1;
-          elemsz -= 1;
+          const size_t blocksz =
+            ((elemsz - i) < (QUICKSORTS_COMMON__ELEMBUF_SIZE)) ?
+            (elemsz - i) : (QUICKSORTS_COMMON__ELEMBUF_SIZE);
+          QUICKSORTS_COMMON__MEMCPY (elembuf, p1, blocksz);
+          QUICKSORTS_COMMON__MEMCPY (p1, p2, blocksz);
+          QUICKSORTS_COMMON__MEMCPY (p2, elembuf, blocksz);
+          p1 += blocksz;
+          p2 += blocksz;
         }
-      while (elemsz != 0);
-      break;
     }
 }
 
@@ -353,23 +317,17 @@ quicksorts_common__reverse_prefix (char *arr, size_t pfx_len,
 /**/
 #endif
 
-#ifndef QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE
-#define QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE 128
-#endif
-
 #if 1
 /* One implementation of subcirculate_right. */
 quicksorts_common__inline void
 quicksorts_common__subcirculate_right (char *p_left, char *p_right,
                                        size_t elemsz)
 {
-  char elembuf
-    [QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE];
+  char elembuf[QUICKSORTS_COMMON__ELEMBUF_SIZE];
 
   if (p_left != p_right)
     {
-      if (elemsz <=
-          QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE)
+      if (elemsz <= (QUICKSORTS_COMMON__ELEMBUF_SIZE))
         {
           QUICKSORTS_COMMON__MEMCPY (elembuf, p_right, elemsz);
           QUICKSORTS_COMMON__MEMMOVE (p_left + elemsz, p_left,
@@ -378,16 +336,15 @@ quicksorts_common__subcirculate_right (char *p_left, char *p_right,
         }
       else
         {
-          const size_t elembuf_sz =
-            QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE;
           for (size_t i = 0;
                i != elemsz;
-               i += (((elemsz - i) < elembuf_sz) ?
-                     (elemsz - i) : elembuf_sz))
+               i +=
+                 (((elemsz - i) < (QUICKSORTS_COMMON__ELEMBUF_SIZE)) ?
+                  (elemsz - i) : (QUICKSORTS_COMMON__ELEMBUF_SIZE)))
             {
               const size_t blocksz =
-                ((elemsz - i) < elembuf_sz) ?
-                (elemsz - i) : elembuf_sz;
+                ((elemsz - i) < (QUICKSORTS_COMMON__ELEMBUF_SIZE)) ?
+                (elemsz - i) : (QUICKSORTS_COMMON__ELEMBUF_SIZE);
               QUICKSORTS_COMMON__MEMCPY (elembuf, p_right, blocksz);
               for (char *p = p_right; p != p_left; p -= elemsz)
                 QUICKSORTS_COMMON__MEMCPY (p, p - elemsz, blocksz);
@@ -425,15 +382,13 @@ quicksorts_common__subcirculate_right_with_gap (char *p_left,
                                                 size_t elemsz,
                                                 size_t gap)
 {
-  char elembuf
-    [QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE];
+  char elembuf[QUICKSORTS_COMMON__ELEMBUF_SIZE];
 
   if (p_left != p_right)
     {
       const size_t chargap = elemsz * gap;
 
-      if (elemsz <=
-          QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE)
+      if (elemsz <= (QUICKSORTS_COMMON__ELEMBUF_SIZE))
         {
           QUICKSORTS_COMMON__MEMCPY (elembuf, p_right, elemsz);
           if (gap == 1)
@@ -446,17 +401,15 @@ quicksorts_common__subcirculate_right_with_gap (char *p_left,
         }
       else
         {
-          const size_t elembuf_sz =
-            QUICKSORTS_COMMON__SUBCIRCULATE_RIGHT__ELEMBUF_SIZE;
-
           for (size_t i = 0;
                i != elemsz;
-               i += (((elemsz - i) < elembuf_sz) ?
-                     (elemsz - i) : elembuf_sz))
+               i +=
+                 (((elemsz - i) < (QUICKSORTS_COMMON__ELEMBUF_SIZE)) ?
+                  (elemsz - i) : (QUICKSORTS_COMMON__ELEMBUF_SIZE)))
             {
               const size_t blocksz =
-                ((elemsz - i) < elembuf_sz) ?
-                (elemsz - i) : elembuf_sz;
+                ((elemsz - i) < (QUICKSORTS_COMMON__ELEMBUF_SIZE)) ?
+                (elemsz - i) : (QUICKSORTS_COMMON__ELEMBUF_SIZE);
               QUICKSORTS_COMMON__MEMCPY (elembuf, p_right, blocksz);
               for (char *p = p_right; p != p_left; p -= chargap)
                 QUICKSORTS_COMMON__MEMCPY (p, p - chargap, blocksz);
