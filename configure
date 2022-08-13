@@ -19023,11 +19023,19 @@ ac_config_files="$ac_config_files tests/test-unstable-median3-shell-typed"
 
 ac_config_files="$ac_config_files tests/test-unstable-random-insertion-big"
 
+ac_config_files="$ac_config_files tests/test-unstable-random-insertion-typed-big"
+
 ac_config_files="$ac_config_files tests/test-unstable-median3-insertion-big"
+
+ac_config_files="$ac_config_files tests/test-unstable-median3-insertion-typed-big"
 
 ac_config_files="$ac_config_files tests/test-unstable-random-shell-big"
 
+ac_config_files="$ac_config_files tests/test-unstable-random-shell-typed-big"
+
 ac_config_files="$ac_config_files tests/test-unstable-median3-shell-big"
+
+ac_config_files="$ac_config_files tests/test-unstable-median3-shell-typed-big"
 
 
 ac_config_files="$ac_config_files quicksorts.pc"
@@ -20192,9 +20200,13 @@ do
     "tests/test-unstable-median3-shell") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-median3-shell" ;;
     "tests/test-unstable-median3-shell-typed") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-median3-shell-typed" ;;
     "tests/test-unstable-random-insertion-big") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-insertion-big" ;;
+    "tests/test-unstable-random-insertion-typed-big") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-insertion-typed-big" ;;
     "tests/test-unstable-median3-insertion-big") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-median3-insertion-big" ;;
+    "tests/test-unstable-median3-insertion-typed-big") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-median3-insertion-typed-big" ;;
     "tests/test-unstable-random-shell-big") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-shell-big" ;;
+    "tests/test-unstable-random-shell-typed-big") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-random-shell-typed-big" ;;
     "tests/test-unstable-median3-shell-big") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-median3-shell-big" ;;
+    "tests/test-unstable-median3-shell-typed-big") CONFIG_FILES="$CONFIG_FILES tests/test-unstable-median3-shell-typed-big" ;;
     "quicksorts.pc") CONFIG_FILES="$CONFIG_FILES quicksorts.pc" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
@@ -21469,9 +21481,13 @@ EOF
     "tests/test-unstable-median3-shell":F) chmod +x tests/test-unstable-median3-shell ;;
     "tests/test-unstable-median3-shell-typed":F) chmod +x tests/test-unstable-median3-shell-typed ;;
     "tests/test-unstable-random-insertion-big":F) chmod +x tests/test-unstable-random-insertion-big ;;
+    "tests/test-unstable-random-insertion-typed-big":F) chmod +x tests/test-unstable-random-insertion-typed-big ;;
     "tests/test-unstable-median3-insertion-big":F) chmod +x tests/test-unstable-median3-insertion-big ;;
+    "tests/test-unstable-median3-insertion-typed-big":F) chmod +x tests/test-unstable-median3-insertion-typed-big ;;
     "tests/test-unstable-random-shell-big":F) chmod +x tests/test-unstable-random-shell-big ;;
+    "tests/test-unstable-random-shell-typed-big":F) chmod +x tests/test-unstable-random-shell-typed-big ;;
     "tests/test-unstable-median3-shell-big":F) chmod +x tests/test-unstable-median3-shell-big ;;
+    "tests/test-unstable-median3-shell-typed-big":F) chmod +x tests/test-unstable-median3-shell-typed-big ;;
 
   esac
 done # for ac_tag

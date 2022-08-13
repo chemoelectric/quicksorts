@@ -1,2 +1,2 @@
 #!@SHELL@
-exec @abs_builddir@/test-big unstable-random-insertion-big
+exec @abs_builddir@/test-big `echo $0 | sed 's|^.*/test-||'`

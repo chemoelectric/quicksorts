@@ -1,2 +1,2 @@
 #!@SHELL@
-exec @abs_builddir@/test-int-patterns unstable-middle-insertion-typed
+exec @abs_builddir@/test-int-patterns `echo $0 | sed 's|^.*/test-||'`

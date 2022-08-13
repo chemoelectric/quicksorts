@@ -109,9 +109,13 @@ my_config_executable([tests/test-unstable-middle-shell-typed])
 my_config_executable([tests/test-unstable-median3-shell])
 my_config_executable([tests/test-unstable-median3-shell-typed])
 my_config_executable([tests/test-unstable-random-insertion-big])
+my_config_executable([tests/test-unstable-random-insertion-typed-big])
 my_config_executable([tests/test-unstable-median3-insertion-big])
+my_config_executable([tests/test-unstable-median3-insertion-typed-big])
 my_config_executable([tests/test-unstable-random-shell-big])
+my_config_executable([tests/test-unstable-random-shell-typed-big])
 my_config_executable([tests/test-unstable-median3-shell-big])
+my_config_executable([tests/test-unstable-median3-shell-typed-big])
 
 AC_CONFIG_FILES([quicksorts.pc])
 

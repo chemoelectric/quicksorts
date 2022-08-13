@@ -33,7 +33,7 @@
 #
 
 # aminclude_static.am generated automatically by Autoconf
-# from AX_AM_MACROS_STATIC on Sat Aug 13 14:54:55 CDT 2022
+# from AX_AM_MACROS_STATIC on Sat Aug 13 15:43:01 CDT 2022
 
 
 
@@ -114,7 +114,7 @@ build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS =
 EXTRA_PROGRAMS = tests/test-int-patterns$(EXEEXT) \
-	tests/test-big$(EXEEXT)
+	tests/test-big$(EXEEXT) tests/test-typed-big$(EXEEXT)
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_ac_append_to_file.m4 \
@@ -154,9 +154,13 @@ CONFIG_CLEAN_FILES = tests/test-unstable_qsort \
 	tests/test-unstable-median3-shell \
 	tests/test-unstable-median3-shell-typed \
 	tests/test-unstable-random-insertion-big \
+	tests/test-unstable-random-insertion-typed-big \
 	tests/test-unstable-median3-insertion-big \
+	tests/test-unstable-median3-insertion-typed-big \
 	tests/test-unstable-random-shell-big \
-	tests/test-unstable-median3-shell-big quicksorts.pc
+	tests/test-unstable-random-shell-typed-big \
+	tests/test-unstable-median3-shell-big \
+	tests/test-unstable-median3-shell-typed-big quicksorts.pc
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" \
 	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(includedir)" \
@@ -206,6 +210,8 @@ am_tests_test_int_patterns_OBJECTS =  \
 	tests/test-int-patterns.$(OBJEXT)
 tests_test_int_patterns_OBJECTS =  \
 	$(am_tests_test_int_patterns_OBJECTS)
+am_tests_test_typed_big_OBJECTS = tests/test-typed-big.$(OBJEXT)
+tests_test_typed_big_OBJECTS = $(am_tests_test_typed_big_OBJECTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -224,7 +230,8 @@ am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/lcg-seed.Plo \
 	./$(DEPDIR)/unstable_qsort.Plo \
 	./$(DEPDIR)/unstable_qsort_r.Plo tests/$(DEPDIR)/test-big.Po \
-	tests/$(DEPDIR)/test-int-patterns.Po
+	tests/$(DEPDIR)/test-int-patterns.Po \
+	tests/$(DEPDIR)/test-typed-big.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -245,9 +252,11 @@ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(libquicksorts_la_SOURCES) $(tests_test_big_SOURCES) \
-	$(tests_test_int_patterns_SOURCES)
+	$(tests_test_int_patterns_SOURCES) \
+	$(tests_test_typed_big_SOURCES)
 DIST_SOURCES = $(libquicksorts_la_SOURCES) $(tests_test_big_SOURCES) \
-	$(tests_test_int_patterns_SOURCES)
+	$(tests_test_int_patterns_SOURCES) \
+	$(tests_test_typed_big_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -464,9 +473,11 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/quicksorts.pc.in \
 	$(top_srcdir)/tests/test-unstable-defaults-typed.in \
 	$(top_srcdir)/tests/test-unstable-defaults.in \
 	$(top_srcdir)/tests/test-unstable-median3-insertion-big.in \
+	$(top_srcdir)/tests/test-unstable-median3-insertion-typed-big.in \
 	$(top_srcdir)/tests/test-unstable-median3-insertion-typed.in \
 	$(top_srcdir)/tests/test-unstable-median3-insertion.in \
 	$(top_srcdir)/tests/test-unstable-median3-shell-big.in \
+	$(top_srcdir)/tests/test-unstable-median3-shell-typed-big.in \
 	$(top_srcdir)/tests/test-unstable-median3-shell-typed.in \
 	$(top_srcdir)/tests/test-unstable-median3-shell.in \
 	$(top_srcdir)/tests/test-unstable-middle-insertion-typed.in \
@@ -474,9 +485,11 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/quicksorts.pc.in \
 	$(top_srcdir)/tests/test-unstable-middle-shell-typed.in \
 	$(top_srcdir)/tests/test-unstable-middle-shell.in \
 	$(top_srcdir)/tests/test-unstable-random-insertion-big.in \
+	$(top_srcdir)/tests/test-unstable-random-insertion-typed-big.in \
 	$(top_srcdir)/tests/test-unstable-random-insertion-typed.in \
 	$(top_srcdir)/tests/test-unstable-random-insertion.in \
 	$(top_srcdir)/tests/test-unstable-random-shell-big.in \
+	$(top_srcdir)/tests/test-unstable-random-shell-typed-big.in \
 	$(top_srcdir)/tests/test-unstable-random-shell-typed.in \
 	$(top_srcdir)/tests/test-unstable-random-shell.in \
 	$(top_srcdir)/tests/test-unstable_qsort.in \
@@ -665,7 +678,8 @@ AUTOMAKE_OPTIONS = foreign subdir-objects
 @CODE_COVERAGE_ENABLED_TRUE@AM_DISTCHECK_CONFIGURE_FLAGS := $(AM_DISTCHECK_CONFIGURE_FLAGS) --disable-code-coverage
 EXTRA_DIST = $(srcdir)/silent-rules.mk COPYING INSTALL README AUTHORS
 MOSTLYCLEANFILES = 
-CLEANFILES = tests/test-int-patterns tests/test-big
+CLEANFILES = tests/test-int-patterns tests/test-big \
+	tests/test-typed-big
 DISTCLEANFILES = Makefile GNUmakefile
 BUILT_SOURCES = 
 AM_CPPFLAGS = -I$(builddir) -I$(srcdir)
@@ -714,15 +728,22 @@ TESTS = tests/test-unstable_qsort tests/test-unstable_qsort_r \
 	tests/test-unstable-median3-shell \
 	tests/test-unstable-median3-shell-typed \
 	tests/test-unstable-random-insertion-big \
+	tests/test-unstable-random-insertion-typed-big \
 	tests/test-unstable-median3-insertion-big \
+	tests/test-unstable-median3-insertion-typed-big \
 	tests/test-unstable-random-shell-big \
-	tests/test-unstable-median3-shell-big
+	tests/test-unstable-random-shell-typed-big \
+	tests/test-unstable-median3-shell-big \
+	tests/test-unstable-median3-shell-typed-big
 tests_test_int_patterns_SOURCES = tests/test-int-patterns.c
 tests_test_int_patterns_DEPENDENCIES = libquicksorts.la
 tests_test_int_patterns_LDADD = libquicksorts.la
 tests_test_big_SOURCES = tests/test-big.c
 tests_test_big_DEPENDENCIES = libquicksorts.la
 tests_test_big_LDADD = libquicksorts.la
+tests_test_typed_big_SOURCES = tests/test-typed-big.c
+tests_test_typed_big_DEPENDENCIES = libquicksorts.la
+tests_test_typed_big_LDADD = libquicksorts.la
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -796,11 +817,19 @@ tests/test-unstable-median3-shell-typed: $(top_builddir)/config.status $(top_src
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 tests/test-unstable-random-insertion-big: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-random-insertion-big.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+tests/test-unstable-random-insertion-typed-big: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-random-insertion-typed-big.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 tests/test-unstable-median3-insertion-big: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-median3-insertion-big.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tests/test-unstable-median3-insertion-typed-big: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-median3-insertion-typed-big.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 tests/test-unstable-random-shell-big: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-random-shell-big.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+tests/test-unstable-random-shell-typed-big: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-random-shell-typed-big.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 tests/test-unstable-median3-shell-big: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-median3-shell-big.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tests/test-unstable-median3-shell-typed-big: $(top_builddir)/config.status $(top_srcdir)/tests/test-unstable-median3-shell-typed-big.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 quicksorts.pc: $(top_builddir)/config.status $(srcdir)/quicksorts.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
@@ -909,6 +938,12 @@ tests/test-int-patterns.$(OBJEXT): tests/$(am__dirstamp) \
 tests/test-int-patterns$(EXEEXT): $(tests_test_int_patterns_OBJECTS) $(tests_test_int_patterns_DEPENDENCIES) $(EXTRA_tests_test_int_patterns_DEPENDENCIES) tests/$(am__dirstamp)
 	@rm -f tests/test-int-patterns$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(tests_test_int_patterns_OBJECTS) $(tests_test_int_patterns_LDADD) $(LIBS)
+tests/test-typed-big.$(OBJEXT): tests/$(am__dirstamp) \
+	tests/$(DEPDIR)/$(am__dirstamp)
+
+tests/test-typed-big$(EXEEXT): $(tests_test_typed_big_OBJECTS) $(tests_test_typed_big_DEPENDENCIES) $(EXTRA_tests_test_typed_big_DEPENDENCIES) tests/$(am__dirstamp)
+	@rm -f tests/test-typed-big$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(tests_test_typed_big_OBJECTS) $(tests_test_typed_big_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -922,6 +957,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unstable_qsort_r.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test-big.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test-int-patterns.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test-typed-big.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -1351,9 +1387,23 @@ tests/test-unstable-random-insertion-big.log: tests/test-unstable-random-inserti
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+tests/test-unstable-random-insertion-typed-big.log: tests/test-unstable-random-insertion-typed-big
+	@p='tests/test-unstable-random-insertion-typed-big'; \
+	b='tests/test-unstable-random-insertion-typed-big'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 tests/test-unstable-median3-insertion-big.log: tests/test-unstable-median3-insertion-big
 	@p='tests/test-unstable-median3-insertion-big'; \
 	b='tests/test-unstable-median3-insertion-big'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+tests/test-unstable-median3-insertion-typed-big.log: tests/test-unstable-median3-insertion-typed-big
+	@p='tests/test-unstable-median3-insertion-typed-big'; \
+	b='tests/test-unstable-median3-insertion-typed-big'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
@@ -1365,9 +1415,23 @@ tests/test-unstable-random-shell-big.log: tests/test-unstable-random-shell-big
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+tests/test-unstable-random-shell-typed-big.log: tests/test-unstable-random-shell-typed-big
+	@p='tests/test-unstable-random-shell-typed-big'; \
+	b='tests/test-unstable-random-shell-typed-big'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 tests/test-unstable-median3-shell-big.log: tests/test-unstable-median3-shell-big
 	@p='tests/test-unstable-median3-shell-big'; \
 	b='tests/test-unstable-median3-shell-big'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+tests/test-unstable-median3-shell-typed-big.log: tests/test-unstable-median3-shell-typed-big
+	@p='tests/test-unstable-median3-shell-typed-big'; \
+	b='tests/test-unstable-median3-shell-typed-big'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
@@ -1624,6 +1688,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/unstable_qsort_r.Plo
 	-rm -f tests/$(DEPDIR)/test-big.Po
 	-rm -f tests/$(DEPDIR)/test-int-patterns.Po
+	-rm -f tests/$(DEPDIR)/test-typed-big.Po
 	-rm -f GNUmakefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-libtool distclean-local distclean-tags
@@ -1678,6 +1743,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/unstable_qsort_r.Plo
 	-rm -f tests/$(DEPDIR)/test-big.Po
 	-rm -f tests/$(DEPDIR)/test-int-patterns.Po
+	-rm -f tests/$(DEPDIR)/test-typed-big.Po
 	-rm -f GNUmakefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -1841,6 +1907,7 @@ distclean-local: code-coverage-dist-clean
 
 check: tests/test-int-patterns
 check: tests/test-big
+check: tests/test-typed-big
 
 tests-clean:
 	-rm -f tests/*.$(OBJEXT)

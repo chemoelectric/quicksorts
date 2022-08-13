@@ -1,2 +1,2 @@
 #!@SHELL@
-exec @abs_builddir@/test-int-patterns unstable-median3-shell-typed
+exec @abs_builddir@/test-int-patterns `echo $0 | sed 's|^.*/test-||'`

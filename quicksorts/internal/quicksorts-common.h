@@ -182,9 +182,11 @@ quicksorts_common__random_size_t_below (size_t n)
           const char *p_last = arr + (elemsz * i_last);             \
                                                                     \
           const bool middle_lt_first =                              \
-            (bool) LT (p_middle, p_first);                          \
+            (bool) LT ((const void *) p_middle,                     \
+                       (const void *) p_first);                     \
           const bool last_lt_first =                                \
-            (bool) LT (p_last, p_first);                            \
+            (bool) LT ((const void *) p_last,                       \
+                       (const void *) p_first);                     \
           if (middle_lt_first != last_lt_first)                     \
             {                                                       \
               RESULT = i_first;                                     \
@@ -192,7 +194,8 @@ quicksorts_common__random_size_t_below (size_t n)
           else                                                      \
             {                                                       \
               const bool middle_lt_last =                           \
-                (bool) LT (p_middle, p_last);                       \
+                (bool) LT ((const void *) p_middle,                 \
+                           (const void *) p_last);                  \
               if (middle_lt_first != middle_lt_last)                \
                 {                                                   \
                   RESULT = i_middle;                                \
